@@ -137,5 +137,5 @@ class Periodo_Electivo(models.Model):
     id_dependencia_desempeño = models.ForeignKey(Instituto, on_delete=models.CASCADE)
     id_dependencia_designacion = models.ForeignKey(Instituto, on_delete=models.CASCADE)
     id_dedicacion = models.ForeignKey(Dedicacion, on_delete=models.CASCADE)
-    id_cargas_extras = models.ForeignKey(Cargas_Extras, on_delete=models.CASCADE)
+    id_cargas_extras = models.ManyToManyField(Cargas_Extras)
     id_franja_horaria = models.ManyToManyField(Franja_Horaria)
