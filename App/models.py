@@ -78,6 +78,13 @@ class Dedicacion(models.Model):
         return self.nombre
     
     
+ class Modalidad_Dedicacion(models.Model):
+    id_modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE)
+    id_dedicacion = models.ForeignKey(Dedicacion, on_delete=models.CASCADE)
+    horas_minimas = models.IntegerField()
+    horas_maximas = models.IntegerField()
+    
+    
  class Localidad(models.Model):
     nombre = models.CharField(max_length=100)
     
@@ -117,8 +124,18 @@ class Periodo_Electivo(models.Model):
     nombre = models.CharField(max_length=100)
     id_materia = models.ManyToManyField(Materia)
     id_periodo_electivo = models.ForeignKey(Periodo_Electivo, on_delete=models.CASCADE)
-    id_franja_horaria = models.ManyToManyField(Franja_Horaria, on_delete=models.CASCADE)
+    id_franja_horaria = models.ManyToManyField(Franja_Horaria)
     id_localidad = models.ForeignKey(Localidad, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.nombre
+    
+    
+ class Cargo(models.Model):
+    id_docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
+    id_resolucion = models.ForeignKey(Resolucion, on_delete=models.CASCADE)
+    id_dependencia_desempeño = models.ForeignKey(Instituto, on_delete=models.CASCADE)
+    id_dependencia_designacion = models.ForeignKey(Instituto, on_delete=models.CASCADE)
+    id_dedicacion = models.ForeignKey(Dedicacion, on_delete=models.CASCADE)
+    id_cargas_extras = models.ForeignKey(Cargas_Extras, on_delete=models.CASCADE)
+    id_franja_horaria = models.ManyToManyField(Franja_Horaria)
