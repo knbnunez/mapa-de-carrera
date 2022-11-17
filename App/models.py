@@ -1,5 +1,45 @@
 from django.db import models
 
+
+class Instituto(models.Model):
+    nombre = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.nombre
+    
+class Carrera(models.Model):
+    nombre = models.CharField(max_length=100)
+    id_instituto = models.ForeignKey(Instutito, on_delete=models.CASCADE)
+   
+    def __str__(self):
+        return self.nombre
+    
+    
+class Materia(models.Model):
+    nombre = models.CharField(max_length=100)
+    id_carrera = models.ManyToManyField(Carrera)
+   
+    def __str__(self):
+        return self.nombre
+
+class Docente(models.Model):
+    nombre = models.CharField(max_length=100)
+    apellido = models.IntegerField()
+    DNI = models.IntegerField()
+    legajo = models.IntegerField()
+    fecha_nacimiento = models.DateField()
+    direccion = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.nombre
+    
+class Coordinador(models.Model):
+    id_docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
+    id_instituto = models.ForeignKey(Instituto, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.nombre
+
 class Cargas_Extras(models.Model):
     nombre = models.CharField(max_length=100)
     horas = models.IntegerField()
@@ -71,26 +111,6 @@ class Periodo_Electivo(models.Model):
     def __str__(self):
         return self.nombre
     
-class Instituto(models.Model):
-    nombre = models.CharField(max_length=100)
-    
-    def __str__(self):
-        return self.nombre
-    
-class Carrera(models.Model):
-    nombre = models.CharField(max_length=100)
-    id_instituto = models.ForeignKey(Instutito, on_delete=models.CASCADE)
-   
-    def __str__(self):
-        return self.nombre
-    
-    
-class Materia(models.Model):
-    nombre = models.CharField(max_length=100)
-    id_carrera = models.ManyToManyField(Carrera)
-   
-    def __str__(self):
-        return self.nombre
 
 
  class Comision(models.Model):
