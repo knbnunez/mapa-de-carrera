@@ -139,3 +139,4 @@ class Cargo(models.Model):
     id_dedicacion = models.ForeignKey(Dedicacion, on_delete=models.CASCADE)
     id_cargas_extras = models.ManyToManyField(Cargas_Extras)
     id_franja_horaria = models.ManyToManyField(Franja_Horaria)
+    id_categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
