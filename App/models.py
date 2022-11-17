@@ -44,7 +44,25 @@ class Dedicacion(models.Model):
     def __str__(self):
         return self.nombre
     
- 
+
+class Tipo(models.Model):
+    nombre = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.nombre
+    
+    
+class franja_Horaria(models.Model):
+    nombre = models.CharField(max_length=100)
+    dia = models.DateField()
+    hora_inicio = models.TimeField()
+    hora_fin = models.TimeField()
+    tipo = models.ForeignKey(Tipo, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.nombre
+    
+    
 class Periodo_Electivo(models.Model):
     nombre = models.CharField(max_length=100)
     desde = models.DateField()
@@ -74,3 +92,13 @@ class Materia(models.Model):
     def __str__(self):
         return self.nombre
 
+
+ class Comision(models.Model):
+    nombre = models.CharField(max_length=100)
+    id_materia = models.ManyToManyField(Materia)
+    id_periodo_electivo = models.ForeignKey(Periodo_Electivo, on_delete=models.CASCADE)
+    id_franja_horaria = models.ManyToManyField(Franja_Horaria, on_delete=models.CASCADE)
+    id_localidad = models.ForeignKey(Localidad, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.nombre
