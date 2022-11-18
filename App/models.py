@@ -6,6 +6,7 @@ class Instituto(models.Model):
     def __str__(self):
         return self.nombre
     
+
 class Carrera(models.Model):
     nombre = models.CharField(max_length=100)
     id_instituto = models.ForeignKey(Instituto, on_delete=models.CASCADE)
@@ -21,6 +22,7 @@ class Materia(models.Model):
     def __str__(self):
         return self.nombre
 
+
 class Docente(models.Model):
     nombre = models.CharField(max_length=100)
     apellido = models.IntegerField()
@@ -32,12 +34,14 @@ class Docente(models.Model):
     def __str__(self):
         return self.nombre
     
+
 class Coordinador(models.Model):
     id_docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
     id_instituto = models.ForeignKey(Instituto, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.nombre
+
 
 class Cargas_Extras(models.Model):
     nombre = models.CharField(max_length=100)
@@ -56,6 +60,7 @@ class Resolucion(models.Model):
     def __str__(self):
         return self.nombre
     
+
 class Categoria(models.Model):
     nombre = models.CharField(max_length=100)
     
@@ -115,8 +120,7 @@ class Periodo_Electivo(models.Model):
     hasta = models.DateField()
     
     def __str__(self):
-        return self.nombre
-    
+        return self.nombre  
 
 
 class Comision(models.Model):
@@ -133,10 +137,9 @@ class Comision(models.Model):
 class Cargo(models.Model):
     id_docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
     id_resolucion = models.ForeignKey(Resolucion, on_delete=models.CASCADE)
-    id_dependencia_desempeno = models.ForeignKey(Instituto, on_delete=models.CASCADE)
-    id_dependencia_designacion = models.ForeignKey(Instituto, on_delete=models.CASCADE)
+    id_dependencia_desempeno = models.ForeignKey(Instituto, on_delete=models.CASCADE, related_name='cargo_desmpeno')
+    id_dependencia_designacion = models.ForeignKey(Instituto, on_delete=models.CASCADE, related_name='cargo_designacion')
     id_dedicacion = models.ForeignKey(Dedicacion, on_delete=models.CASCADE)
     id_cargas_extras = models.ManyToManyField(Cargas_Extras)
     id_franja_horaria = models.ManyToManyField(Franja_Horaria)
     id_categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
->>>>>>> 8b18dd5c1dc3c3ecc20485ce4d15d2e416f7a4c2
