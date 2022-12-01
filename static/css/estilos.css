@@ -1,0 +1,22 @@
+.isologo {
+    position: relative;
+    left: 4%;
+    width: 26%;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+.isologofondo {
+    position: absolute;
+    top: 11%;
+    left: 4%;
+    width: 91.5%;    
+    height: 75%;
+    z-index: -99;
+}
+
+.separador {
+    width: 83%;
+    margin-left: 10%;
+    border-bottom: 1px solid;
+}
