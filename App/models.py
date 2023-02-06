@@ -24,17 +24,20 @@ class Materia(models.Model):
 
 
 class Docente(models.Model):
-    nombre = models.CharField(max_length=100)
-    apellido = models.IntegerField()
-    DNI = models.IntegerField()
+    dni = models.IntegerField()
     legajo = models.IntegerField()
-    fecha_nacimiento = models.DateField()
-    direccion = models.CharField(max_length=100)
-    
+    nombre_apellido = models.CharField(max_length=240)
+    apellido = models.IntegerField()
+    fecha_ingreso = models.DateField()
+    fecha_jubilacion = models.DateField(null=True)
+    # direccion = models.CharField(max_length=100)
+    mail = models.EmailField(null=False)
+
     def __str__(self):
         return self.nombre
     
 
+# TO DO: Analizar la posibilidad de eliminarlo...
 class Coordinador(models.Model):
     id_docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
     id_instituto = models.ForeignKey(Instituto, on_delete=models.CASCADE)
@@ -53,6 +56,7 @@ class Cargas_Extras(models.Model):
  
 class Resolucion(models.Model):
     nombre = models.CharField(max_length=100)
+    # De las dudas: las fechas son las mismas que podemos obtener del endpoint de /agentes/{legajo}/cargos ???
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
     documento = models.ImageField(upload_to='pdf')

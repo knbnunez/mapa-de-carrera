@@ -1,6 +1,8 @@
 from django.urls import path
-from App.views.views import IndexView
+from .views.views import *
+
 
 urlpatterns = [
-    path('', IndexView.as_view()),
+    path('', IndexView.as_view(), name='index'),
+    path('docente/<int:legajo>/', DocenteView.as_view(), name='docente'),
 ]
