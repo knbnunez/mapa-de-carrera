@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Instituto(models.Model):
     nombre = models.CharField(max_length=100)
     
@@ -24,26 +25,19 @@ class Materia(models.Model):
 
 
 class Docente(models.Model):
-    dni = models.IntegerField()
+    numero_documento = models.IntegerField()
     legajo = models.IntegerField()
     nombre_apellido = models.CharField(max_length=240)
     apellido = models.IntegerField()
     fecha_ingreso = models.DateField()
     fecha_jubilacion = models.DateField(null=True)
-    # direccion = models.CharField(max_length=100)
-    mail = models.EmailField(null=False)
+    correo_electronico = models.EmailField(null=False)
 
     def __str__(self):
         return self.nombre
     
 
-# TO DO: Analizar la posibilidad de eliminarlo...
-class Coordinador(models.Model):
-    id_docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
-    id_instituto = models.ForeignKey(Instituto, on_delete=models.CASCADE)
-    
-    def __str__(self):
-        return self.nombre
+# Se eleminó la clase Coordinador. La distinción será arreglada con roles dentro de la aplicación
 
 
 class Cargas_Extras(models.Model):
