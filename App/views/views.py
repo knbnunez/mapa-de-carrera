@@ -24,14 +24,20 @@ class DocenteView(TemplateView):
         url_mail = self.url_mapuche+'agentes/'+recover_legajo+'/mail' # /agentes/{legajo}/mail
         # responses[0] = requests.get(url_docente, auth=(self.username, self.password))
         # responses[1] = requests.get(url_mail, auth=(self.username, self.password))
-        responses = [requests.get(url, auth=(self.username, self.password)) for url in [url_docente, url_mail]] # lo mismo hecho con lista por comprensión
+        responses = [requests.get(url, auth=(self.username, self.password)) for url in [url_docente, url_mail]] # lo mismo, pero hecho con lista por comprensión
         exito = -1
         for response in responses:
             if response.status_code == 200:
                 exito += 1
         if exito == 1: # exito en ambos casos
             jsons = [response.json() for response in responses]
-            # print(jsons[1][0]['correo_electronico'])
+            # for json in jsons:
+            #     print(json)
+            if not jsons[1]: # Consulto si la lista en la posición [1] está vacía
+                jsons[1] = [{'correo_electronico': None}]
+            if jsons[0]['fecha_jubilacion'] is 'null':
+                jsons[0]['fecha_jubilacion'] = None
+            # else: no está vacío y no hay que hacer nada, ya tiene un valor
             docente = Docente(
                 numero_documento    = jsons[0]['numero_documento'],
                 legajo              = jsons[0]['legajo'],
@@ -42,4 +48,5 @@ class DocenteView(TemplateView):
             )
             # TO DO: guardarlo en la base de datos. docente.save() y algo más?
 
+        # TO DO: else
         return render(request, self.template_name, { 'docente': docente})
