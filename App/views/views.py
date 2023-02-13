@@ -50,3 +50,29 @@ class DocenteView(TemplateView):
 
         # TO DO: else
         return render(request, self.template_name, { 'docente': docente})
+
+
+
+class DocenteBusquedaView(TemplateView):
+    template_name = 'buscadocente.html'
+    username='mapumapa'
+    password='Mowozelu28'
+    url_mapuche = 'http://10.7.180.231/mapuche/rest/'
+
+    def get(self, request):
+        url = reverse('buscadocente')
+        #recover_legajo = url.split('/')[-2] # split('/') = ['', 'game', 'id', '']; split('/')[-2] = ['id']
+        url_buscadocente = self.url_mapuche+'agentes' # /agentes/{legajo}
+        #url_mail = self.url_mapuche+'agentes/'+recover_legajo+'/mail' # /agentes/{legajo}/mail
+        # responses[0] = requests.get(url_docente, auth=(self.username, self.password))
+        # responses[1] = requests.get(url_mail, auth=(self.username, self.password))
+        response = requests.get(url_buscadocente, auth=(self.username, self.password))
+        #if response.status_code == 200:
+                      
+        docentes= response.json()
+
+        print (docentes)
+        return render(request, self.template_name, {"docentes":docentes})
+        
+       # else :
+        #    return render(request, self.template_name, {"docentes":})
