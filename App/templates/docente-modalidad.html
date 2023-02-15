@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asignar-modalidad</title>
+</head>
+<body>
+    <label><b>Cargos</b></label>
+    <select>
+    {% for cargo in cargos %}        
+        <option>{{cargo}}</option>
+    {% endfor %}
+    </select>
+    
+    <label><b>Modalidad</b></label>
+    <select>
+        <option value="desarrollo-profesional">Doecente/Desarrollo profesional</option>
+        <option value="investigador">Docente/Investigador</option>
+    </select>
+</body>
+</html>
