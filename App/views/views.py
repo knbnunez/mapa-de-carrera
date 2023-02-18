@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from App.models import *
 import requests
+import json
 
 
 class IndexView(TemplateView):
@@ -77,7 +78,8 @@ class DocenteModalidadView(TemplateView):
         url = self.url_mapuche+'agentes/'+legajo+'/cargos' # /agentes/{legajo}/cargos
         response = requests.get(url, auth=(self.username, self.password))
         cargos = response.json()
-        cargos = [_['cargo'] for _ in response.json()]
-        print(cargos)
+        cargos = [{'cargo':_['cargo'], 'desc_categ':_['desc_categ'], 'desc_dedic':_['desc_dedic']} for _ in response.json()]
+        # print(cargos)
+        # cargos = json.dumps(cargos)
         # TO DO: mostrar más datos para un cargo seleccionado, almacenar la modalidad para testear el tema de la restricción de horas
-        return render(request, self.template_name, {'cargos': cargos})
+        return render(request, self.template_name, {'cargos': json.dumps(cargos)})
