@@ -141,3 +141,7 @@ class Cargo(models.Model):
     id_cargas_extras = models.ManyToManyField(Cargas_Extras)
     id_franja_horaria = models.ManyToManyField(Franja_Horaria)
     id_categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
+    # Vienen de la API
+    fecha_alta = models.DateField()
+    fecha_baja = models.DateField()
+    error = models.IntegerField(default=0) # Para marcar ante error de carga
