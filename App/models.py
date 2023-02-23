@@ -27,10 +27,7 @@ class Materia(models.Model):
 class Docente(models.Model):
     numero_documento = models.IntegerField()
     legajo = models.IntegerField()
-    nombre_apellido = models.CharField(max_length=240)
-    apellido = models.IntegerField()
-    fecha_ingreso = models.DateField()
-    fecha_jubilacion = models.DateField(null=True)
+    nombre_apellido = models.CharField(max_length=255)
     correo_electronico = models.EmailField(null=False)
 
     def __str__(self):

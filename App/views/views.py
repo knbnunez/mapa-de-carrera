@@ -6,14 +6,15 @@ from django.urls import reverse
 from App.models import *
 import requests
 import json
+from requests.exceptions import ConnectTimeout
 
 
 class IndexView(TemplateView):
     template_name = 'index.html' 
 
 
-class DetalleDocenteView(TemplateView): # Detalle para un único docente
-    template_name = 'docente.html'
+class DocenteDetalleView(TemplateView): # Detalle para un único docente
+    template_name = 'docente-detalle.html'
     username = 'mapumapa' # Para producción hay que crifrar las credenciales
     password = 'Mowozelu28'
     url_mapuche = 'http://10.7.180.231/mapuche/rest/'
@@ -24,44 +25,60 @@ class DetalleDocenteView(TemplateView): # Detalle para un único docente
         # print(legajo)
         url_docente = self.url_mapuche+'agentes/'+legajo # /agentes/{legajo}
         url_mail = self.url_mapuche+'agentes/'+legajo+'/mail' # /agentes/{legajo}/mail
-        responses = [requests.get(url, auth=(self.username, self.password)) for url in [url_docente, url_mail]] # lo mismo, pero hecho con lista por comprensión
         exito = -1
-        for response in responses:
-            if response.status_code == 200:
-                exito += 1
-
-        # Éxito en la consulta
-            # 1. No existe en la BD -> se crea (create)
-            # 2. Existe en la BD -> se pisan los datos (update)
-        if exito == 1: # exito en ambos casos
-            jsons = [response.json() for response in responses]
-            if not jsons[1]: # Consulto si la lista en la posición [1] está vacía
-                jsons[1] = [{'correo_electronico': None}]
-            # if jsons[0]['fecha_jubilacion'] is 'null':
-            #     jsons[0]['fecha_jubilacion'] = None
-            
-            
-            # TODO: consultas a la BD ejemplo
-            # if not Game.objects.filter(id=recover_id).exists(): # not exists?? 
-                # game = Game.objects.get(id=recover_id)
-            # else: 
-
-            docente = Docente(
-                # numero_documento    = jsons[0]['numero_documento'],
-                numero_documento    = jsons[0].get('numero_documento'), # usar .get() en un dicccionario es equivalente a acceder con ['key'], pero es más seguro porque si no hay nada para esa llave (key), en lugar de lanzar una EXCEPCIÓN, retorno None...
-                legajo              = jsons[0].get('legajo'),
-                nombre_apellido     = jsons[0].get('agente'),
-                fecha_ingreso       = jsons[0].get('fecha_ingreso'),
-                fecha_jubilacion    = jsons[0].get('fecha_jubilacion'),     # jsons[idx-lista]['attr']
-                correo_electronico  = jsons[1][0].get('correo_electronico') # hay que especificar jsons[idx-lista][idx-lista-attrJson]['attr']
-            )
-            # TO DO: guardarlo en la base de datos. docente.save() y algo más?
-
-        # TO DO: else (es un status_code <> 200):
-            # 1. No existe en la BD -> algún mensaje en el template sobre que no está cargado
+        try:
+            responses = [requests.get(url, auth=(self.username, self.password), timeout=5) for url in [url_docente, url_mail]] # timeout = 5 segundos, si no consigue hacer la petición en ese lapso, salta a la excepción
+            # exito = -1
+            for response in responses:
+                if response.status_code == 200:
+                    exito += 1
+            # Éxito en la consulta            
+            if exito == 1: # exito en ambos casos
+                jsons = [response.json() for response in responses] # recupero los jsons de las respuestas -> list of jsons
+                if not jsons[1]: # En la posición [1] está el correo electrónico, si está vacío lo autocompleto con None
+                    jsons[1] = [{'correo_electronico': None}]
+                # 1. No existe en la BD -> se crea (create)
+                if not Docente.objects.filter(legajo=legajo).exists(): # Caso no existe en la BD
+                    # create
+                    docente = Docente.objects.create(
+                        # numero_documento    = jsons[0]['numero_documento'],
+                        numero_documento    = jsons[0].get('numero_documento'), # usar .get() en un dicccionario es equivalente a acceder con ['key'], pero es más seguro porque si no hay nada para esa llave (key), en lugar de lanzar una EXCEPCIÓN, retorno None...
+                        legajo              = jsons[0].get('legajo'),
+                        nombre_apellido     = jsons[0].get('agente'),
+                        correo_electronico  = jsons[1][0].get('correo_electronico') # hay que especificar jsons[idx-lista][idx-lista-attrJson]['attr']
+                    )
+                    docente.save()
+                # 2. Existe en la BD -> se pisan los datos (update)
+                else: # Caso sí existe en la BD, lo recupero
+                    docente = Docente.objects.get(legajo=legajo)
+                    # update all
+                    docente.numero_documento    = jsons[0].get('numero_documento')
+                    docente.nombre_apellido     = jsons[0].get('agente')
+                    docente.correo_electronico  = jsons[1][0].get('correo_electronico')
+                    docente.save()
+            # Fallo en alguna de las dos consultas agentes o mail
+            # else:
+                # # 1. No existe en la BD -> algún mensaje en el template sobre que no está cargado
+                # if not Docente.objects.filter(legajo=legajo).exists(): # Caso no existe en la BD
+                #     docente = None # Luego en el template -> if docente -> muestro; else (docente = None): "no existe"
+                # # 2. Existe en la BD -> se muestran los datos de la BD
+                # else:
+                #     docente = Docente.objects.get(legajo=legajo)
+        except ConnectTimeout:
+            # if not Docente.objects.filter(legajo=legajo).exists(): docente = None 
+            # else: docente = Docente.objects.get(legajo=legajo)
+            pass
+        # Caso status_code <> 200 para cualquiera de las dos consultas (agentes, mail) y caso excepción ConnectTimeout, junto todo acá
+        if exito != 1:   
+            # # 1. No existe en la BD -> algún mensaje en el template sobre que el docente no está cargado     
+            if not Docente.objects.filter(legajo=legajo).exists(): # Caso no existe en la BD
+                docente = None # Luego en el template -> if docente -> muestro; else (docente = None): "no existe"
             # 2. Existe en la BD -> se muestran los datos de la BD
-
+            else:
+                docente = Docente.objects.get(legajo=legajo)
         return render(request, self.template_name, {'docente': docente})
+
+        
 
 
 class DocenteBusquedaView(TemplateView):
@@ -91,11 +108,16 @@ class DocenteModalidadView(TemplateView):
     def get(self, request, legajo):
         legajo = str(legajo) 
         url = self.url_mapuche+'agentes/'+legajo+'/cargos' # /agentes/{legajo}/cargos
-        response = requests.get(url, auth=(self.username, self.password))
-        cargos = response.json()
-        cargos = [{'cargo':_.get('cargo'), 'desc_categ':_.get('desc_categ'), 'desc_dedic':_.get('desc_dedic')} for _ in response.json()]
-        # print(cargos)
-        # TO DO: si hay modalidad cargada, recuperarla desde la DB
+        # TO DO: Misma lógica que en DocenteDetalle, si hay error en la consulta, etc...
+        try:
+            response = requests.get(url, auth=(self.username, self.password), timeout=5)
+            cargos = response.json()
+            # Puede ser útil el codigoescalafon, que nos trae si es DOCE (docente), NODO, AUTO. En teoría el único que nos interesa es DOCE, por lo que capaz nos puede servir para hacer algún control...
+            cargos = [{'cargo':_.get('cargo'), 'desc_dedic':_.get('desc_dedic'), 'codigoescalafon':_.get('codigoescalafon')} for _ in response.json()]
+            # print(cargos)
+            # TO DO: Complejidad, traer la modalidad si hubiera una ya cargada. Cómo llegamos hasta la modalidad cargada para el cargo del docente?
+        except ConnectTimeout:
+            
         return render(request, self.template_name, {'cargos': json.dumps(cargos)})
 
     # TO DO: almacenar la modalidad y la dedicación que viene en la consulta para la tabla intermedia que genera la restricción de horas + el archivo adjunto
