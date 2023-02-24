@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle docente</title>
+</head>
+<body>
+    {% if docente %}
+        <h1>Docente</h1>
+        <h3> - Docuemento nro: {{docente.numero_documento}}</h3>
+        <h3> - Legajo nro: {{docente.legajo}}</h3>
+        <h3> - Nombre y Apellido: {{docente.nombre_apellido}}</h3>
+        {% if docente.correo_electronico %}
+            <h3> - Correo electrónico: {{docente.correo_electronico}}</h3>
+        {% else %}
+            <h3> - Correo electrónico: no se cargó ningún mail</h3>
+        {% endif %}
+    {% else %}
+        <h3>El docente no pudo ser recuperado y no se encontraba en bases internas</h3>
+    {% endif %}
+</body>
+
+</html>
