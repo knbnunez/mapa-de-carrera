@@ -1,17 +1,35 @@
-
-
-
-<!DOCTYPE html>
 <html lang="en">
-
+ 
 <head>
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+   
+    
     <title>MDC</title>
 </head>
 
 <body>
+
+{%block content%}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 search">
+                <form method="get">
+                    <div id="custom-search-input">
+                        <imput type="text" class="form-control" placeholder="Buscar" name="Buscar"></imput>
+                        <span class="imput-group-list">
+                            <button type="submit" class="boton btn-success">Buscar</button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <h1>Ingrese Legajo a buscar</h1>
     {% for d in docentes %}
         <h3> - Nro DNI: {{d.numero_documento}}</h3>

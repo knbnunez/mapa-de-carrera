@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from App.models import *
 import requests
+from django.db.models import Q
 import json
 from requests.exceptions import ConnectTimeout
 
@@ -116,7 +117,6 @@ class DocenteModalidadView(TemplateView):
             # print(cargos)
             # TO DO: Complejidad, traer la modalidad si hubiera una ya cargada. Cómo llegamos hasta la modalidad cargada para el cargo del docente?
         except ConnectTimeout:
-            # TO DO:
             pass
         return render(request, self.template_name, {'cargos': json.dumps(cargos)})
 
