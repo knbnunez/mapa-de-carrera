@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from App.models import *
 import requests
+from django.db.models import Q
 
 
 class IndexView(TemplateView):
@@ -63,7 +64,7 @@ class DocenteBusquedaView(TemplateView):
         url = reverse('buscadocente')
         #recover_legajo = url.split('/')[-2] # split('/') = ['', 'game', 'id', '']; split('/')[-2] = ['id']
         url_buscadocente = self.url_mapuche+'agentes' # /agentes/{legajo}
-        #url_mail = self.url_mapuche+'agentes/'+recover_legajo+'/mail' # /agentes/{legajo}/mail
+        
         # responses[0] = requests.get(url_docente, auth=(self.username, self.password))
         # responses[1] = requests.get(url_mail, auth=(self.username, self.password))
         response = requests.get(url_buscadocente, auth=(self.username, self.password))
@@ -76,3 +77,12 @@ class DocenteBusquedaView(TemplateView):
         
        # else :
         #    return render(request, self.template_name, {"docentes":})
+    # def get_buscar (request):
+      #   queryset = request.GET.get("buscar")
+        # posts=Post.objects.filter(estado = True)
+         #if queryset:
+           #  posts =Post.objects.filter(
+             #    Q(legajo = queryset)
+
+             #)
+         #return render (request,'docente.html',('posts':posts)) 

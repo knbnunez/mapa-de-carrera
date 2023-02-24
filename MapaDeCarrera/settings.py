@@ -81,6 +81,20 @@ DATABASES = {
     }
 }
 
+#DATABASES = {
+ #   'default': {
+  #      'ENGINE': 'django.db.backends.mysql',
+   #     'NAME': 'djangoAppTest',
+   #     'USER': 'mariadb',
+   #     'PASSWORD': 'p0bl4d0rg4',
+   #     'HOST': 'ush-sie-vm1.dom.tdf.gob.ar',
+   #     'PORT': '3306',
+   #     'OPTIONS': {
+   #         'read_default_file': '/etc/my.cnf',
+   #     },
+   # }
+#}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
