@@ -31,14 +31,11 @@
         </div>
     </div>
     <h1>Ingrese Legajo a buscar</h1>
-    
-    {%for d in docentes%}
-
+    {% for d in docentes %}
         <h3> - Nro DNI: {{d.numero_documento}}</h3>
         <h3> - Legajo: {{d.legajo}}</h3>
         <h3> - Nombre y Apellido: {{d.nombre_apellido}}</h3>
-        {%endfor%}
-{%endblock%}
+    {% endfor %}
 </body>
 
 </html>
