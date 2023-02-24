@@ -116,10 +116,12 @@ class DocenteModalidadView(TemplateView):
             # print(cargos)
             # TO DO: Complejidad, traer la modalidad si hubiera una ya cargada. Cómo llegamos hasta la modalidad cargada para el cargo del docente?
         except ConnectTimeout:
-            
+            # TO DO:
+            pass
         return render(request, self.template_name, {'cargos': json.dumps(cargos)})
 
     # TO DO: almacenar la modalidad y la dedicación que viene en la consulta para la tabla intermedia que genera la restricción de horas + el archivo adjunto
+
     def post(self, request, legajo):
         
         return self.get(request, legajo) # invoco al método get declarado arriba
