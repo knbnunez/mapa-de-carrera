@@ -1,0 +1,16 @@
+
+{% load crispy_forms_tags %}
+
+
+<div class="form-criticas bg-info p-3 rounded-3">
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+
+        
+            <div class="row p-3">
+                <input type="submit" value="Publicar" class="btn btn-danger">
+            </div>
+    </form>
+</div>

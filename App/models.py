@@ -27,10 +27,7 @@ class Materia(models.Model):
 class Docente(models.Model):
     numero_documento = models.IntegerField()
     legajo = models.IntegerField()
-    nombre_apellido = models.CharField(max_length=240)
-    apellido = models.IntegerField()
-    fecha_ingreso = models.DateField()
-    fecha_jubilacion = models.DateField(null=True)
+    nombre_apellido = models.CharField(max_length=255)
     correo_electronico = models.EmailField(null=False)
 
     def __str__(self):
@@ -141,3 +138,7 @@ class Cargo(models.Model):
     id_cargas_extras = models.ManyToManyField(Cargas_Extras)
     id_franja_horaria = models.ManyToManyField(Franja_Horaria)
     id_categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
+    # Vienen de la API
+    fecha_alta = models.DateField()
+    fecha_baja = models.DateField()
+    error = models.IntegerField(default=0) # Para marcar ante error de carga

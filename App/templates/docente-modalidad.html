@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asignar-modalidad</title>
+</head>
+<body>
+    <form method="POST">
+        {% csrf_token %}
+        <!-- Para poder mostrar el resto de los datos de un cargo cuando ocurra un cambio de valor tengo que hacerlo con js... Espero que no se termine transformando en un frankenstein... -->
+        <!-- <label><b>Cargos</b></label>
+        <select id="cargos" onchange="mostrar_info_cargo()">
+            {% for cargo in cargos %}
+                <option value="{{ cargo.cargo }}">{{ cargo.cargo }}</option>
+            {% endfor %}
+        </select> -->
+        <label><b>Cargos</b></label>
+        <select id="cargos" onchange="mostrar_info_cargo()">
+            <option value="none" selected disabled hidden>Seleccione cargo</option>
+            <!-- Se muestra cada option desde un script más abajo -->
+        </select>
+        
+        <label><b>Modalidad</b></label>
+        <select>
+            <option value="none" selected disabled hidden>Seleccione modalidad</option>
+            <option value="desarrollo-profesional">Doecente/Desarrollo profesional</option>
+            <option value="investigador">Docente/Investigador</option>
+        </select>
+
+        <label><b>Info Cargo:</b></label>
+        <div id="cargo-info">
+            <!-- Aquí se mostrará la información adicional del cargo seleccionado -->
+        </div>
+        <br><br>
+        <button type="submit">Asignar modalidad</button>
+    </form>
+
+    <script>
+        const data = JSON.parse("{{cargos|escapejs}}");
+        console.log(data);
+        const selectCargos = document.getElementById('cargos');
+        data.forEach(e => {
+            selectCargos.innerHTML += `<option value="${e.cargo}">${e.cargo}</option>`
+        });
+        const cargoInfo = document.getElementById('cargo-info');
+        cargoInfo.innerHTML = `Código escalafón: ${data[0].codigoescalafon} <br> Desc. dedicación: ${data[0].desc_dedic}`;
+        // función que se llama en el onchange
+        const mostrar_info_cargo = () => {
+            const cargoSeleccionado = document.getElementById('cargos').value;
+            const cargo = data.find(c => c.cargo == cargoSeleccionado);
+            document.getElementById('cargo-info').innerHTML = `Código ecalafón: ${cargo.codigoescalafon} <br> Desc. dedicación: ${cargo.desc_dedic}`;
+        }
+    </script>
+</body>
+</html>
