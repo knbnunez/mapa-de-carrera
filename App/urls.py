@@ -3,7 +3,7 @@ from .views.views import *
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
-    path('docente/', DocenteBusquedaView.as_view(), name='buscadocente'),
-    path('docente/<int:legajo>/', DocenteDetalleView.as_view(), name='docente'),
-    path('docente/<int:legajo>/asignar-modalidad', DocenteModalidadView.as_view(), name='docente-modalidad'),
+    path('docentes/', DocenteBusquedaView.as_view(), name='buscadocente'),
+    path('docentes/<int:legajo>/', DocenteDetalleView.as_view(), name='docente'),
+    path('docentes/<int:legajo>/asignar-modalidades', DocenteModalidadView.as_view(), name='docente-modalidad'),
 ]

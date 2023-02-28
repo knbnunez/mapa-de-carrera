@@ -45,12 +45,12 @@
             selectCargos.innerHTML += `<option value="${e.cargo}">${e.cargo}</option>`
         });
         const cargoInfo = document.getElementById('cargo-info');
-        cargoInfo.innerHTML = `Código escalafón: ${data[0].codigoescalafon} <br> Desc. dedicación: ${data[0].desc_dedic}`;
+        cargoInfo.innerHTML = `Código escalafón: ${data[0].escalafon} <br> Desc. dedicación: ${data[0].desc_dedic}`;
         // función que se llama en el onchange
         const mostrar_info_cargo = () => {
             const cargoSeleccionado = document.getElementById('cargos').value;
             const cargo = data.find(c => c.cargo == cargoSeleccionado);
-            document.getElementById('cargo-info').innerHTML = `Código ecalafón: ${cargo.codigoescalafon} <br> Desc. dedicación: ${cargo.desc_dedic}`;
+            document.getElementById('cargo-info').innerHTML = `Código ecalafón: ${cargo.escalafon} <br> Desc. dedicación: ${cargo.desc_dedic}`;
         }
     </script>
 </body>

@@ -113,7 +113,7 @@ class DocenteModalidadView(TemplateView):
             response = requests.get(url, auth=(self.username, self.password), timeout=5)
             cargos = response.json()
             # Puede ser útil el codigoescalafon, que nos trae si es DOCE (docente), NODO, AUTO. En teoría el único que nos interesa es DOCE, por lo que capaz nos puede servir para hacer algún control...
-            cargos = [{'cargo':_.get('cargo'), 'desc_dedic':_.get('desc_dedic'), 'codigoescalafon':_.get('codigoescalafon')} for _ in response.json()]
+            cargos = [{'cargo':_.get('cargo'), 'desc_dedic':_.get('desc_dedic'), 'escalafon':_.get('escalafon')} for _ in response.json()]
             # print(cargos)
             # TO DO: Complejidad, traer la modalidad si hubiera una ya cargada. Cómo llegamos hasta la modalidad cargada para el cargo del docente?
         except ConnectTimeout:
