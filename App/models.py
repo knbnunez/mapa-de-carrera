@@ -25,10 +25,10 @@ class Materia(models.Model):
 
 
 class Docente(models.Model):
-    numero_documento = models.IntegerField()
-    legajo = models.IntegerField()
+    legajo = models.IntegerField(primary_key=True)
+    numero_documento = models.IntegerField(unique=True)
     nombre_apellido = models.CharField(max_length=255)
-    correo_electronico = models.EmailField(null=False)
+    correo_electronico = models.EmailField(null=True)
 
     def __str__(self):
         return self.nombre
@@ -57,6 +57,7 @@ class Resolucion(models.Model):
     
 
 class Categoria(models.Model):
+    categoria = models.CharField(primary_key=True, max_length=50)
     nombre = models.CharField(max_length=100)
     
     def __str__(self):
@@ -78,10 +79,11 @@ class Dedicacion(models.Model):
     
     
 class Modalidad_Dedicacion(models.Model):
-    id_modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE)
-    id_dedicacion = models.ForeignKey(Dedicacion, on_delete=models.CASCADE)
+    id_modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, null=True)
+    id_dedicacion = models.ForeignKey(Dedicacion, on_delete=models.CASCADE, null=True)
     horas_minimas = models.IntegerField()
     horas_maximas = models.IntegerField()
+    error = models.IntegerField(default=0) # Para marcar ante error de carga
     
     
 class Localidad(models.Model):
@@ -130,15 +132,15 @@ class Comision(models.Model):
     
     
 class Cargo(models.Model):
-    id_docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
-    id_resolucion = models.ForeignKey(Resolucion, on_delete=models.CASCADE)
-    id_dependencia_desempeno = models.ForeignKey(Instituto, on_delete=models.CASCADE, related_name='cargo_desmpeno')
-    id_dependencia_designacion = models.ForeignKey(Instituto, on_delete=models.CASCADE, related_name='cargo_designacion')
-    id_dedicacion = models.ForeignKey(Dedicacion, on_delete=models.CASCADE)
-    id_cargas_extras = models.ManyToManyField(Cargas_Extras)
+    cargo = models.IntegerField(primary_key=True) # En la API de Mapuche lo usan como si fuera un nro de legajo
+    legajo = models.ForeignKey(Docente, on_delete=models.CASCADE)
+    id_resolucion = models.ForeignKey(Resolucion, on_delete=models.CASCADE, null=True)
+    id_dependencia_desempeno = models.ForeignKey(Instituto, on_delete=models.CASCADE, related_name='cargo_desmpeno', null=True)
+    id_dependencia_designacion = models.ForeignKey(Instituto, on_delete=models.CASCADE, related_name='cargo_designacion', null=True)
+    id_modalidad_dedicacion = models.ForeignKey(Modalidad_Dedicacion, on_delete=models.CASCADE, null=True)
+    id_cargas_extras = models.ManyToManyField(Cargas_Extras) # null=True
     id_franja_horaria = models.ManyToManyField(Franja_Horaria)
-    id_categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, null=True)
     # Vienen de la API
     fecha_alta = models.DateField()
     fecha_baja = models.DateField()
-    error = models.IntegerField(default=0) # Para marcar ante error de carga
