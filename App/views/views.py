@@ -20,101 +20,135 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
     url_mapuche = 'http://10.7.180.231/mapuche/rest/'
 
     def get(self, request, legajo): # Se puede recuperar el param atr llamándolo como esta definido en urls.py en este caso: legajo
-        # Y no hace falta usar el reverse ni hacer el split
-        legajo = str(legajo)
-        # print(legajo)
-        url_docente = self.url_mapuche+'agentes/'+legajo # /agentes/{legajo}
-        url_mail = self.url_mapuche+'agentes/'+legajo+'/mail' # /agentes/{legajo}/mail
-        url_cargos = self.url_mapuche+'agentes/'+legajo+'/cargos' # /agentes/{legajo}/cargos
-        exito = -2
+        legajo = str(legajo) # TODO: Revisar si la conversión afecta a las consultas a la base de datos. En el modelo, legajo es Integer     
+        
+        # Info persona docente ---------------------------------------------------
+        docente = None
+        url = self.url_mapuche+'agentes/'+legajo # /agentes/{legajo}
         try:
-            responses = [requests.get(url, auth=(self.username, self.password), timeout=5) for url in [url_docente, url_mail, url_cargos]] # timeout = 5 segundos, si no consigue hacer la petición en ese lapso, salta a la excepción
-            for response in responses:
-                if response.status_code == 200:
-                    exito += 1
-            # Éxito en la consulta            
-            if exito == 1: # exito en ambos casos
-                jsons = [response.json() for response in responses] # recupero los jsons de las respuestas -> list of jsons
-                
-                # DOCENTE -----------------------------------------
-                if not jsons[1]: # En la posición [1] está el correo electrónico, si está vacío lo autocompleto con None
-                    jsons[1] = [{'correo_electronico': None}]
-                # 1. No existe en la BD -> se crea (create)
-                if not Docente.objects.filter(legajo=legajo).exists(): # Caso no existe en la BD
-                    # Create
-                    docente = Docente.objects.create(
-                        # numero_documento    = jsons[0]['numero_documento'],
-                        numero_documento    = jsons[0].get('numero_documento'), # usar .get() en un dicccionario es equivalente a acceder con ['key'], pero es más seguro porque si no hay nada para esa llave (key), en lugar de lanzar una EXCEPCIÓN, retorno None...
-                        legajo              = jsons[0].get('legajo'),
-                        nombre_apellido     = jsons[0].get('agente'),
-                        correo_electronico  = jsons[1][0].get('correo_electronico') # hay que especificar jsons[idx-lista][idx-lista-attrJson]['attr']
-                    )
-                # 2. Existe en la BD -> se pisan los datos (update)
-                else: # Caso sí existe en la BD, lo recupero
+            response = requests.get(url, auth=(self.username, self.password), timeout=5)
+            if response.status_code == 200:
+                data = response.json()
+                if Docente.objects.filter(legajo=legajo).exists(): # Existe en la DB UPDATE
                     docente = Docente.objects.get(legajo=legajo)
-                    # update all
-                    docente.numero_documento    = jsons[0].get('numero_documento')
-                    docente.nombre_apellido     = jsons[0].get('agente')
-                    docente.correo_electronico  = jsons[1][0].get('correo_electronico')
-                    docente.save()
-                
-                # CARGO -----------------------------------------
-                # categoria axuiliar, traigo el listado completo
-                response = requests.get(self.url_mapuche+'categorias', auth=(self.username, self.password), timeout=5)
-                json = response.json()
-                print(json)
-                for c in jsons[2]:
-                    # print(c)
-                    # Comprobación antes sobre la categoria:
-                    if not Categoria.objects.filter(categoria=c.get('categoria')).exists():
-                        categoria = Categoria.objects.create(
-                            categoria = c.get('categoria'),
-                            nombre = filter(lambda json: json['categoria'] == c.get('categoria'), json) # ojo porque el filter puede devolver más de un elemento, no debería porque cada categoria es un código único, según la API
-                        )
-                    else:
-                        categoria = Categoria.objects.get(categoria=c.get('categoria'))
-                    
-                    # Creación cargo
-                    if not Cargo.objects.filter(cargo=c.get('cargo')).exists(): # Caso no existe en la BD
-                        cargo = Cargo.objects.create(
-                            cargo = c.get('cargo'),
-                            # legajo = jsons[0].get('legajo'), # NO FUNCIONA ASÍ, SOLUCIÓN:
-                            legajo = docente,
-                            # id_resolucion = Cargar más adelante...
-                            # dependencia_desempeno = Cargar más adelante...
-                            # dependencia_designacion = Cargar más adelante...
-                            categoria = categoria,
-                            # id_dedicacion_modalidad = Se carga más adelante al Asignar la Modalidad
-                            # id_cargas_extras = Cargar más adelante...
-                            fecha_alta = c.get('fecha_alta'),
-                            fecha_baja = c.get('fecha_baja')
-                        )                        
-                    else: cargo = Cargo.objects.get(cargo=c.get('cargo'))
-                    print(cargo)
-
-            # Fallo en alguna de las dos consultas agentes o mail
-            # else:
-                # # 1. No existe en la BD -> algún mensaje en el template sobre que no está cargado
-                # if not Docente.objects.filter(legajo=legajo).exists(): # Caso no existe en la BD
-                #     docente = None # Luego en el template -> if docente -> muestro; else (docente = None): "no existe"
-                # # 2. Existe en la BD -> se muestran los datos de la BD
-                # else:
-                #     docente = Docente.objects.get(legajo=legajo)
+                    docente.numero_documento = data.get('numero_documento')
+                    docente.nombre_apellido  = data.get('agente')
+                    docente.save() # No actualizo el legajo porque no tiene sentido... Si se hubiese cambiado el legajo no lo hubiese encontrado...
+                else: # No existe en la DB CREATE
+                    docente = Docente.objects.create(
+                        numero_documento = data.get('numero_documento'),
+                        legajo           = data.get('legajo'),
+                        nombre_apellido  = data.get('agente')
+                    )
         except ConnectTimeout:
-            # if not Docente.objects.filter(legajo=legajo).exists(): docente = None 
-            # else: docente = Docente.objects.get(legajo=legajo)
+            pass # Se trata al final junto con el status_code <> 200
+        if (docente is None) and (Docente.objects.filter(legajo=legajo).exists()):
+            docente = Docente.objects.get(legajo=legajo) # Lo recupero
+        else: return render(request, self.template_name, {'docente': docente, 'cargos':cargos, 'categorias':categorias})
+
+        # Correo docente --------------------------------------------------------
+        correo_electronico = None
+        if docente is not None:
+            url = self.url_mapuche+'agentes/'+legajo+'/mail' # /agentes/{legajo}/mail
+            try:
+                response = requests.get(url, auth=(self.username, self.password), timeout=5)
+                if response.status_code == 200:
+                    data = response.json()
+                    docente.correo_electronico = data.get('correo_electronico')
+                    docente.save()
+            except ConnectTimeout:
+                pass # Si hubo error se mostrará el que tenga cargado el docente, y si se recuperó el correo, pero no el docente, no se mostrará el docente...
+        
+        # Categorías --------------------------------------------------------
+        # Nota: se actualiza el listado de categorias almacenadas en la base de datos. Sirve para recuperarlas de manera posterior en 
+        # url = self.url_mapuche+'categorias' # /categorias
+        # try:
+        #     response = requests.get(url, auth=(self.username, self.password), timeout=5)
+        #     if response.status_code == 200: 
+        #         data = response.json()
+        #         for d in data:
+        #             categoria, _ = Categoria.objects.get_or_create( # .save() implícito
+        #                 categoria=d.get('categoria'),
+        #                 nombre = d.get('desc_categ')
+        #             )
+        # except ConnectTimeout:
+        #     pass
+        
+        # Info cargo docente --------------------------------------------------------
+        cargos = None        
+        url = self.url_mapuche+'agentes/'+legajo+'/cargos' # /agentes/{legajo}/cargos
+        try:
+            response = requests.get(url, auth=(self.username, self.password), timeout=5)
+            if response.status_code == 200:
+                cargos = response.json()
+                # TODO: Recorrer los Cargos, para las categorias y el docente, recuperar el que coincida con la categoria y con el legajo
+                #       tener en cuenta lo comentado abajo
+                
+                # Para este punto la categoria y el docente asociado al cargo tiene que estar definido
+                for c in cargos:
+                    # print(c)
+                    if Cargo.objects.filter(id_cargo=c.get('cargo')).exists(): # Update si hubo cambios (intuímos por error en mapuche), errores no nos interesa dejar como histórico
+                        cargo = Cargo.objects.get(id_cargo=c.get('cargo'))
+                        dedicacion, _ = Dedicacion.objects.get_or_create(nombre=c.get('desc_dedic'))
+                        modalidad_dedicacion, _ = Modalidad_Dedicacion.objects.get_or_create(
+                            dedicacion = dedicacion,
+                            modalidad = None, # IMPORTANTE: Deberán asignarsela devuelta...
+                            # restriccion_horas # TODO: Pensar en el tema restricción de horas, si debería estar predefinido en el modelo, o dónde...
+                            # error default = 0
+                        )
+
+                        id_dedicacion = Dedicacion.objects.get(nombre=c.get(''))
+                    
+                    else: # TODO: Crear un cargo nuevo para el docente
+
+        except ConnectTimeout:
             pass
-        # Caso status_code <> 200 para cualquiera de las dos consultas (agentes, mail) y caso excepción ConnectTimeout, junto todo acá
-        #
-        # AGREGAR TEMA CARGO Y CATEGORIA
-        if exito != 1:   
-            # # 1. No existe en la BD -> algún mensaje en el template sobre que el docente no está cargado     
-            if not Docente.objects.filter(legajo=legajo).exists(): # Caso no existe en la BD
-                docente = None # Luego en el template -> if docente -> muestro; else (docente = None): "no existe"
-            # 2. Existe en la BD -> se muestran los datos de la BD
-            else:
-                docente = Docente.objects.get(legajo=legajo)
-        return render(request, self.template_name, {'docente': docente})
+              
+                    
+        #             # Creación cargo
+        #             if not Cargo.objects.filter(cargo=c.get('cargo')).exists(): # Caso no existe en la BD
+        #                 cargo = Cargo.objects.create(
+        #                     cargo = c.get('cargo'),
+        #                     # legajo = jsons[0].get('legajo'), # NO FUNCIONA ASÍ, SOLUCIÓN:
+        #                     legajo = docente,
+        #                     # id_resolucion = Cargar más adelante...
+        #                     # dependencia_desempeno = Cargar más adelante...
+        #                     # dependencia_designacion = Cargar más adelante...
+        #                     categoria = categoria,
+        #                     # id_dedicacion_modalidad = Se carga más adelante al Asignar la Modalidad
+        #                     # id_cargas_extras = Cargar más adelante...
+        #                     fecha_alta = c.get('fecha_alta'),
+        #                     fecha_baja = c.get('fecha_baja')
+        #                 )                        
+        #             else: cargo = Cargo.objects.get(cargo=c.get('cargo'))
+        #             print(cargo)
+
+        #     # Fallo en alguna de las dos consultas agentes o mail
+        #     # else:
+        #         # # 1. No existe en la BD -> algún mensaje en el template sobre que no está cargado
+        #         # if not Docente.objects.filter(legajo=legajo).exists(): # Caso no existe en la BD
+        #         #     docente = None # Luego en el template -> if docente -> muestro; else (docente = None): "no existe"
+        #         # # 2. Existe en la BD -> se muestran los datos de la BD
+        #         # else:
+        #         #     docente = Docente.objects.get(legajo=legajo)
+        # except ConnectTimeout:
+        #     # if not Docente.objects.filter(legajo=legajo).exists(): docente = None 
+        #     # else: docente = Docente.objects.get(legajo=legajo)
+        #     pass
+        # # Caso status_code <> 200 para cualquiera de las dos consultas (agentes, mail) y caso excepción ConnectTimeout, junto todo acá
+        # #
+        # # AGREGAR TEMA CARGO Y CATEGORIA
+        # if exito != 1:   
+        #     # 1. No existe en la BD -> algún mensaje en el template sobre que el docente no está cargado     
+        #     if not Docente.objects.filter(legajo=legajo).exists(): # Caso no existe en la BD
+        #         docente = None # Luego en el template -> if docente -> muestro; else (docente = None): "no existe"
+        #     # 2. Existe en la BD -> se muestran los datos de la BD
+        #     else:
+        #         docente = Docente.objects.get(legajo=legajo)
+
+
+
+        return render(request, self.template_name, {'docente': docente, 'cargos':cargos, 'categorias':categorias}) # Tratar de devolver las categorias asociadas a los cargos, no todo el listado.
 
         
 
