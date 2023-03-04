@@ -31,7 +31,7 @@ class Docente(models.Model):
     correo_electronico = models.EmailField(null=True, default=None) # correo_electronico
 
     def __str__(self):
-        return self.nombre
+        return self.nombre_apellido
     
 
 # Se eleminó la clase Coordinador. La distinción será arreglada con roles dentro de la aplicación
@@ -57,25 +57,25 @@ class Resolucion(models.Model):
     
 
 class Categoria(models.Model):
-    categoria = models.CharField(primary_key=True, max_length=50) # categoria
+    codigo = models.CharField(primary_key=True, max_length=50) # categoria
     desc_categ = models.CharField(max_length=100) # desc_dedic
     
     def __str__(self):
-        return self.nombre
+        return self.desc_categ
     
 
 class Modalidad(models.Model):
     desc_modal = models.CharField(max_length=100)
     
     def __str__(self):
-        return self.nombre
+        return self.desc_modal
     
     
 class Dedicacion(models.Model):
     desc_dedic = models.CharField(max_length=100)
     
     def __str__(self):
-        return self.nombre
+        return self.desc_dedic
     
     
 # TO DO: crear las instancias con las restricciones
@@ -90,6 +90,7 @@ class Modalidad_Dedicacion(models.Model):
     def save(self, *args, **kwargs):
         if self.modalidad is None: # Caso todavía no está definida la modalidad, no se aplica la restricción 
             super(Modalidad_Dedicacion, self).save(*args, **kwargs)
+            return
         dedicacion = Dedicacion.objects.get(id=self.dedicacion.id) # Hay que asegurarse de que la dedicación asignada siempre exista, eso se controla en las views
         modalidad = Modalidad.objects.get(id=self.modalidad.id)
         # TO DO: definir restricciones
@@ -186,4 +187,4 @@ class Cargo(models.Model):
     # Mapuche
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, null=True)
     fecha_alta = models.DateField()
-    fecha_baja = models.DateField()
+    fecha_baja = models.DateField(null=True, blank=True)

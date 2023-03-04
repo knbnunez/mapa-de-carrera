@@ -20,6 +20,47 @@
     {% else %}
         <h3>El docente no pudo ser recuperado y no se encontraba en bases internas</h3>
     {% endif %}
+    <!-- Cargos -->
+    {% if cargos %}
+        <h1>Cargos</h1>
+        {% for c in cargos %}
+            <li></li>    
+            <!-- 
+            aux_dict['cargo'] = cargo.nro_cargo
+            # dependencias -> TODO: Relacionar con los datos de Guaraní
+            aux_dict['dedicacion'] = dedicacion.desc_dedic
+            # cargas de horarias -> TODO: faltan definirlas bien
+            aux_dict['categoria'] = categoria.desc_categ
+            aux_dict['fecha_alta'] = cargo.fecha_alta
+            aux_dict['fecha_baja'] = cargo.fecha_baja 
+            -->
+            <h3> - Nro cargo: {{c.cargo.nro_cargo}}</h3>
+            <h3> - Dedicación: {{c.dedicacion.desc_dedic}}</h3>
+            <!-- 
+            {% if c.modalidad %} <h3> - Modalidad: {{c.cargo.modalidad}}</h3>
+            {% else %} <h3> - Modalidad: no hay modalidad asignada todavía</h3>
+            {% endif %}
+
+            {% if c.dependencia_desempeno %} <h3> - Dependencia de Desempeño: {{c.dependencia_desempeno}}</h3>
+            {% else %} <h3> - Dependencia de Desempeño: no hay dependencia asignada</h3>
+            {% endif %}
+
+            {% if c.dependencia_designacion %} <h3> - Dependencia de Designación: {{c.dependencia_designacion}}</h3>
+            {% else %} <h3> - Dependencia de Designación: no hay dependencia asignada</h3>
+            {% endif %}
+
+            {% if c.cargas_aulas %} <h3> - Cargas horarias frente al aula: {{c.cargas_aulas}}</h3>
+            {% else %} <h3> - Cargas horarias frente al aula: no hay cargas frente al aula asociadas</h3>
+            {% endif %}
+
+            {% if c.cargas_extras %} <h3> - Cargas horarias extras: {{c.cargas_extras}}</h3>
+            {% else %} <h3> - Cargas horarias extras: no hay cargas extras asociadas</h3>
+            {% endif %} -->
+            <h3> - Categoria: {{c.categoria.desc_categ}}</h3>
+            <h3> - Fecha alta: {{c.cargo.fecha_alta}}</h3>
+            <h3> - Fecha baja: {{c.cargo.fecha_baja}}</h3>
+        {% endfor %}
+    {% endif %}
 </body>
 
 </html>
