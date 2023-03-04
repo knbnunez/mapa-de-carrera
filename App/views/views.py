@@ -7,6 +7,7 @@ import requests
 from django.db.models import Q
 import json
 from requests.exceptions import ConnectTimeout
+import datetime
 
 
 class IndexView(TemplateView):
@@ -42,9 +43,10 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
                     )
         except ConnectTimeout:
             pass # Se trata al final junto con el status_code <> 200
-        if (docente is None) and (Docente.objects.filter(legajo=legajo).exists()):
-            docente = Docente.objects.get(legajo=legajo) # Lo recupero
-        else: return render(request, self.template_name, {'docente': docente, 'cargos':cargos, 'categorias':categorias})
+        if (docente is None) and (Docente.objects.filter(legajo=legajo).exists()): docente = Docente.objects.get(legajo=legajo) # Lo recupero
+        else: 
+            cargos_activos = None
+            return render(request, self.template_name, {'docente': docente, 'cargos':cargos_activos})
 
         # Correo docente --------------------------------------------------------
         correo_electronico = None
@@ -56,50 +58,72 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
                     data = response.json()
                     docente.correo_electronico = data.get('correo_electronico')
                     docente.save()
-            except ConnectTimeout:
-                pass # Si hubo error se mostrará el que tenga cargado el docente, y si se recuperó el correo, pero no el docente, no se mostrará el docente...
-        
-        # Categorías --------------------------------------------------------
-        # Nota: se actualiza el listado de categorias almacenadas en la base de datos. Sirve para recuperarlas de manera posterior en 
-        # url = self.url_mapuche+'categorias' # /categorias
-        # try:
-        #     response = requests.get(url, auth=(self.username, self.password), timeout=5)
-        #     if response.status_code == 200: 
-        #         data = response.json()
-        #         for d in data:
-        #             categoria, _ = Categoria.objects.get_or_create( # .save() implícito
-        #                 categoria=d.get('categoria'),
-        #                 nombre = d.get('desc_categ')
-        #             )
-        # except ConnectTimeout:
-        #     pass
+            except ConnectTimeout: pass # Si no se pudo recuperar el correo de la API se muestra lo que tenga cargado -> None o sumail@untdf.edu.ar
         
         # Info cargo docente --------------------------------------------------------
-        cargos = None        
+        cargos = None # Hay que inicializar sí o sí, sino no se van a cargar los nuevos valores del if que viene más abajo
+        cargos_activos = [] # Lista de diccionarios auxiliar, facilita mostrar nombre de categoria, dedicación, otros. En lugar de mostrar solo el código  
         url = self.url_mapuche+'agentes/'+legajo+'/cargos' # /agentes/{legajo}/cargos
         try:
             response = requests.get(url, auth=(self.username, self.password), timeout=5)
             if response.status_code == 200:
                 cargos = response.json()
-                # TODO: Recorrer los Cargos, para las categorias y el docente, recuperar el que coincida con la categoria y con el legajo
-                #       tener en cuenta lo comentado abajo
-                
-                # Para este punto la categoria y el docente asociado al cargo tiene que estar definido
+                # Para este punto la categoria y el docente asociado al cargo ya están definidos, en caso de algún inconveninete sale antes
                 for c in cargos:
                     # print(c)
-                    if Cargo.objects.filter(id_cargo=c.get('cargo')).exists(): # Update si hubo cambios (intuímos por error en mapuche), errores no nos interesa dejar como histórico
-                        cargo = Cargo.objects.get(id_cargo=c.get('cargo'))
-                        dedicacion, _ = Dedicacion.objects.get_or_create(nombre=c.get('desc_dedic'))
-                        modalidad_dedicacion, _ = Modalidad_Dedicacion.objects.get_or_create(
-                            dedicacion = dedicacion,
-                            modalidad = None, # IMPORTANTE: Deberán asignarsela devuelta...
-                            # restriccion_horas # TODO: Pensar en el tema restricción de horas, si debería estar predefinido en el modelo, o dónde...
-                            # error default = 0
-                        )
+                    cargo = None
+                    aux_dict = {}
+                    dedicacion, _ = Dedicacion.objects.get_or_create(desc_dedic=c.get('desc_dedic'))
+                    categoria = Categoria.objects.get_or_create(desc_categ=c.get('desc_categ'))
 
-                        id_dedicacion = Dedicacion.objects.get(nombre=c.get(''))
-                    
-                    else: # TODO: Crear un cargo nuevo para el docente
+                    if Cargo.objects.filter(nro_cargo=c.get('cargo')).exists(): # Update si hubo cambios (intuímos por error en mapuche), errores no nos interesa dejar como histórico
+                        cargo = Cargo.objects.get(nro_cargo=c.get('cargo')) # Recupero el cargo que voy a actualizar
+                        # Modalidad-Dedicación
+                        modalidad_dedicacion = Modalidad_Dedicacion.objects.get(id=c.modalidad_dedicacion.id)
+                        modalidad_dedicacion.dedicacion = dedicacion # Update dedicación por las dudas de que haya cambiado.
+                        modalidad_dedicacion.save()
+                        # Actualizo
+                        cargo.modalidad_dedicacion = modalidad_dedicacion
+                        cargo.categoria = categoria
+                        cargo.fecha_alta = c.get('fecha_alta')
+                        cargo.fecha_baja = c.get('fecha_baja')
+                        cargo.save()
+
+                        aux_dict['cargo'] = cargo.nro_cargo
+                        aux_dict['dedicacion'] = dedicacion.desc_dedic
+                        aux_dict['categoria'] = categoria.desc_categ
+                        aux_dict['fecha_alta'] = cargo.fecha_alta
+                        aux_dict['fecha_baja'] = cargo.fecha_baja
+                    else: 
+                        # TODO: Crear un cargo nuevo para el docente
+                        #       - Debe definirse una modalidad_dedicacion aunque no esté completa (parte sólo dedicación, modalidad se carga después)
+                        modalidad_dedicacion = Modalidad_Dedicacion.objects.create(
+                            # modalidad -> la definimos luego
+                            dedicacion = dedicacion
+                            # restriccion de horas se definen implícitamente cuando se le asigne modalidad
+                            # error -> no
+                        )
+                        Cargo.objects.create(
+                            nro_cargo = c.get('cargo'),
+                            docente = docente,
+                            # resol -> Default,
+                            # depend_desemp -> Default, TODO: asociar data Guaraní
+                            # depend_design -> Ídem depend_desemp,
+                            modalidad_dedicacion = modalidad_dedicacion,
+                            # cargas de hora -> todavía no se definen
+                            categoria = categoria,
+
+                            # Falta seguir
+                        )
+                
+                    fecha_baja = None
+                    if aux_dict['fecha_baja'] is not 'null':
+                        fecha_baja = datetime.strptime(aux_dict['fecha_baja'], '%Y-%m-%d')
+                    cur_date = datetime.date.today() # Debería venir en formato yyyy-mm-dd
+                    # Add
+                    if fecha_baja is 'null' or fecha_baja >= cur_date: # REVISAR SI EL null DE LA API ES UN null de python O SI LLEGA COMO UN STRING
+                        cargos_activos.append(cargo)
+
 
         except ConnectTimeout:
             pass
@@ -148,7 +172,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
 
 
 
-        return render(request, self.template_name, {'docente': docente, 'cargos':cargos, 'categorias':categorias}) # Tratar de devolver las categorias asociadas a los cargos, no todo el listado.
+        return render(request, self.template_name, {'docente': docente, 'cargos':cargos_activos}) # Tratar de devolver las categorias asociadas a los cargos, no todo el listado.
 
         
 
