@@ -151,12 +151,13 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
         # Dependencia de designación # Por ahora no sabemos de donde sacarla
         # Dependencia desempeño      # Ídem 
         
-        # Periodo lectivo --> fecha_inicio, fecha_finalización (sga_comisiones_bh)
+        
         # Carrera         --> Vamos a tirar directamente la propuesta
         # Materia         --> elemento.nombre (sga_elementos)
         # Comisión        --> 
-        # Franja horaria  -->
-        # Total horas     -->
+        # Franja horaria  --> 
+        # Periodo lectivo --> fecha_inicio, fecha_finalización (sga_comisiones_bh)
+        # Total horas     --> 
 
 
   

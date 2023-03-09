@@ -37,12 +37,12 @@ class Docente(models.Model):
 # Se eleminó la clase Coordinador. La distinción será arreglada con roles dentro de la aplicación
 
 
-class Cargas_Extras(models.Model):
-    nombre = models.CharField(max_length=100)
-    horas = models.IntegerField()
+# class Cargas_Extras(models.Model):
+#     nombre = models.CharField(max_length=100)
+#     horas = models.IntegerField()
     
-    def __str__(self):
-        return self.nombre
+#     def __str__(self):
+#         return self.nombre
     
  
 class Resolucion(models.Model):
@@ -124,46 +124,23 @@ class Modalidad_Dedicacion(models.Model):
         #       - Frente al aula: 6 hrs (máx) y 4 hrs (mín)
 
     
+class Tipo_Extra(models.Model):
+    desc_extra = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.nombre     
+
     
 class Localidad(models.Model):
     nombre = models.CharField(max_length=100)
     
     def __str__(self):
-        return self.nombre
-    
-
-class Tipo(models.Model):
-    nombre = models.CharField(max_length=100)
-    
-    def __str__(self):
-        return self.nombre
-    
-    
-class Franja_Horaria(models.Model):
-    nombre = models.CharField(max_length=100)
-    dia = models.DateField()
-    hora_inicio = models.TimeField()
-    hora_fin = models.TimeField()
-    tipo = models.ForeignKey(Tipo, on_delete=models.CASCADE)
-    
-    def __str__(self):
-        return self.nombre
-    
-    
-class Periodo_Electivo(models.Model):
-    nombre = models.CharField(max_length=100)
-    desde = models.DateField()
-    hasta = models.DateField()
-    
-    def __str__(self):
-        return self.nombre  
+        return self.nombre 
 
 
 class Comision(models.Model):
     nombre = models.CharField(max_length=100)
     materia = models.ManyToManyField(Materia)
-    periodo_electivo = models.ForeignKey(Periodo_Electivo, on_delete=models.CASCADE)
-    franja_horaria = models.ManyToManyField(Franja_Horaria)
     localidad = models.ForeignKey(Localidad, on_delete=models.CASCADE)
     
     def __str__(self):
@@ -181,14 +158,26 @@ class Cargo(models.Model):
     dependencia_designacion = models.ForeignKey(Instituto, on_delete=models.CASCADE, related_name='cargo_designacion', null=True, default=None)
     # Propio - Mapuche
     modalidad_dedicacion = models.ForeignKey(Modalidad_Dedicacion, on_delete=models.CASCADE, null=True)
-    # Propio
-    carga_extra = models.ManyToManyField(Cargas_Extras, default=None) # null=True
-    franja_horaria = models.ManyToManyField(Franja_Horaria, default=None)
     # Mapuche
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, null=True)
     fecha_alta = models.DateField()
     fecha_baja = models.DateField(null=True, blank=True)
 
+
+class Carga_Horaria(models.Model):
+    cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
+    comision = models.ForeignKey(Comision, on_delete=models.CASCADE, null=True)
+    tipo_extra = models.ForeignKey(Tipo_Extra, on_delete=models.CASCADE, null=True)
+    f_desde = models.CharField()
+    fecha_hasta = models.CharField(max_length=100)
+    hora_inicio = models.CharField(max_length=100)
+    hora_finalizacion = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nombre
+    
+
+# Auxiliar?
 class Cargo_Materia(models.Model):
     cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
     materia = models.ForeignKey(Materia, on_delete=models.CASCADE)
