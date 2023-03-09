@@ -1,4 +1,4 @@
-<html lang="en">
+html lang="en">
  
 <head>
 
@@ -14,21 +14,56 @@
 
 <body>
 
+<!--
     <div class="container">
         <div class="row">
             <div class="col-md-12 search">
                 <form method="get">
                     <div id="custom-search-input">
-                        <imput type="text" class="form-control" placeholder="Buscar" name="Buscar"></imput>
-                        <span class="imput-group-list">
-                            <button type="submit" class="boton btn-success">Buscar</button>
-                        </span>
-                    </div>
+                        <div class="input-group col-md-as">
+                            <input type="text" class="form-control" placeholder="Buscar" name="Buscar"></input>
+                            <span class="input-group-list">
+                                <i class="icon icon-search"></i>
+                                <button type="submit" class="boton btn-success">Buscar</button>
+                            </span>
+                        </div>
+                     </div>
                 </form>
             </div>
         </div>
     </div>
+
+    <form action="http://127.0.0.1:8000/docente" method="get">
+        <label for="search_query">Buscar:</label>
+        <input type="text" name=" " id="search_query">
+        <button type="submit">Buscar</button>
+      </form>
+
+      <form id="mi-formulario" method="post">
+        <label for="search_query">Buscar:</label>
+        <input type="text" name="q" id="search_query">
+        <input type="hidden" name="legajo" >
+        
+        <button type="submit">Buscar</button>
+      </form>
+      
+      <script>
+        const formulario = document.querySelector('#mi-formulario');
+           formulario.addEventListener('submit', (event) => {
+          event.preventDefault();
+          const q = encodeURIComponent(document.querySelector('#search_query').value);
+          const legajo = encodeURIComponent(document.querySelector('input[name="legajo"]').value);
+          const url = `http://127.0.0.1:8000/docente/${legajo}`;
+          window.location.href = url;
+        });
+      </script>-->
     <h1>Ingrese Legajo a buscar</h1>
+    <form action="{% url 'buscadocente' %}" method="busca">
+        <input type="text" name="q" value="{{ queryset }}">
+        <button type="submit">Buscar</button>
+    </form>
+    
+
     {% for d in docentes %}
         <h3> - Nro DNI: {{d.numero_documento}}</h3>
         <h3> - Legajo: {{d.legajo}}</h3>
