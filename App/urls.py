@@ -1,5 +1,7 @@
 from django.urls import path
-from .views.views import *
+from .views.docente_busqueda import *
+from .views.docente_detalle import *
+from .views.docente_modalidad import *
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),

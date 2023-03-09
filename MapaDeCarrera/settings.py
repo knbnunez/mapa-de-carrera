@@ -75,25 +75,27 @@ WSGI_APPLICATION = 'MapaDeCarrera.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    # },
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'mapa_de_carreras',
+        'USER': 'kevin',
+        'PASSWORD': '55mdc22',
+        'HOST': '10.7.180.230',
+        'PORT': '5432',
+    },
+    'gaurani': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'g3p',
+        'USER': 'kevin',
+        'PASSWORD': '55mdc22',
+        'HOST': '10.7.180.230',
+        'PORT': '5432'
+    },
 }
-
-# DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgres',
-#        'NAME': 'postgre',
-#        'USER': 'postgres',
-#        'PASSWORD': '',
-#        'HOST': '',
-#        'PORT': '3306',
-#        'OPTIONS': {
-#            'read_default_file': '/etc/my.cnf',
-#        },
-#    }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

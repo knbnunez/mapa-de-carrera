@@ -95,17 +95,17 @@ class Modalidad_Dedicacion(models.Model):
         modalidad = Modalidad.objects.get(id=self.modalidad.id)
         # TO DO: definir restricciones
         if dedicacion.desc_dedic == 'Simple' and modalidad.desc_modal == 'Docencia/Desarrollo profesional':
-            self.restriccion_horas_minimas = 0
-            self.restriccion_horas_maximas = 0
+            self.restriccion_horas_minimas = 4
+            self.restriccion_horas_maximas = 6
         elif dedicacion.desc_dedic == 'Semided.' and modalidad.desc_modal == 'Docencia/Desarrollo profesional':
-            self.restriccion_horas_minimas = 0
-            self.restriccion_horas_maximas = 0
+            self.restriccion_horas_minimas = 6
+            self.restriccion_horas_maximas = 10
         elif dedicacion.desc_dedic == 'Semided.' and modalidad.desc_modal == 'Docencia e Investigación':
-            self.restriccion_horas_minimas = 0
-            self.restriccion_horas_maximas = 0
+            self.restriccion_horas_minimas = 4
+            self.restriccion_horas_maximas = 6
         elif dedicacion.desc_dedic == 'Exclusiva' and modalidad.desc_modal == 'Docencia e Investigación':
-            self.restriccion_horas_minimas = 0
-            self.restriccion_horas_maximas = 0
+            self.restriccion_horas_minimas = 4
+            self.restriccion_horas_maximas = 8
         
         # Para la restricción de la restricción de las combinaciones de arriba, definirlas en el template, si la dedicación es 'Simple', sólo mostrar 'Docencia/Desarrollo profesional' en el drop down list.
         
@@ -188,3 +188,8 @@ class Cargo(models.Model):
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, null=True)
     fecha_alta = models.DateField()
     fecha_baja = models.DateField(null=True, blank=True)
+
+class Cargo_Materia(models.Model):
+    cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
+    materia = models.ForeignKey(Materia, on_delete=models.CASCADE)
+    # fecha = models.DateField()
