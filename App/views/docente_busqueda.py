@@ -1,37 +1,36 @@
 # app/views.py
-html lang="en">
- 
-<head>
+class DocenteBusquedaView(TemplateView):
+    template_name = 'buscadocente.html'
+    username='mapumapa'
+    password='Mowozelu28'
+    url_mapuche = 'http://10.7.180.231/mapuche/rest/'
 
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
-   
-    
-    <title>MDC</title>
-</head>
-
-<body>
-
-<!--
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 search">
-                <form method="get">
-                    <div id="custom-search-input">
-                        <div class="input-group col-md-as">
-                            <input type="text" class="form-control" placeholder="Buscar" name="Buscar"></input>
-                            <span class="input-group-list">
-                                <i class="icon icon-search"></i>
-                                <button type="submit" class="boton btn-success">Buscar</button>
-                            </span>
-                        </div>
-                     </div>
-                </form>
-            </div>
-        </div>
+    def get(self, request):
+        url = reverse('buscadocente')
+        url_buscadocente = self.url_mapuche+'agentes' # /agentes/{legajo}
+        response = requests.get(url_buscadocente, auth=(self.username, self.password))
+        # if response.status_code == 200:
+        docentes = response.json()
+        # print(docentes)
+        
+        return render(request, self.template_name, {'docentes': docentes})
+        # else :
+            # return render(request, self.template_name, {"docentes":})
+    def busca(request):
+       # url=self.url_mapuche+'agentes/'+legajo
+        queryset = request.Get.get('q')
+        if queryset:
+            docentes = Docente.objects.filter(legajo=queryset).first()
+            if docentes:
+                url = reverse('docentes', kwargs={'legajo':queryset})
+              #  return redirect('docentes', legajo=queryset)
+     #    if queryset:
+      #         docentes = Post.objects.filter(
+      #             Q(legajo = queryset) 
+      #         )
+      #   responses = [requests.get(url, auth=(self.username, self.password), timeout=5) for url in [url]]
+      #  return render(request, 'docente-detalle.html', {'docentes': json.dumps(docentes),'queryset':queryset} )
+        return render(request, 'buscadocente.html', {'queryset':queryset} )
     </div>
 
     <form action="http://127.0.0.1:8000/docente" method="get">
