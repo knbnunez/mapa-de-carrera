@@ -168,7 +168,7 @@ class Carga_Horaria(models.Model):
     cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
     comision = models.ForeignKey(Comision, on_delete=models.CASCADE, null=True)
     tipo_extra = models.ForeignKey(Tipo_Extra, on_delete=models.CASCADE, null=True)
-    f_desde = models.CharField()
+    fecha_desde = models.CharField(max_length=100)
     fecha_hasta = models.CharField(max_length=100)
     hora_inicio = models.CharField(max_length=100)
     hora_finalizacion = models.CharField(max_length=100)
