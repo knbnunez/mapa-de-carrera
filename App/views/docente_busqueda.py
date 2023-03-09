@@ -1,3 +1,14 @@
+from django.views.generic import TemplateView
+
+from django.shortcuts import render
+from django.urls import reverse
+from App.models.mapa_de_carreras import *
+import requests
+from django.db.models import Q
+import json
+from requests.exceptions import ConnectTimeout
+import datetime
+
 # app/views.py
 from django.views.generic import TemplateView
 from django.shortcuts import render
@@ -10,7 +21,7 @@ from requests.exceptions import ConnectTimeout
 import datetime
 # app/views.py
 class DocenteBusquedaView(TemplateView):
-    template_name = 'buscadocente.html'
+    template_name = 'docente_busqueda.html'
     username='mapumapa'
     password='Mowozelu28'
     url_mapuche = 'http://10.7.180.231/mapuche/rest/'
@@ -41,4 +52,3 @@ class DocenteBusquedaView(TemplateView):
       #   responses = [requests.get(url, auth=(self.username, self.password), timeout=5) for url in [url]]
       #  return render(request, 'docente-detalle.html', {'docentes': json.dumps(docentes),'queryset':queryset} )
         return render(request, 'buscadocente.html', {'queryset':queryset} )
-    
