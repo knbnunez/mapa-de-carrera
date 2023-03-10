@@ -1,6 +1,7 @@
 from django.urls import path
 from .views.docente_busqueda import *
 from .views.docente_detalle import *
+
 from .views.docente_modalidad import *
 
 urlpatterns = [
