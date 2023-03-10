@@ -7,9 +7,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
-   
+    
     
     <title>MDC</title>
+
+    <style>
+        .hidden{
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -59,16 +65,52 @@
       </script>-->
     <h1>Ingrese Legajo a buscar</h1>
     <form action="{% url 'buscadocente' %}" method="busca">
-        <input type="text" name="q" value="{{ queryset }}">
-        <button type="submit">Buscar</button>
+        <input type="text" name="filtro" id="filtro" value="{{queryset}}">
+        <!--<button type="submit">Buscar</button>-->    
     </form>
     
-
+   <ul id="lista-docentes"> 
     {% for d in docentes %}
-        <h3> - Nro DNI: {{d.numero_documento}}</h3>
-        <h3> - Legajo: {{d.legajo}}</h3>
-        <h3> - Nombre y Apellido: {{d.nombre_apellido}}</h3>
+    <li class="docente"> 
+       <a href="{% url 'docente-detalle' legajo=d.legajo %}"> 
+            <h3> DNI: {{d.numero_documento}}. Legajo: {{d.legajo}}. Nombre y Apellido: {{d.nombre_apellido}}.</h3>
+        </a>
+    </li>
     {% endfor %}
+</ul>
+
+<script>
+ // lista de docente 
+  //capturar Input
+//  filtrar docentes 
+  console.log("Ejecutando JS");
+
+  const listaDocente = document.getElementById("lista-docentes").children;
+  console.log(listaDocente);
+
+  const filtrarDocente = () => {
+    console.log("filtrando docentes");
+  const inputValue = document.getElementById("filtro").value;
+  console.log(inputValue);
+  for(const docente of listaDocente) {
+  if(inputValue!== "" &&
+    !docente.innerHTML.includes(inputValue)){
+     docente.classList.add("hidden");
+
+ }
+ else {
+    docente.classList.remove("hidden");
+ }
+  };
+  }
+  //filtrarDocente();
+
+
+  const inputDOC = document.getElementById("filtro");
+  inputDOC.onkeyup = filtrarDocente;
+
+</script>
+
 </body>
 
 </html>

@@ -43,7 +43,7 @@ class DocenteBusquedaView(TemplateView):
         if queryset:
             docentes = Docente.objects.filter(legajo=queryset).first()
             if docentes:
-                url = reverse('docentes', kwargs={'legajo':queryset})
+                url = reverse('docente-detalle', kwargs={'legajo':queryset})
               #  return redirect('docentes', legajo=queryset)
      #    if queryset:
       #         docentes = Post.objects.filter(
@@ -51,4 +51,4 @@ class DocenteBusquedaView(TemplateView):
       #         )
       #   responses = [requests.get(url, auth=(self.username, self.password), timeout=5) for url in [url]]
       #  return render(request, 'docente-detalle.html', {'docentes': json.dumps(docentes),'queryset':queryset} )
-        return render(request, 'buscadocente.html', {'queryset':queryset} )
+        return render(request, 'docente_detalle.html', {'queryset':queryset} )
