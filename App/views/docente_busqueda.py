@@ -1,5 +1,4 @@
 from django.views.generic import TemplateView
-
 from django.shortcuts import render
 from django.urls import reverse
 from App.models.mapa_de_carreras import *
@@ -9,17 +8,7 @@ import json
 from requests.exceptions import ConnectTimeout
 import datetime
 
-# app/views.py
-from django.views.generic import TemplateView
-from django.shortcuts import render
-from django.urls import reverse
-from App.models.mapa_de_carreras import *
-import requests
-from django.db.models import Q
-import json
-from requests.exceptions import ConnectTimeout
-import datetime
-# app/views.py
+
 class DocenteBusquedaView(TemplateView):
     template_name = 'docente_busqueda.html'
     username='mapumapa'
@@ -27,7 +16,7 @@ class DocenteBusquedaView(TemplateView):
     url_mapuche = 'http://10.7.180.231/mapuche/rest/'
 
     def get(self, request):
-        url = reverse('buscadocente')
+        # url = reverse('buscadocente')
         url_buscadocente = self.url_mapuche+'agentes' # /agentes/{legajo}
         response = requests.get(url_buscadocente, auth=(self.username, self.password))
         # if response.status_code == 200:
