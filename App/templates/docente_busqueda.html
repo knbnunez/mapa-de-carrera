@@ -64,7 +64,7 @@
         });
       </script>-->
     <h1>Ingrese Legajo a buscar</h1>
-    <form action="{% url 'buscadocente' %}" method="busca">
+    <form action="{% url 'docente' %}" method="busca">
         <input type="text" name="filtro" id="filtro" value="{{queryset}}">
         <!--<button type="submit">Buscar</button>-->    
     </form>
@@ -73,7 +73,7 @@
     {% for d in docentes %}
     <li class="docente"> 
        <a href="{% url 'docente-detalle' legajo=d.legajo %}"> 
-            <h3> DNI: {{d.numero_documento}}. Legajo: {{d.legajo}}. Nombre y Apellido: {{d.nombre_apellido}}.</h3>
+            <h4> DNI: {{d.numero_documento}}. Legajo: {{d.legajo}}. Nombre y Apellido: {{d.agente}}.</h4>
         </a>
     </li>
     {% endfor %}
@@ -94,13 +94,15 @@
   console.log(inputValue);
   for(const docente of listaDocente) {
   if(inputValue!== "" &&
-    !docente.innerHTML.includes(inputValue)){
+    !docente.innerHTML.includes(inputValue))
+{
      docente.classList.add("hidden");
 
  }
  else {
     docente.classList.remove("hidden");
  }
+ 
   };
   }
   //filtrarDocente();
