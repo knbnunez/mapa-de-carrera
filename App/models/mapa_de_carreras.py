@@ -2,14 +2,14 @@ from django.db import models
 
 
 class Instituto(models.Model):
-    nombre = models.CharField(max_length=100)
+    nombre = models.CharField(max_length=255)
     
     def __str__(self):
         return self.nombre
     
 
 class Carrera(models.Model):
-    nombre = models.CharField(max_length=100)
+    nombre = models.CharField(max_length=255)
     instituto = models.ForeignKey(Instituto, on_delete=models.CASCADE)
    
     def __str__(self):
@@ -17,8 +17,7 @@ class Carrera(models.Model):
     
     
 class Materia(models.Model):
-    nombre = models.CharField(max_length=100)
-    carrera = models.ManyToManyField(Carrera)
+    nombre = models.CharField(max_length=255)
    
     def __str__(self):
         return self.nombre
@@ -32,21 +31,10 @@ class Docente(models.Model):
 
     def __str__(self):
         return self.nombre_apellido
-    
-
-# Se eleminó la clase Coordinador. La distinción será arreglada con roles dentro de la aplicación
-
-
-# class Cargas_Extras(models.Model):
-#     nombre = models.CharField(max_length=100)
-#     horas = models.IntegerField()
-    
-#     def __str__(self):
-#         return self.nombre
-    
+       
  
 class Resolucion(models.Model):
-    nombre = models.CharField(max_length=100)
+    nombre = models.CharField(max_length=255)
     # De las dudas: las fechas son las mismas que podemos obtener del endpoint de /agentes/{legajo}/cargos ???
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
@@ -58,21 +46,21 @@ class Resolucion(models.Model):
 
 class Categoria(models.Model):
     codigo = models.CharField(primary_key=True, max_length=50) # categoria
-    desc_categ = models.CharField(max_length=100) # desc_dedic
+    desc_categ = models.CharField(max_length=255) # desc_dedic
     
     def __str__(self):
         return self.desc_categ
     
 
 class Modalidad(models.Model):
-    desc_modal = models.CharField(max_length=100)
+    desc_modal = models.CharField(max_length=255)
     
     def __str__(self):
         return self.desc_modal
     
     
 class Dedicacion(models.Model):
-    desc_dedic = models.CharField(max_length=100)
+    desc_dedic = models.CharField(max_length=255)
     
     def __str__(self):
         return self.desc_dedic
@@ -84,7 +72,7 @@ class Modalidad_Dedicacion(models.Model):
     dedicacion = models.ForeignKey(Dedicacion, on_delete=models.CASCADE, null=True)
     restriccion_horas_minimas = models.IntegerField(null=True, default=None) # Se define implícitamente al crear una instancia
     restriccion_horas_maximas = models.IntegerField(null=True, default=None) # Ídem
-    error = models.IntegerField(default=0) # Para marcar ante error de carga
+    # error = models.IntegerField(default=0) # Para marcar ante error de carga
 
     # Restricciones:
     def save(self, *args, **kwargs):
@@ -125,23 +113,31 @@ class Modalidad_Dedicacion(models.Model):
 
     
 class Tipo_Extra(models.Model):
-    desc_extra = models.CharField(max_length=100)
+    desc_extra = models.CharField(max_length=255)
     
     def __str__(self):
         return self.nombre     
 
     
-class Localidad(models.Model):
-    nombre = models.CharField(max_length=100)
+class Ubicacion(models.Model):
+    nombre = models.CharField(max_length=255)
     
     def __str__(self):
         return self.nombre 
 
 
 class Comision(models.Model):
-    nombre = models.CharField(max_length=100)
-    materia = models.ManyToManyField(Materia)
-    localidad = models.ForeignKey(Localidad, on_delete=models.CASCADE)
+    nombre = models.CharField(max_length=255)
+    materia = models.ForeignKey(Materia, on_delete=models.CASCADE)
+    ubicacion = models.ForeignKey(Ubicacion, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.nombre
+    
+    
+class Comision_Carrera(models.Model):
+    comision = models.ForeignKey(Comision, on_delete=models.CASCADE)
+    carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.nombre
@@ -166,8 +162,8 @@ class Cargo(models.Model):
 
 class Carga_Horaria(models.Model):
     cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
-    comision = models.ForeignKey(Comision, on_delete=models.CASCADE, null=True)
-    tipo_extra = models.ForeignKey(Tipo_Extra, on_delete=models.CASCADE, null=True)
+    comision = models.ForeignKey(Comision, on_delete=models.CASCADE, null=True, default=None) # Cuando sea tipo_extra: comision = null
+    tipo_extra = models.ForeignKey(Tipo_Extra, on_delete=models.CASCADE, null=True, default=None) # Cuando sea comision: tipo_extra = null
     fecha_desde = models.CharField(max_length=100)
     fecha_hasta = models.CharField(max_length=100)
     hora_inicio = models.CharField(max_length=100)
@@ -175,10 +171,3 @@ class Carga_Horaria(models.Model):
 
     def __str__(self):
         return self.nombre
-    
-
-# Auxiliar?
-class Cargo_Materia(models.Model):
-    cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
-    materia = models.ForeignKey(Materia, on_delete=models.CASCADE)
-    # fecha = models.DateField()

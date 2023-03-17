@@ -1,17 +1,10 @@
-# app/views.py
 from django.views.generic import TemplateView
 from django.shortcuts import render
-from django.urls import reverse
-from App.models.mapa_de_carreras import *
 import requests
-from django.db.models import Q
-import json
 from requests.exceptions import ConnectTimeout
 import datetime
-
-
-class IndexView(TemplateView):
-    template_name = 'index.html' 
+from App.models.mapa_de_carreras import *
+from App.models.guarani import *
 
 
 class DocenteDetalleView(TemplateView): # Detalle para un único docente
@@ -147,10 +140,8 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
                 cur_date = datetime.date.today()
                 if (fecha_baja is None) or (fecha_baja >= cur_date): cargos_activos.append(aux_dict)
 
-        # TODO: Falta agregar la parte de los datos relacionados al cargo desde Guaraní:
         # Dependencia de designación # Por ahora no sabemos de donde sacarla
         # Dependencia desempeño      # Ídem 
-        
         
         # Carrera         --> Vamos a tirar directamente la propuesta
         # Materia         --> elemento.nombre (sga_elementos)
@@ -158,8 +149,36 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
         # Franja horaria  --> 
         # Periodo lectivo --> fecha_inicio, fecha_finalización (sga_comisiones_bh)
         # Total horas     --> 
+        # print(sga_elementos.objects.using('guarani').all())
+        # # usuarios_externos = UsuarioExterno.objects.using('db_externa').all()
+
+        # Sólo aplica el caso de "Existe" una carga_horaria asignada al docente... Sino no debería mostrar nada...
+        if cargos_activos is not None:
+            for dict in cargos_activos:
+                c = dict.get('cargo')
+                cargas_horarias = Carga_Horaria.objects.filter(cargo=c) # Puedo recibir más de uno... uso filter
+                dict['carga_horaria'] = []
+                if cargas_horarias: # Contiene elementos
+                    for ch in cargas_horarias: 
+                        # Es carga de materia o de tipo extra?
+                        if ch.comision: # Es no None --> Recupero materia y plan de estudio
+                            
+                            # Tema n:n
+                            # recupera materia --> elemento
+                            # Tema n:n
+                            # recupera carrera --> plan de estudios 
+                        
+                            print(ch.comision)
+                        # dict['carga_horaria'].append(ch)
+                
+                    
+                
 
 
+        # Funciona correcto!
+        # materias = Materias.objects.using('guarani').all()
+        # for materia in materias:
+        #     print(materia.nombre)
   
         return render(request, self.template_name, {'docente': docente, 'cargos':cargos_activos}) # materias, comisiones...
 

@@ -88,7 +88,7 @@ DATABASES = {
         'HOST': '10.7.180.230',
         'PORT': '5432',
     },
-    'gaurani': {
+    'guarani': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('NAME_DB_G'),
         'USER': os.getenv('USER'),

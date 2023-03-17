@@ -1,66 +1,101 @@
 from django.db import models
+#
 
+# TODO: Hacer andar esto en SQLScript:  insert into mapa_de_carreras.public."App_instituto"
+#                                       select nombre from g3p.negocio."sga_responsables_academicas"
+# Insertar datos de una base en otra... Quise hacerlo por código pero tarda demasiado, no vale la pena...
+# Es para cargar los datos la primera vez aunque sea. Par así poder probar la parte de las cargas horarias...
 
-# Agregar todas las tablas que nos interese usar de la BD de Guaraní
-class sga_elementos(models.Model): # Materias
-    elemento = models.CharField(primary_key=True)
-    nombre = models.CharField()
-    codigo = models.CharField()
-
-    class Meta:
-        managed = False # Es necesario para que Django no cree las tablas en nuestra base de datos
-        db_table = 'sga_comisiones_bh'
-        # app_label = 'nombre_app_externa'
-        using = 'guarani' # DB
-
-
-class sga_comisiones(models.Model):
-    comision = models.CharField(primary_key=True)
-    nombre = models.CharField()
-    elemento = models.ForeignKey(sga_elementos) # materia
+class SgaUbicaciones(models.Model):
+    ubicacion = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=100)
 
     class Meta:
         managed = False
-        db_table = 'sga_comisiones_bh'
-        # app_label = 'nombre_app_externa'
-        using = 'guarani' # DB
+        db_table = 'sga_ubicaciones'
 
 
-class sga_ubicaciones(models.Model):
-    ubicacion = models.CharField(primary_key=True)
-    nombre = models.CharField()
-
-    class Meta:
-            managed = False
-            db_table = 'sga_comisiones_bh'
-            # app_label = 'nombre_app_externa'
-            using = 'guarani' # DB
-
-
-class sga_asignaciones(models.Model):
-    asignacion = models.CharField(primary_key=True)
-    dia_semana = models.CharField()
-    fecha_desde = models.CharField()
-    fecha_hasta = models.CharField()
-    hora_inicio = models.CharField()
-    hora_fin = models.CharField()
-
-    class Meta:
-        managed = False 
-        db_table = 'sga_comisiones_bh'
-        # app_label = 'nombre_app_externa'
-        using = 'guarani' # DB
-
-
-class sga_comisiones_bh(models.Model):
-    comision = models.ForeignKey(sga_comisiones)
-    asignacion = models.ForeignKey(sga_asignaciones)
-    elmento = models.ForeignKey()
+class SgaResponsablesAcademicas(models.Model):
+    responsable_academica = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=200)
 
     class Meta:
         managed = False
-        db_table = 'sga_comisiones_bh'
-        # app_label = 'nombre_app_externa'
-        using = 'guarani' # DB
+        db_table = 'sga_responsables_academicas'
+        # unique_together = (('institucion', 'codigo'),)
 
-    # Luego para manejarlo desde el ORM: usuarios_externos = UsuarioExterno.objects.using('db_externa').all()
+
+class SgaPropuestas(models.Model):
+    propuesta = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=255)
+    nombre_abreviado = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'sga_propuestas'
+
+
+class SgaPropuestasRa(models.Model):
+    propuesta = models.ForeignKey('SgaPropuestas', models.DO_NOTHING, db_column='propuesta')
+    responsable_academica = models.ForeignKey('SgaResponsablesAcademicas', models.DO_NOTHING, db_column='responsable_academica')
+
+    class Meta:
+        managed = False
+        db_table = 'sga_propuestas_ra'
+        # unique_together = (('propuesta', 'responsable_academica'),)
+
+
+class SgaElementos(models.Model):
+    elemento = models.AutoField(primary_key=True) # No cambiar el nombre del atributo, sirve para cursor pueda hacer la consulta a la BD
+    nombre = models.CharField(max_length=255)
+
+    class Meta:
+        managed = False
+        db_table = 'sga_elementos'
+
+
+class SgaComisiones(models.Model):
+    comision = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=100)
+    elemento = models.ForeignKey(SgaElementos, models.DO_NOTHING, db_column='elemento')
+    ubicacion = models.ForeignKey(SgaUbicaciones, models.DO_NOTHING, db_column='ubicacion')
+    
+    class Meta:
+        managed = False
+        db_table = 'sga_comisiones'
+        # unique_together = (('elemento', 'periodo_lectivo', 'ubicacion', 'nombre'),)
+
+
+class SgaAsignaciones(models.Model):
+    asignacion = models.AutoField(primary_key=True)
+    dia_semana = models.CharField(max_length=10, blank=True, null=True)
+    fecha_desde = models.DateField()
+    fecha_hasta = models.DateField()
+    hora_inicio = models.TimeField(blank=True, null=True)
+    hora_finalizacion = models.TimeField(blank=True, null=True)
+    
+    class Meta:
+        managed = False
+        db_table = 'sga_asignaciones'
+
+
+class SgaComisionesPropuestas(models.Model):
+    comision = models.ForeignKey(SgaComisiones, models.DO_NOTHING, db_column='comision', primary_key=True)
+    propuesta = models.ForeignKey(SgaPropuestas, models.DO_NOTHING, db_column='propuesta')
+
+    class Meta:
+        managed = False
+        db_table = 'sga_comisiones_propuestas'
+        # unique_together = (('comision', 'propuesta', 'plan'),)
+
+
+class ShaComisionesBH(models.Model):
+    banda_horaria = models.AutoField(primary_key=True)
+    comision = models.ForeignKey(SgaComisiones, models.DO_NOTHING, db_column='comision')
+    asignacion = models.ForeignKey(SgaAsignaciones, models.DO_NOTHING, db_column='asignacion')
+    
+    class Meta:
+        managed = False
+        db_table = 'sga_comisiones_bh'
+        # unique_together = (('comision', 'asignacion'),)
+        
