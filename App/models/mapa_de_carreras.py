@@ -10,17 +10,26 @@ class Instituto(models.Model):
 
 class Carrera(models.Model):
     nombre = models.CharField(max_length=255)
-    instituto = models.ForeignKey(Instituto, on_delete=models.CASCADE)
    
     def __str__(self):
         return self.nombre
     
+
+class Carrera_Instituto(models.Model):
+    carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE)
+    instituto = models.ForeignKey(Instituto, on_delete=models.CASCADE)
     
+
 class Materia(models.Model):
     nombre = models.CharField(max_length=255)
    
     def __str__(self):
         return self.nombre
+
+
+class Materia_Carrera(models.Model):
+    materia = models.ForeignKey(Materia, on_delete=models.CASCADE)
+    carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE)
 
 
 class Docente(models.Model):

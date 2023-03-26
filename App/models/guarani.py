@@ -1,10 +1,5 @@
 from django.db import models
-#
 
-# TODO: Hacer andar esto en SQLScript:  insert into mapa_de_carreras.public."App_instituto"
-#                                       select nombre from g3p.negocio."sga_responsables_academicas"
-# Insertar datos de una base en otra... Quise hacerlo por código pero tarda demasiado, no vale la pena...
-# Es para cargar los datos la primera vez aunque sea. Par así poder probar la parte de las cargas horarias...
 
 class SgaUbicaciones(models.Model):
     ubicacion = models.AutoField(primary_key=True)
@@ -28,7 +23,6 @@ class SgaResponsablesAcademicas(models.Model):
 class SgaPropuestas(models.Model):
     propuesta = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=255)
-    nombre_abreviado = models.CharField(max_length=50)
 
     class Meta:
         managed = False
@@ -89,7 +83,7 @@ class SgaComisionesPropuestas(models.Model):
         # unique_together = (('comision', 'propuesta', 'plan'),)
 
 
-class ShaComisionesBH(models.Model):
+class SgaComisionesBH(models.Model):
     banda_horaria = models.AutoField(primary_key=True)
     comision = models.ForeignKey(SgaComisiones, models.DO_NOTHING, db_column='comision')
     asignacion = models.ForeignKey(SgaAsignaciones, models.DO_NOTHING, db_column='asignacion')
@@ -99,3 +93,22 @@ class ShaComisionesBH(models.Model):
         db_table = 'sga_comisiones_bh'
         # unique_together = (('comision', 'asignacion'),)
         
+
+
+# Elminar: es solo para cargar datos de prueba
+class sgaDocentes(models.Model):
+    docente = models.AutoField(primary_key=True)
+    legajo = models.IntegerField()
+    class Meta:
+        managed = False
+        db_table = 'sga_docentes'
+
+# Eliminar
+class sgaDocentesComision(models.Model):
+    docente = models.ForeignKey(sgaDocentes, models.DO_NOTHING, db_column='docente')
+    comision = models.ForeignKey(SgaComisiones, models.DO_NOTHING, db_column='comision')
+    class Meta:
+        managed = False
+        db_table = 'sga_docentes_comision'
+    
+    
