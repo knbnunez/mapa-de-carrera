@@ -1,57 +1,54 @@
+{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asignar-tareas</title>
+    <title>Tareas Docente</title>
+
+    <style>
+        .hidden{
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <form method="POST">
-        {% csrf_token %}
-        <!-- Para poder mostrar el resto de los datos de un cargo cuando ocurra un cambio de valor tengo que hacerlo con js... Espero que no se termine transformando en un frankenstein... -->
-        <!-- <label><b>Cargos</b></label>
-        <select id="cargos" onchange="mostrar_info_cargo()">
-            {% for cargo in cargos %}
-                <option value="{{ cargo.cargo }}">{{ cargo.cargo }}</option>
-            {% endfor %}
-        </select> -->
-        <label><b>Docentes</b></label>
-        <select id="docente" onchange="mostrar_info_docente()">
-            <option value="none" selected disabled hidden>Seleccione docente</option>
-            <!-- Se muestra cada option desde un script más abajo -->
-        </select>
-        
-        <label><b>Tareas</b></label>
-        <select>
-            <option value="none" selected disabled hidden>Seleccione modalidad</option>
-            <option value="desarrollo-profesional">Doecente/Desarrollo profesional</option>
-            <option value="investigador">Docente/Investigador</option>
-        </select>
+{% if docente %}
+    <h1>Docente</h1>
+    <h3> - Documento nro: {{docente.numero_documento}}</h3>
+    <h3> - Legajo nro: {{docente.legajo}}</h3>
+    <h3> - Nombre y Apellido: {{docente.nombre_apellido}}</h3>
+{% else %}
+    <h3>El docente no pudo ser recuperado y no se encontraba en bases internas</h3>
+{% endif %}
+<!-- Cargos -->
 
-        <label><b>Info Docente:</b></label>
-        <div id="docente-info">
-            <!-- Aquí se mostrará la información adicional del cargo seleccionado -->
-        </div>
-        <br><br>
-        <button type="submit">Asignar tarea</button>
-    </form>
+<form action="{% url 'docente-asignar-tareas' legajo=docente.legajo %}" method="busca">
+  
+</form>
+<ul id="lista-docentes"> 
+    {% for c in cargos %}
+    <li class="cargos"> 
+       <a href="{% url 'docente-asignar-tareas-1' legajo=docente.legajo nro_cargo=c.cargo.nro_cargo %}"> 
+            <h4> Cargo: {{c.cargo}}</h4>
+        </a>
+    </li>
+    {% endfor %}
+</ul>
 
-    <script>
-        const data = JSON.parse("{{docente|escapejs}}");
-        console.log(data);
-        const selectDocente= document.getElementById('docente');
-        data.forEach(e => {
-            selectDocente.innerHTML += `<option value="${e.docente}">${e.docente}</option>`
-        });
-        const docenteInfo = document.getElementById('docente-info');
-        docenteInfo.innerHTML = `Numero de documento: ${data[0].numero_documento} <br> Nombre y apellido: ${data[0].nombre_apellido}`;
-        // función que se llama en el onchange
-        const mostrar_info_docente = () => {
-            const docenteSeleccionado = document.getElementById('docente').value;
-            const docente = data.find(c => c.docente == docenteSeleccionado);
-            document.getElementById('docente-info').innerHTML = `Numero de documento: ${docente.numero_documento} <br> Nombre y apellido: ${docente.nombre_apellido}`;
-        }
-    </script>
+{% if cargos %}
+    <h1>Elija el cargo al que se le asignara Tareas Extras</h1>
+    {% for c in cargos %}
+    
+        <h3> - Nro cargo: </h3><a href="{% url 'docente-asignar-tareas-1' legajo=docente.legajo nro_cargo=c.cargo.nro_cargo %}"> {{c.cargo.nro_cargo}}</a>
+        <h3> - Dedicación: {{c.dedicacion.desc_dedic}}</h3>
+        <h3> - Categoria: {{c.categoria.desc_categ}}</h3>
+        <h3> - Fecha alta: {{c.cargo.fecha_alta}}</h3>
+        <h3> - Fecha baja: {{c.cargo.fecha_baja}}</h3></a> </li>
+    {% endfor %}
+{% endif %}
+
+
 </body>
 </html>
