@@ -1,3 +1,5 @@
 ./venv
 *.pyc
 .env
+.txt
+gen_sql.py

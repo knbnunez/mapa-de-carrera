@@ -13,15 +13,17 @@
 
 
 # Generamos tantos archivos como columnas necesitemos.
-with open("input1.txt", "r") as input1, open("input2.txt", "r") as input2:
+with open("input1.txt", "r", encoding="utf-8") as input1, open("input2.txt", "r", encoding="utf-8") as input2, open("input3.txt", "r", encoding="utf-8") as input3, open("input4.txt", "r", encoding="utf-8") as input4:
     lista_cadenas1 = input1.read().splitlines()
     lista_cadenas2 = input2.read().splitlines()
+    lista_cadenas3 = input3.read().splitlines()
+    lista_cadenas4 = input4.read().splitlines()
 
 lista_concatenada = []
 
 for i in range(len(lista_cadenas1)):
-    cadena_concatenada = "("+lista_cadenas1[i]+", "+lista_cadenas2[i]+"),\n" # Y agregaríamos más comas entre strings
+    cadena_concatenada = "("+lista_cadenas1[i]+", '"+lista_cadenas2[i]+"', "+lista_cadenas3[i]+", "+lista_cadenas4[i]+")," # Y agregaríamos más comas entre strings
     lista_concatenada.append(cadena_concatenada)
 
-with open("output.txt", "w") as archivo_concatenado:
+with open("output.txt", "w", encoding="utf-8") as archivo_concatenado:
     archivo_concatenado.writelines(lista_concatenada)
