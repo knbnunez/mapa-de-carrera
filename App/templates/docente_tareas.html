@@ -1,0 +1,54 @@
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tareas Docente</title>
+
+    <style>
+        .hidden{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+{% if docente %}
+    <h1>Docente</h1>
+    <h3> - Documento nro: {{docente.numero_documento}}</h3>
+    <h3> - Legajo nro: {{docente.legajo}}</h3>
+    <h3> - Nombre y Apellido: {{docente.nombre_apellido}}</h3>
+{% else %}
+    <h3>El docente no pudo ser recuperado y no se encontraba en bases internas</h3>
+{% endif %}
+<!-- Cargos -->
+
+<form action="{% url 'docente-asignar-tareas' legajo=docente.legajo %}" method="busca">
+  
+</form>
+<ul id="lista-docentes"> 
+    {% for c in cargos %}
+    <li class="cargos"> 
+       <a href="{% url 'docente-asignar-tareas-1' legajo=docente.legajo nro_cargo=c.cargo.nro_cargo %}"> 
+            <h4> Cargo: {{c.cargo}}</h4>
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+
+{% if cargos %}
+    <h1>Elija el cargo al que se le asignara Tareas Extras</h1>
+    {% for c in cargos %}
+    
+        <h3> - Nro cargo: </h3><a href="{% url 'docente-asignar-tareas-1' legajo=docente.legajo nro_cargo=c.cargo.nro_cargo %}"> {{c.cargo.nro_cargo}}</a>
+        <h3> - Dedicación: {{c.dedicacion.desc_dedic}}</h3>
+        <h3> - Categoria: {{c.categoria.desc_categ}}</h3>
+        <h3> - Fecha alta: {{c.cargo.fecha_alta}}</h3>
+        <h3> - Fecha baja: {{c.cargo.fecha_baja}}</h3></a> </li>
+    {% endfor %}
+{% endif %}
+
+
+</body>
+</html>
