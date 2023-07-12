@@ -45,8 +45,8 @@
             <div class="container h-1/2 flex flex-col items-center justify-evenly">
                 <!-- Dropdown list -->
                 <button 
-                    id="dropdownDefaultButtonCargo" 
-                    data-dropdown-toggle="dropdown" 
+                    id="cargoDropdownDefaultButton" 
+                    data-dropdown-toggle="cargoDropdown" 
                     class="w-2/3 text-white bg-gray-300 hover:bg-gray-400 focus:ring-1 focus:outline-none focus:ring-gray-400 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center justify-between" 
                     type="button"
                 >
@@ -56,13 +56,14 @@
                     </svg>
                 </button>
                 <!-- options, a este id es al que está relacionado el data-dropdown-toggle del button de arriba -->
-                <div id="dropdown" class="dropdownCargo z-10 hidden bg-gray-100 divide-y divide-gray-100 rounded-lg shadow w-1/4 font-bold">
-                    <ul id="cargoOptions" class="py-2 text-sm text-gray-700" aria-labelledby="dropdownDefaultButtonCargo">
+                <div id="cargoDropdown" class="z-10 hidden bg-gray-100 divide-y divide-gray-100 rounded-lg shadow w-1/4 font-bold">
+                    <ul id="cargoOptions" class="py-2 text-sm text-gray-700" aria-labelledby="cargoDropdownDefaultButton">
                         <!-- Opciones (en js) -->
                     </ul>
                 </div>
 
-                <div class="w-1/2 h-10 bg-gray-200">Traer dedicación</div>
+                <div class="w-1/2 bg-gray-200">ToDo: alinear dropdowns</div>
+                <div class="w-1/2 bg-gray-200">- Nro: ___, - una vez seleccionados el cargo y/o modalidad, mostrarlos acá también; - ver tema restricción de dedicaciones según la modalidad elegida, lo más fácil sería evaluarla una vez que tratan de hacer el "save"</div>
             </div>
             <div class="container h-1/2 flex flex-col items-center justify-center">
                 <div class="w-1/2 h-10 bg-gray-300">Upload resolución</div>
@@ -70,8 +71,43 @@
         </div>
         <div class="container flex flex-col items-center justify-evenly">
             <div class="container h-1/2 flex flex-col items-center justify-evenly">
-                <div class="w-1/2 h-10 bg-blue-600">Modalidad</div>
-                <div class="w-1/2 h-10"></div>
+                
+                <!-- Dropdown list -->
+                <button 
+                    id="modalidadDropdownDefaultButton" 
+                    data-dropdown-toggle="modalidadDropdown" 
+                    class="w-2/3 text-white bg-gray-300 hover:bg-gray-400 focus:ring-1 focus:outline-none focus:ring-gray-400 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center justify-between" 
+                    type="button"
+                >
+                    <span class="font-bold text-stone-600">Modalidad</span>
+                    <svg class="w-2.5 h-2.5 text-stone-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                </button>
+                <div id="modalidadDropdown" class="z-10 hidden bg-gray-100 divide-y divide-gray-100 rounded-lg shadow w-1/4 font-bold">
+                    <ul id="modalidadOptions" class="py-2 text-sm text-gray-700" aria-labelledby="modalidadDropdownDefaultButton">
+                        <!-- Opciones (en js) -->
+                    </ul>
+                </div>
+
+                <!-- Dropdown list -->
+                <button 
+                    id="dedicacionDropdownDefaultButton" 
+                    data-dropdown-toggle="dedicacionDropdown" 
+                    class="w-2/3 text-white bg-gray-300 hover:bg-gray-400 focus:ring-1 focus:outline-none focus:ring-gray-400 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center justify-between" 
+                    type="button"
+                >
+                    <span class="font-bold text-stone-600">Dedicacion</span>
+                    <svg class="w-2.5 h-2.5 text-stone-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                </button>
+                <!-- options, a este id es al que está relacionado el data-dropdown-toggle del button de arriba -->
+                <div id="dedicacionDropdown" class="z-10 hidden bg-gray-100 divide-y divide-gray-100 rounded-lg shadow w-1/4 font-bold">
+                    <ul id="dedicacionOptions" class="py-2 text-sm text-gray-700" aria-labelledby="dedicacionDropdownDefaultButton">
+                        <!-- Opciones (en js) -->
+                    </ul>
+                </div>
             </div>
             <div class="container h-1/2 flex flex-row items-center justify-evenly">
                 <div class="w-1/2 h-10 bg-gray-300">Modificar modalidad</div>
@@ -152,18 +188,19 @@
         });
     </script>
 
-    <!-- Lógica de la dropDownCargo -->
     <script>
+        // -------------------------------------------------------------------
+        // cargoDropdown
+
         // Obtenemos el elemento del botón y el menú desplegable
-        const dropdownMenu = document.getElementsByClassName('dropdownCargo');
+        const cargoDropdown = document.getElementById('cargoDropdown');
 
         const cargoOptions = document.getElementById('cargoOptions');
-        const options = ["N° 1", "N° 324", "N° 52", "N° 128"];
-        options.forEach((e) => { cargoOptions.innerHTML += `<li><a class="block px-4 py-2 hover:bg-gray-300" data-option-value="${e}">${e}</a></li>` });
-
+        const cargoData = ["N° 1", "N° 324", "N° 52", "N° 128"];
+        cargoData.forEach((e) => { cargoOptions.innerHTML += `<li><a class="block px-4 py-2 hover:bg-gray-300" data-option-value="${e}">${e}</a></li>` });
 
         // Agregamos un controlador de eventos al menú desplegable
-        dropdownMenu.addEventListener('click', (event) => {
+        cargoDropdown.addEventListener('click', (event) => {
             // Verificamos si el evento fue disparado por un enlace (<a>)
             if (event.target.tagName === 'A') {
                 // Obtenemos el valor almacenado en el atributo data-option-value del enlace
@@ -173,8 +210,38 @@
                 console.log('Valor seleccionado:', selectedValue);
             }
         });
+
+
+        // -------------------------------------------------------------------
+        // modalidadDropdown
+        const modalidadDropdown = document.getElementById('modalidadDropdown');
+        const modalidadOptions = document.getElementById('modalidadOptions');
+        const modalidadData = ["Docente investigador", "Docente"];
+        modalidadData.forEach((e) => { modalidadOptions.innerHTML += `<li><a class="block px-4 py-2 hover:bg-gray-300" data-option-value="${e}">${e}</a></li>` });
+        modalidadDropdown.addEventListener('click', (event) => {
+            if (event.target.tagName === 'A') {
+                const selectedValue = event.target.dataset.optionValue;
+                
+                console.log('Valor seleccionado:', selectedValue);
+            }
+        });
+
+        // -------------------------------------------------------------------
+        // dedicaciónDropdown
+        const dedicacionDropdown = document.getElementById('dedicacionDropdown');
+        const dedicacionOptions = document.getElementById('dedicacionOptions');
+        const dedicacionData = ["Exclusivo", "Semiexclusivo", "Simple", "ToDO: Controlar restricción al tratar de guardar? o en tiempo real?"];
+        dedicacionData.forEach((e) => { dedicacionOptions.innerHTML += `<li><a class="block px-4 py-2 hover:bg-gray-300" data-option-value="${e}">${e}</a></li>` });
+        dedicacionDropdown.addEventListener('click', (event) => {
+            if (event.target.tagName === 'A') {
+                const selectedValue = event.target.dataset.optionValue;
+                
+                console.log('Valor seleccionado:', selectedValue);
+            }
+        });
+
     </script>
-  
+
 </body>
 
 </html>
