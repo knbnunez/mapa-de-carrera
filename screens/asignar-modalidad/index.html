@@ -40,14 +40,16 @@
     </aside>
 
 
-    <div class="h-full p-4 pl-7 pt-52 pb-40 sm:ml-64 flex flex-row">
-        <div class="container flex flex-col items-center justify-evenly">
-            <div class="container h-1/2 flex flex-col items-center justify-evenly">
+    <div class="h-2/3 sm:ml-64 pt-20 flex flex-row">
+        
+        <div class="container h-full flex flex-col">
+            
+            <div class="container h-1/2 flex flex-col items-center justify-center">
                 <!-- Dropdown list -->
                 <button 
                     id="cargoDropdownDefaultButton" 
                     data-dropdown-toggle="cargoDropdown" 
-                    class="w-2/3 text-white bg-gray-300 hover:bg-gray-400 focus:ring-1 focus:outline-none focus:ring-gray-400 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center justify-between" 
+                    class="w-2/3 bg-gray-200 hover:bg-gray-300 focus:ring-1 focus:outline-none focus:ring-gray-400 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center justify-between" 
                     type="button"
                 >
                     <span class="font-bold text-stone-600">Cargo</span>
@@ -61,59 +63,79 @@
                         <!-- Opciones (en js) -->
                     </ul>
                 </div>
-
-                <div class="w-1/2 bg-gray-200">ToDo: alinear dropdowns</div>
-                <div class="w-1/2 bg-gray-200">- Nro: ___, - una vez seleccionados el cargo y/o modalidad, mostrarlos acá también; - ver tema restricción de dedicaciones según la modalidad elegida, lo más fácil sería evaluarla una vez que tratan de hacer el "save"</div>
-            </div>
-            <div class="container h-1/2 flex flex-col items-center justify-center">
-                <div class="w-1/2 h-10 bg-gray-300">Upload resolución</div>
-            </div>
-        </div>
-        <div class="container flex flex-col items-center justify-evenly">
-            <div class="container h-1/2 flex flex-col items-center justify-evenly">
                 
-                <!-- Dropdown list -->
-                <button 
-                    id="modalidadDropdownDefaultButton" 
-                    data-dropdown-toggle="modalidadDropdown" 
-                    class="w-2/3 text-white bg-gray-300 hover:bg-gray-400 focus:ring-1 focus:outline-none focus:ring-gray-400 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center justify-between" 
-                    type="button"
-                >
-                    <span class="font-bold text-stone-600">Modalidad</span>
-                    <svg class="w-2.5 h-2.5 text-stone-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                    </svg>
-                </button>
-                <div id="modalidadDropdown" class="z-10 hidden bg-gray-100 divide-y divide-gray-100 rounded-lg shadow w-1/4 font-bold">
-                    <ul id="modalidadOptions" class="py-2 text-sm text-gray-700" aria-labelledby="modalidadDropdownDefaultButton">
-                        <!-- Opciones (en js) -->
-                    </ul>
-                </div>
+            </div>
 
-                <!-- Dropdown list -->
-                <button 
-                    id="dedicacionDropdownDefaultButton" 
-                    data-dropdown-toggle="dedicacionDropdown" 
-                    class="w-2/3 text-white bg-gray-300 hover:bg-gray-400 focus:ring-1 focus:outline-none focus:ring-gray-400 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center justify-between" 
-                    type="button"
-                >
-                    <span class="font-bold text-stone-600">Dedicacion</span>
-                    <svg class="w-2.5 h-2.5 text-stone-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                    </svg>
-                </button>
-                <!-- options, a este id es al que está relacionado el data-dropdown-toggle del button de arriba -->
-                <div id="dedicacionDropdown" class="z-10 hidden bg-gray-100 divide-y divide-gray-100 rounded-lg shadow w-1/4 font-bold">
-                    <ul id="dedicacionOptions" class="py-2 text-sm text-gray-700" aria-labelledby="dedicacionDropdownDefaultButton">
-                        <!-- Opciones (en js) -->
+            <!-- <div class="w-1/2 bg-gray-200">- Nro: ___, - una vez seleccionados el cargo y/o modalidad, mostrarlos acá también; - ver tema restricción de dedicaciones según la modalidad elegida, lo más fácil sería evaluarla una vez que tratan de hacer el "save"</div> -->
+            <div class="container h-1/2 flex flex-row pl-12 sm:pl-20 lg:pl-28">
+                <!-- <div class="container h-full w-full flex justify-center bg-yellow-100"> -->
+                    <ul>
+                        <li id="nroCargo"><!-- Nro cargo --></li>
+                        <li id="modalidad"><!-- Modalidad --></li>
+                        <li id="dedicacion"><!-- Dedicación --></li>
                     </ul>
-                </div>
+                <!-- </div> -->
             </div>
-            <div class="container h-1/2 flex flex-row items-center justify-evenly">
-                <div class="w-1/2 h-10 bg-gray-300">Modificar modalidad</div>
-                <div class="w-1/2 h-10 bg-gray-500">Guardar</div>
-            </div>
+
         </div>
+
+        <div class="container h-full p-8 flex flex-col items-center justify-evenly">
+            <!-- Dropdown Modalidad list -->
+            <button 
+                id="modalidadDropdownDefaultButton" 
+                data-dropdown-toggle="modalidadDropdown" 
+                class="w-2/3 text-white bg-gray-200 hover:bg-gray-300 focus:ring-1 focus:outline-none focus:ring-gray-400 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center justify-between" 
+                type="button"
+            >
+                <span class="font-bold text-stone-600">Modalidad</span>
+                <svg class="w-2.5 h-2.5 text-stone-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                </svg>
+            </button>
+            <div id="modalidadDropdown" class="z-10 hidden bg-gray-100 divide-y divide-gray-100 rounded-lg shadow w-1/4 font-bold">
+                <ul id="modalidadOptions" class="py-2 text-sm text-gray-700" aria-labelledby="modalidadDropdownDefaultButton">
+                    <!-- Opciones (en js) -->
+                </ul>
+            </div>
+
+            <!-- Dropdown Dedicación list -->
+            <button 
+                id="dedicacionDropdownDefaultButton" 
+                data-dropdown-toggle="dedicacionDropdown" 
+                class="w-2/3 text-white bg-gray-200 hover:bg-gray-300 focus:ring-1 focus:outline-none focus:ring-gray-400 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center justify-between" 
+                type="button"
+            >
+                <span class="font-bold text-stone-600">Dedicacion</span>
+                <svg class="w-2.5 h-2.5 text-stone-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                </svg>
+            </button>
+            <div id="dedicacionDropdown" class="z-10 hidden bg-gray-100 divide-y divide-gray-100 rounded-lg shadow w-1/4 font-bold">
+                <ul id="dedicacionOptions" class="py-2 text-sm text-gray-700" aria-labelledby="dedicacionDropdownDefaultButton">
+                    <!-- Opciones (en js) -->
+                </ul>
+            </div>
+
+            <!-- Button upload -->
+            <button id="uploadButton" type="button" class="xl:w-1/4 xl:h-1/6 py-2.5 px-5 mr-2 mb-2 text-sm font-semibold focus:outline-none rounded-lg dark:bg-gray-100 dark:hover:bg-gray-200 hover:bg-gray-100 focus:z-10 inline-flex items-center justify-between ">
+                <span class="text-gray-600">Subir Resolución</span>
+                <i class="fa-solid fa-arrow-up-from-bracket text-gray-600 ml-4 mr-2"></i>
+            </button>
+            
+            <!-- Hidden file input -->
+            <input id="fileInput" type="file" style="display: none;">
+
+            <!-- <div id="dropArea" class="drop-area">
+                Arrastra y suelta tus archivos aquí
+            </div> -->
+        </div>
+    </div>
+
+    <div class="h-1/3 p-4 pl-7 sm:ml-64 flex flex-row items-center justify-center">
+        <!-- Botón guardar cambios -->
+        <button type="button" class="w-1/3 py-2.5 px-5 mr-2 mb-2 text-sm font-semibold focus:outline-none rounded-lg dark:bg-gray-200 dark:hover:bg-gray-300 focus:z-10">
+            <span class="text-gray-700">Guardar cambios</span>
+        </button>
     </div>
 
 
@@ -205,12 +227,17 @@
             if (event.target.tagName === 'A') {
                 // Obtenemos el valor almacenado en el atributo data-option-value del enlace
                 const selectedValue = event.target.dataset.optionValue;
-                
                 // Hacemos algo con el valor seleccionado
-                console.log('Valor seleccionado:', selectedValue);
+                const nroCargo = document.getElementById('nroCargo');
+                // console.log('Valor seleccionado:', selectedValue);
+                nroCargo.innerHTML = `<span>- ${selectedValue}</span>`;
+                cargoDropdown.style.display = 'none';
             }
         });
 
+        document.getElementById('cargoDropdownDefaultButton').addEventListener('click', () => {
+            cargoDropdown.style.display = 'block';
+        });
 
         // -------------------------------------------------------------------
         // modalidadDropdown
@@ -221,9 +248,13 @@
         modalidadDropdown.addEventListener('click', (event) => {
             if (event.target.tagName === 'A') {
                 const selectedValue = event.target.dataset.optionValue;
-                
-                console.log('Valor seleccionado:', selectedValue);
+                const modalidad = document.getElementById('modalidad');
+                modalidad.innerHTML = `<span>- ${selectedValue}</span>`;
+                modalidadDropdown.style.display = 'none';
             }
+        });
+        document.getElementById('modalidadDropdownDefaultButton').addEventListener('click', () => {
+            modalidadDropdown.style.display = 'block';
         });
 
         // -------------------------------------------------------------------
@@ -235,12 +266,77 @@
         dedicacionDropdown.addEventListener('click', (event) => {
             if (event.target.tagName === 'A') {
                 const selectedValue = event.target.dataset.optionValue;
-                
-                console.log('Valor seleccionado:', selectedValue);
+                const dedicacion = document.getElementById('dedicacion');
+                dedicacion.innerHTML = `<span>- ${selectedValue}</span>`;
+                dedicacionDropdown.style.display = 'none';
             }
+        });
+        document.getElementById('deidacionDropdownDefaultButton').addEventListener('click', () => {
+            dedicacionDropdown.style.display = 'block';
         });
 
     </script>
+
+
+    <!-- TODO: agregar un elemento visual para DRAG AND DROP -->
+    <script>
+        var uploadButton = document.getElementById('uploadButton');
+        var fileInput = document.getElementById('fileInput');
+
+        uploadButton.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', () => {
+            var file = fileInput.files[0];
+            console.log('Archivo seleccionado:', file);
+        });
+
+
+
+
+        //  acá está la lógica del drop
+        var dropArea = document.getElementById('dropArea');
+
+        dropArea.addEventListener('dragenter', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            dropArea.classList.add('dragover');
+        });
+
+        dropArea.addEventListener('dragover', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+        });
+
+        dropArea.addEventListener('dragleave', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            dropArea.classList.remove('dragover');
+        });
+
+        dropArea.addEventListener('drop', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            var files = event.dataTransfer.files;
+            console.log('Archivos arrastrados:', files);
+            dropArea.classList.remove('dragover');
+        });
+    </script>
+    <!--  -->
+    <style>
+        .drop-area {
+            border: 2px dashed gray;
+            height: 200px;
+            width: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            text-align: center;
+        }
+        .drop-area.dragover {
+           border-color: blue;
+        }
+    </style>
 
 </body>
 
