@@ -1,130 +1,260 @@
-{% load static %} 
-<!DOCTYPE html>
-<html lang="es">
+<!--  
+*
+*
+*
+*
+        TODO: 
+            - Componentizar el side-bar
+            # Comment: hay que tener en cuenta que el container de la derecha tiene que cumplir con la separación de: class="p-4 pl-7 sm:ml-64"
+                       para que no sea ocultado por el sidebar.
+*
+*
+*
+*
+-->
+
+
+
+<!doctype html>
+<html>
+
 <head>
-  <!-- meta tags -->
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport'>
-
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
-  <!-- Icons -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-  
-  <!-- CSS Files -->
-  <link href="{% static '/css/bootstrap.min.css' %}" rel="stylesheet">
-  <link href="{% static '/css/now-ui-dashboard.css' %}" rel="stylesheet">
-  <link href="{% static '/css/estilos.css' %}" rel="stylesheet">
-  
-  <title>Mapa de carreras</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.7.0/flowbite.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body>
-  <!--
-      Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
-  -->  
-  <div class="sidebar" data-color="orange">
-    
-    <div class="logo">
-      <a href="#" class="simple-text">
-        <img src="https://www.untdf.edu.ar/img/contenedor_marca.png" role="presentation" class="isologofondo">
-        <img src="https://www.untdf.edu.ar/img/isologotipo.png" class="isologo">
-        MAPA DE CARRERAS
-      </a>
+
+    <!-- Botón para desplegar cuando se achica el tamaño de la página -->
+    <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar"
+        type="button"
+        class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+        <span class="sr-only">Desplegar</span>
+        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg">
+            <path clip-rule="evenodd" fill-rule="evenodd"
+                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+            </path>
+        </svg>
+    </button>
+
+    <aside id="logo-sidebar"
+        class="fixed top-0 left-0 z-40 w-65 h-screen transition-transform -translate-x-full sm:translate-x-0"
+        aria-label="Sidebar">
+        <div class="h-full px-3 py-4 overflow-y-auto bg-red-800">
+                <a href="#" class="flex items-center pl-2.5 mb-4 pb-3 border-b-[1px] border-white">
+                    <img src="https://untdf.edu.ar/img/isologotipo_chico.png" class="h-6 mr-3 sm:h-7" alt="UNTDF Logo" />
+                    <span class="self-center text-xl font-semibold whitespace-nowrap text-gray-50">Mapa de carreras</span>
+                </a>
+            <ul id="content-side-bar" class="space-y-2 font-medium"><!-- content con js -->
+            </ul>
+        </div>
+    </aside>
+
+    <div class="p-4 pl-7 sm:ml-64">
+
+        <!-- Acá iría el contenido -->
+        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
+            <div class="grid grid-cols-3 gap-4 mb-4">
+                <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
+                    <p class="text-2xl text-gray-400 dark:text-gray-500">
+                        <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 18 18">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 1v16M1 9h16" />
+                        </svg>
+                    </p>
+                </div>
+                <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
+                    <p class="text-2xl text-gray-400 dark:text-gray-500">
+                        <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 18 18">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 1v16M1 9h16" />
+                        </svg>
+                    </p>
+                </div>
+                <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
+                    <p class="text-2xl text-gray-400 dark:text-gray-500">
+                        <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 18 18">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 1v16M1 9h16" />
+                        </svg>
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
+                <p class="text-2xl text-gray-400 dark:text-gray-500">
+                    <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 18 18">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 1v16M1 9h16" />
+                    </svg>
+                </p>
+            </div>
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+                    <p class="text-2xl text-gray-400 dark:text-gray-500">
+                        <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 18 18">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 1v16M1 9h16" />
+                        </svg>
+                    </p>
+                </div>
+                <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+                    <p class="text-2xl text-gray-400 dark:text-gray-500">
+                        <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 18 18">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 1v16M1 9h16" />
+                        </svg>
+                    </p>
+                </div>
+                <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+                    <p class="text-2xl text-gray-400 dark:text-gray-500">
+                        <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 18 18">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 1v16M1 9h16" />
+                        </svg>
+                    </p>
+                </div>
+                <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+                    <p class="text-2xl text-gray-400 dark:text-gray-500">
+                        <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 18 18">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 1v16M1 9h16" />
+                        </svg>
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
+                <p class="text-2xl text-gray-400 dark:text-gray-500">
+                    <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 18 18">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 1v16M1 9h16" />
+                    </svg>
+                </p>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+                    <p class="text-2xl text-gray-400 dark:text-gray-500">
+                        <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 18 18">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 1v16M1 9h16" />
+                        </svg>
+                    </p>
+                </div>
+                <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+                    <p class="text-2xl text-gray-400 dark:text-gray-500">
+                        <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 18 18">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 1v16M1 9h16" />
+                        </svg>
+                    </p>
+                </div>
+                <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+                    <p class="text-2xl text-gray-400 dark:text-gray-500">
+                        <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 18 18">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 1v16M1 9h16" />
+                        </svg>
+                    </p>
+                </div>
+                <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+                    <p class="text-2xl text-gray-400 dark:text-gray-500">
+                        <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 18 18">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 1v16M1 9h16" />
+                        </svg>
+                    </p>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-<!-- https://webdesign.tutsplus.com/es/tutorials/how-to-make-the-bootstrap-navbar-dropdown-work-on-hover--cms-33840 -->
-
-    <div class="sidebar-wrapper" id="sidebar-wrapper">
-      <ul class="nav">
-        Docente
-        <button class="separador text-white btn" style="display: none;">
-          <li class="active ">
-            <a href="./dashboard.html">
-              <i class="now-ui-icons design_app"></i>
-              <p>Dashboard</p>
-            </a>
-          </li>
-          <li>
-            <a href="./icons.html">
-              <i class="now-ui-icons education_atom"></i>
-              <p>Icons</p>
-            </a>
-          </li>
-          <li>
-            <a href="./map.html">
-              <i class="now-ui-icons location_map-big"></i>
-              <p>Maps</p>
-            </a>
-          </li>
-        </button>
-        <li class="separador text-white">
-          Mapa de Carreras
-        </li>
-        
-        <li>
-          <a href="{% url 'docente' %}">
-            <i class="now-ui-icons users_single-02"></i>
-            <p>Ver Perfil Docente</p>
-          </a>
-        </li>
-        
-        <li>
-          <a href="./tables.html">
-            <i class="now-ui-icons design_bullet-list-67"></i>
-            <p>Ver Historial Docente</p>
-          </a>
-        </li>
-        <li>
-          <a href="./typography.html">
-            <i class="now-ui-icons text_caps-small"></i>
-            <p>Asignar Carga Horaria</p>
-          </a>
-        </li>
-        <li class="active-pro">
-          <a href="./upgrade.html">
-            <i class="now-ui-icons arrows-1_cloud-download-93"></i>
-            <p>Asignar Actividades</p>
-          </a>
-        </li>
-        <li class="active-pro">
-          <a href="./upgrade.html">
-            <i class="now-ui-icons arrows-1_cloud-download-93"></i>
-            <p>Asignar Modalidad</p>
-          </a>
-        </li>
-        <li class="active-pro">
-          <a href="./upgrade.html">
-            <i class="now-ui-icons arrows-1_cloud-download-93"></i>
-            <p>Cargar Documentos</p>
-          </a>
-        </li>
-        <li class="active-pro">
-          <a href="./upgrade.html">
-            <i class="now-ui-icons arrows-1_cloud-download-93"></i>
-            <p>Asignar Franja Horaria</p>
-          </a>
-        </li>
-        <li class="active-pro">
-          <a href="./upgrade.html">
-            <i class="now-ui-icons arrows-1_cloud-download-93"></i>
-            <p>Listar Comisiones</p>
-          </a>
-        </li>
-        <li class="active-pro">
-          <a href="./upgrade.html">
-            <i class="now-ui-icons arrows-1_cloud-download-93"></i>
-            <p>Visualizar</p>
-          </a>
-        </li>
-        <li class="active-pro">
-          <a href="./upgrade.html">
-            <i class="now-ui-icons arrows-1_cloud-download-93"></i>
-            <p>Reportes</p>
-          </a>
-        </li>
-      </ul>
-    </div>
-  </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.7.0/flowbite.min.js"></script>
+    <script>
+        const docenteContent = [
+            {
+                href: "#",
+                iconName: "fa-solid fa-list",
+                title: "Ver listado"
+            },
+            {
+                href: "#",
+                iconName: "far fa-regular fa-user",
+                title: "Ver perfil"
+            },
+            {
+                href: "#",
+                iconName: "far fa-folder-open",
+                title: "Ver histórico"
+            },
+            {
+                href: "#",
+                iconName: "fas fa-chalkboard-teacher",
+                title: "Asignar otras actividades"
+            },
+            {
+                href: "./asignar-modalidad/index.html",
+                iconName: "fa fa-user-edit",
+                title: "Asignar modalidad"
+            },
+            {
+                href: "#",
+                iconName: "fas fa-file-upload",
+                title: "Cargar documentos"
+            },
+        ];
+        const gralContent = [
+            {
+                href: "#",
+                iconName: "fas fa-user-clock",
+                title: "Asignar franja horaria"
+            },
+            {
+                href: "#",
+                iconName: "fas fa-clipboard-list",
+                title: "Listar comisiones sin asignar"
+            }
+        ];
+        const contentSideBar = document.getElementById("content-side-bar");
+        contentSideBar.innerHTML = `<div class="text-white font-semibold text-lg">Docente</div>`;
+        docenteContent.forEach((e) => {
+            contentSideBar.innerHTML += `
+                <li>
+                    <a href='${e.href}' class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-red-900 group">
+                        <i class="${e.iconName} text-gray-200 text-opacity-90"></i>
+                        <span class="ml-3 text-gray-200">${e.title}</span>
+                    </a>
+                </li>
+            `;
+        });
+        contentSideBar.innerHTML += `<div class="pt-2 text-white font-semibold text-lg">General</div>`;
+        gralContent.forEach((e) => {
+            contentSideBar.innerHTML += `
+                <li>
+                    <a href='${e.href}' class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-red-900 group">
+                        <i class="${e.iconName} text-gray-200 text-opacity-90"></i>
+                        <span class="ml-3 text-gray-200">${e.title}</span>
+                    </a>
+                </li>
+            `;
+        });
+    </script>
 </body>
+
 </html>
