@@ -1,0 +1,130 @@
+{% load static %} 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- meta tags -->
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport'>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+  
+  <!-- CSS Files -->
+  <link href="{% static '/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static '/css/now-ui-dashboard.css' %}" rel="stylesheet">
+  <link href="{% static '/css/estilos.css' %}" rel="stylesheet">
+  
+  <title>Mapa de carreras</title>
+</head>
+<body>
+  <!--
+      Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
+  -->  
+  <div class="sidebar" data-color="orange">
+    
+    <div class="logo">
+      <a href="#" class="simple-text">
+        <img src="https://www.untdf.edu.ar/img/contenedor_marca.png" role="presentation" class="isologofondo">
+        <img src="https://www.untdf.edu.ar/img/isologotipo.png" class="isologo">
+        MAPA DE CARRERAS
+      </a>
+    </div>
+
+<!-- https://webdesign.tutsplus.com/es/tutorials/how-to-make-the-bootstrap-navbar-dropdown-work-on-hover--cms-33840 -->
+
+    <div class="sidebar-wrapper" id="sidebar-wrapper">
+      <ul class="nav">
+        Docente
+        <button class="separador text-white btn" style="display: none;">
+          <li class="active ">
+            <a href="./dashboard.html">
+              <i class="now-ui-icons design_app"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+          <li>
+            <a href="./icons.html">
+              <i class="now-ui-icons education_atom"></i>
+              <p>Icons</p>
+            </a>
+          </li>
+          <li>
+            <a href="./map.html">
+              <i class="now-ui-icons location_map-big"></i>
+              <p>Maps</p>
+            </a>
+          </li>
+        </button>
+        <li class="separador text-white">
+          Mapa de Carreras
+        </li>
+        
+        <li>
+          <a href="{% url 'docente' %}">
+            <i class="now-ui-icons users_single-02"></i>
+            <p>Ver Perfil Docente</p>
+          </a>
+        </li>
+        
+        <li>
+          <a href="./tables.html">
+            <i class="now-ui-icons design_bullet-list-67"></i>
+            <p>Ver Historial Docente</p>
+          </a>
+        </li>
+        <li>
+          <a href="./typography.html">
+            <i class="now-ui-icons text_caps-small"></i>
+            <p>Asignar Carga Horaria</p>
+          </a>
+        </li>
+        <li class="active-pro">
+          <a href="./upgrade.html">
+            <i class="now-ui-icons arrows-1_cloud-download-93"></i>
+            <p>Asignar Actividades</p>
+          </a>
+        </li>
+        <li class="active-pro">
+          <a href="./upgrade.html">
+            <i class="now-ui-icons arrows-1_cloud-download-93"></i>
+            <p>Asignar Modalidad</p>
+          </a>
+        </li>
+        <li class="active-pro">
+          <a href="./upgrade.html">
+            <i class="now-ui-icons arrows-1_cloud-download-93"></i>
+            <p>Cargar Documentos</p>
+          </a>
+        </li>
+        <li class="active-pro">
+          <a href="./upgrade.html">
+            <i class="now-ui-icons arrows-1_cloud-download-93"></i>
+            <p>Asignar Franja Horaria</p>
+          </a>
+        </li>
+        <li class="active-pro">
+          <a href="./upgrade.html">
+            <i class="now-ui-icons arrows-1_cloud-download-93"></i>
+            <p>Listar Comisiones</p>
+          </a>
+        </li>
+        <li class="active-pro">
+          <a href="./upgrade.html">
+            <i class="now-ui-icons arrows-1_cloud-download-93"></i>
+            <p>Visualizar</p>
+          </a>
+        </li>
+        <li class="active-pro">
+          <a href="./upgrade.html">
+            <i class="now-ui-icons arrows-1_cloud-download-93"></i>
+            <p>Reportes</p>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
