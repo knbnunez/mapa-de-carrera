@@ -1,15 +1,14 @@
-<html lang="en">
+<!doctype html>
+<html>
 
 <head>
-
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
-
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.7.0/flowbite.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        
     <title>MDC</title>
 
     <style>
@@ -17,101 +16,303 @@
             display: none;
         }
     </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
+<body class="h-screen w-full">
 
-    <!--
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 search">
-                <form method="get">
-                    <div id="custom-search-input">
-                        <div class="input-group col-md-as">
-                            <input type="text" class="form-control" placeholder="Buscar" name="Buscar"></input>
-                            <span class="input-group-list">
-                                <i class="icon icon-search"></i>
-                                <button type="submit" class="boton btn-success">Buscar</button>
-                            </span>
-                        </div>
-                     </div>
-                </form>
-            </div>
+    <!-- Botón para desplegar cuando se achica el tamaño de la página -->
+    <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar"
+        type="button"
+        class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+        <span class="sr-only">Desplegar</span>
+        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg">
+            <path clip-rule="evenodd" fill-rule="evenodd"
+                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+            </path>
+        </svg>
+    </button>
+    <aside id="logo-sidebar"
+        class="fixed top-0 left-0 z-40 w-65 h-screen transition-transform -translate-x-full sm:translate-x-0"
+        aria-label="Sidebar">
+        <div class="h-full px-3 py-4 overflow-y-auto bg-red-800">
+            <a href="#" class="flex items-center pl-2.5 mb-4 pb-3 border-b-[1px] border-white">
+                <img src="https://untdf.edu.ar/img/isologotipo_chico.png" class="h-6 mr-3 sm:h-7" alt="UNTDF Logo" />
+                <span class="self-center text-xl font-semibold whitespace-nowrap text-gray-50">Mapa de carreras</span>
+            </a>
+            <ul id="content-side-bar" class="space-y-2 font-medium">
+                <!-- content con js -->
+            </ul>
         </div>
+    </aside>
+<div class="p-1 pl-7 sm:ml-4">
+   
+<div class="p-1 pl-7 sm:ml-64">
+    <!-- <h3 class="text-sm font-medium text-gray-900 truncate dark:text-black">Ingrese Legajo a buscar</h3>--> 
+    <form action="{% url 'docente' %}" method="busca">
+        <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+        <div class="relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                </svg>
+            </div>
+        <input type="search" name="filtro" id="filtro" class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" style="max-width: 85%" placeholder="Buscar docentes" value="{{queryset}}">
+        <!--<input type="search" id="default-search" class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Mockups, Logos..." required>
+        <button type="submit">Buscar</button>-->   
+    </div> 
+    </form>
+</div>
+
+  
+   <!--     <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700"> w-full-->
+            <div class="p-1 pl-7 sm:ml-64">
+               
+    <ol class="w-full divide-y divide-gray-200 dark:divide-gray-700" id="lista-docentes" style="max-width: 85%">
+    {% for d in docentes %}
+    
+    <li class="docente">
+       <div class="flex items-center space-x-4">
+          
+          <div class="flex-1 min-w-0">
+             <p class="text-sm font-medium text-gray-900 truncate dark:text-black">
+               DNI: {{d.numero_documento}}
+             </p>
+             <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                Apellido y nombre:{{d.agente}}
+             </p>
+          </div>
+          <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-black">
+            <a href="{% url 'docente-detalle' legajo=d.legajo %}"> 
+               Legajo: {{d.legajo}}
+        </a>
+          </div>
+       </div>
+    </li>
+    {% endfor %}
+ </ol>
+ 
+</div>
+    
+    <div class="p-1 pl-7 sm:ml-64 ">
+    <nav aria-label="Page navigation example">
+        <ul class="flex items-center -space-x-px h-20 text-base" id="paginacion">
+          <!-- Los botones de paginación se agregarán aquí con JavaScript -->
+        </ul>
+      </nav>
     </div>
 
-    <form action="http://127.0.0.1:8000/docente" method="get">
-        <label for="search_query">Buscar:</label>
-        <input type="text" name=" " id="search_query">
-        <button type="submit">Buscar</button>
-      </form>
 
-      <form id="mi-formulario" method="post">
-        <label for="search_query">Buscar:</label>
-        <input type="text" name="q" id="search_query">
-        <input type="hidden" name="legajo" >
-        
-        <button type="submit">Buscar</button>
-      </form>
-      
-      <script>
-        const formulario = document.querySelector('#mi-formulario');
-           formulario.addEventListener('submit', (event) => {
-          event.preventDefault();
-          const q = encodeURIComponent(document.querySelector('#search_query').value);
-          const legajo = encodeURIComponent(document.querySelector('input[name="legajo"]').value);
-          const url = `http://127.0.0.1:8000/docente/${legajo}`;
-          window.location.href = url;
-        });
-      </script>-->
-    <h3>Ingrese Legajo a buscar</h3>
-    <form action="{% url 'docente' %}" method="busca">
-        <input type="text" name="filtro" id="filtro" value="{{queryset}}">
-        <!--<button type="submit">Buscar</button>-->
-    </form>
-
-    <ul id="lista-docentes">
-        {% for d in docentes %}
-        <li class="docente">
-            <a href="{% url 'docente-detalle' legajo=d.legajo %}">
-                <h4> DNI: {{d.numero_documento}}. Legajo: {{d.legajo}}. Nombre y Apellido: {{d.agente}}.</h4>
-            </a>
-        </li>
-        {% endfor %}
-    </ul>
-
+</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.7.0/flowbite.min.js"></script>
     <script>
-        // lista de docente 
-        //capturar Input
-        //  filtrar docentes 
-        console.log("Ejecutando JS");
-
-        const listaDocente = document.getElementById("lista-docentes").children;
-        console.log(listaDocente);
-
-        const filtrarDocente = () => {
-            console.log("filtrando docentes");
-            const inputValue = document.getElementById("filtro").value;
-            console.log(inputValue);
-            for (const docente of listaDocente) {
-                if (inputValue !== "" &&
-                    !docente.innerHTML.includes(inputValue)) {
-                    docente.classList.add("hidden");
-
-                }
-                else {
-                    docente.classList.remove("hidden");
-                }
-
-            };
-        }
-        //filtrarDocente();
-
-
-        const inputDOC = document.getElementById("filtro");
-        inputDOC.onkeyup = filtrarDocente;
-
+        const docenteContent = [
+            {
+                href: "docentes",
+                iconName: "fa-solid fa-list",
+                title: "Ver listado"
+            },
+            {
+                href: "#",
+                iconName: "far fa-regular fa-user",
+                title: "Ver perfil"
+            },
+            {
+                href: "#",
+                iconName: "far fa-folder-open",
+                title: "Ver histórico"
+            },
+            {
+                href: "#",
+                iconName: "fas fa-chalkboard-teacher",
+                title: "Asignar otras actividades"
+            },
+            {
+                href: "#",
+                iconName: "fa fa-user-edit",
+                title: "Asignar modalidad"
+            },
+            {
+                href: "#",
+                iconName: "fas fa-file-upload",
+                title: "Cargar documentos"
+            },
+        ];
+        const gralContent = [
+            {
+                href: "#",
+                iconName: "fas fa-user-clock",
+                title: "Asignar franja horaria"
+            },
+            {
+                href: "#",
+                iconName: "fas fa-clipboard-list",
+                title: "Listar comisiones sin asignar"
+            }
+        ];
+        const contentSideBar = document.getElementById("content-side-bar");
+        contentSideBar.innerHTML = `<div class="text-white font-semibold text-lg">Docente</div>`;
+        docenteContent.forEach((e) => {
+            contentSideBar.innerHTML += `
+                <li>
+                    <a href='${e.href}' class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-red-900 group">
+                        <i class="${e.iconName} text-gray-200 text-opacity-90"></i>
+                        <span class="ml-3 text-gray-200">${e.title}</span>
+                    </a>
+                </li>
+            `;
+        });
+        contentSideBar.innerHTML += `<div class="pt-2 text-white font-semibold text-lg">General</div>`;
+        gralContent.forEach((e) => {
+            contentSideBar.innerHTML += `
+                <li>
+                    <a href='${e.href}' class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-red-900 group">
+                        <i class="${e.iconName} text-gray-200 text-opacity-90"></i>
+                        <span class="ml-3 text-gray-200">${e.title}</span>
+                    </a>
+                </li>
+            `;
+        });
     </script>
+
+    
+<script>
+    // lista de docente 
+     //capturar Input
+   //  filtrar docentes 
+     console.log("Ejecutando JS");
+   
+     const listaDocente = document.getElementById("lista-docentes").children;
+     console.log(listaDocente);
+   
+     const filtrarDocente = () => {
+       console.log("filtrando docentes");
+     const inputValue = document.getElementById("filtro").value;
+     console.log(inputValue);
+     for(const docente of listaDocente) {
+     if(inputValue!== "" &&
+       !docente.innerHTML.includes(inputValue))
+   {
+        docente.classList.add("hidden");
+   
+    }
+    else {
+       docente.classList.remove("hidden");
+    }
+    
+     };
+     }
+     //filtrarDocente();
+   
+   
+     const inputDOC = document.getElementById("filtro");
+     inputDOC.onkeyup = filtrarDocente;
+   
+   </script>
+   
+   <script>
+    // Tu código de filtrado de docentes aquí (el que ya tienes)
+    
+    // Código de paginación
+    const elementosPorPagina = 10;
+    let paginaActual = 1;
+ 
+    function mostrarDocentes(pagina) {
+       const listaDocentes = document.getElementById("lista-docentes").children;
+       const numDocentes = listaDocentes.length;
+       const inicio = (pagina - 1) * elementosPorPagina;
+       const fin = Math.min(inicio + elementosPorPagina, numDocentes);
+ 
+       for (let i = 0; i < numDocentes; i++) {
+          if (i >= inicio && i < fin) {
+             listaDocentes[i].classList.remove("hidden");
+          } else {
+             listaDocentes[i].classList.add("hidden");
+          }
+       }
+ 
+       paginaActual = pagina;
+       crearBotonesPaginacion(Math.ceil(numDocentes / elementosPorPagina), paginaActual);
+    }
+ 
+    function crearBotonesPaginacion(numPaginas, paginaActual) {
+       const paginacionDiv = document.getElementById("paginacion");
+       paginacionDiv.innerHTML = "";
+ 
+       // Botón de página anterior
+       const botonAnterior = document.createElement("li");
+       botonAnterior.innerHTML = `
+         <a href="#" class="flex items-center justify-center px-4 h-10 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+           <span class="sr-only">Previous</span>
+           <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+           </svg>
+         </a>
+       `;
+       botonAnterior.addEventListener("click", () => {
+         if (paginaActual > 1) {
+           mostrarDocentes(paginaActual - 1);
+         }
+       });
+       paginacionDiv.appendChild(botonAnterior);
+ 
+       // Botones de páginas
+       for (let i = 1; i <= numPaginas; i++) {
+         const botonPagina = document.createElement("li");
+         botonPagina.innerHTML = `
+           <a href="#" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">${i}</a>
+         `;
+         if (i === paginaActual) {
+           botonPagina.firstElementChild.classList.add("z-10", "text-blue-600", "border-blue-300", "bg-blue-50", "hover:bg-blue-100", "hover:text-blue-700", "dark:border-gray-700", "dark:bg-gray-700", "dark:text-white");
+           botonPagina.firstElementChild.setAttribute("aria-current", "page");
+         } else {
+           botonPagina.firstElementChild.addEventListener("click", () => {
+             mostrarDocentes(i);
+           });
+         }
+         paginacionDiv.appendChild(botonPagina);
+       }
+ 
+       // Botón de página siguiente
+       const botonSiguiente = document.createElement("li");
+       botonSiguiente.innerHTML = `
+         <a href="#" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+           <span class="sr-only">Next</span>
+           <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+           </svg>
+         </a>
+       `;
+       botonSiguiente.addEventListener("click", () => {
+         if (paginaActual < numPaginas) {
+           mostrarDocentes(paginaActual + 1);
+         }
+       });
+       paginacionDiv.appendChild(botonSiguiente);
+    }
+ 
+    // Mostrar la primera página al cargar la página
+    mostrarDocentes(1);
+ </script>
+ 
+    
+    <!--  -->
+    <style>
+        .drop-area {
+            border: 2px dashed gray;
+            height: 200px;
+            width: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            text-align: center;
+        }
+        .drop-area.dragover {
+           border-color: blue;
+        }
+    </style>
 
 </body>
 

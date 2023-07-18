@@ -1,30 +1,149 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
+
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle docente</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.7.0/flowbite.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        
+    <title>MDC</title>
+
+    <style>
+        .hidden{
+            display: none;
+        }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+
+<body class="h-screen w-full">
+
+    <!-- Botón para desplegar cuando se achica el tamaño de la página -->
+    <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar"
+        type="button"
+        class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+        <span class="sr-only">Desplegar</span>
+        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg">
+            <path clip-rule="evenodd" fill-rule="evenodd"
+                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+            </path>
+        </svg>
+    </button>
+    <aside id="logo-sidebar"
+        class="fixed top-0 left-0 z-40 w-65 h-screen transition-transform -translate-x-full sm:translate-x-0"
+        aria-label="Sidebar">
+        <div class="h-full px-3 py-4 overflow-y-auto bg-red-800">
+            <a href="#" class="flex items-center pl-2.5 mb-4 pb-3 border-b-[1px] border-white">
+                <img src="https://untdf.edu.ar/img/isologotipo_chico.png" class="h-6 mr-3 sm:h-7" alt="UNTDF Logo" />
+                <span class="self-center text-xl font-semibold whitespace-nowrap text-gray-50">Mapa de carreras</span>
+            </a>
+            <ul id="content-side-bar" class="space-y-2 font-medium">
+                <!-- content con js -->
+            </ul>
+        </div>
+    </aside>
+
+   
+<div class="p-1 pl-7 sm:ml-64">
+    
+    <div class="p-10 pl-10 sm:ml-14">
     {% if docente %}
-        <h1>Docente</h1>
-        <h3> - Documento nro: {{docente.numero_documento}}</h3>
-        <h3> - Legajo nro: {{docente.legajo}}</h3>
-        <h3> - Nombre y Apellido: {{docente.nombre_apellido}}</h3>
+    <div class="p-1 pl-7 sm:ml-4">
+        <h1 class="text-lg font-semibold dark:text-black" >{{docente.nombre_apellido}}</h1></div>
+        <dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+   
+        <div class="flex flex-col pb-3">
+            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">DNI: </dt>
+            <dd class="text-lg font-semibold dark:text-black">{{docente.numero_documento}}</dd>
+        </div>
+        <div class="flex flex-col pb-3">
+            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Legajo: </dt>
+            <dd class="text-lg font-semibold dark:text-black">{{docente.legajo}}</dd>
+        </div>
+        
+       
+        
         {% if docente.correo_electronico %}
-            <h3> - Correo electrónico: {{docente.correo_electronico}}</h3>
+        <div class="flex flex-col pb-3">
+            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Correo electrónico: </dt>
+            <dd class="text-lg font-semibold dark:text-black">{{docente.correo_electronico}}</dd>
+        </div>
+         
         {% else %}
-            <h3> - Correo electrónico: no se cargó ningún mail</h3>
+        <div class="flex flex-col pb-3">
+            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Correo electrónico: </dt>
+            <dd class="text-lg font-semibold dark:text-black">no se cargó ningún mail</dd>
+        </div>
+            
         {% endif %}
     {% else %}
         <h3>El docente no pudo ser recuperado y no se encontraba en bases internas</h3>
     {% endif %}
     <!-- Cargos -->
+
     {% if cargos %}
-        <h1>Cargos</h1>
-        {% for c in cargos %}
-            <li></li>    
+    <div class="flex flex-col pb-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Cargos: </dt>
+        <dd class="text-lg font-semibold dark:text-black"></dd>
+    </div>
+</dl>  
+        
+              
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Numero
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Dedicación
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Categoria
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Fecha de alta
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Fecha de baja
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    <span class="sr-only">Edit</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in cargos %}
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{c.cargo.nro_cargo}}
+                </th>
+                <td class="px-6 py-4">
+                    {{c.dedicacion.desc_dedic}}
+                </td>
+                <td class="px-6 py-4">
+                    {{c.categoria.desc_categ}}
+                </td>
+                <td class="px-6 py-4">
+                    {{c.cargo.fecha_alta}}
+                </td>
+                <td class="px-6 py-4">
+                    {{c.cargo.fecha_baja}}
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Descargar Resolucion</a>
+                </td>
+            </tr>
+            {% endfor %}
+            
+        </tbody>
+    </table>
+</div>
             <!-- 
             aux_dict['cargo'] = cargo.nro_cargo
             # dependencias -> TODO: Relacionar con los datos de Guaraní
@@ -33,10 +152,10 @@
             aux_dict['categoria'] = categoria.desc_categ
             aux_dict['fecha_alta'] = cargo.fecha_alta
             aux_dict['fecha_baja'] = cargo.fecha_baja 
-            -->
+            
             <h3> - Nro cargo: {{c.cargo.nro_cargo}}</h3>
             <h3> - Dedicación: {{c.dedicacion.desc_dedic}}</h3>
-            <!-- 
+            
             {% if c.modalidad %} <h3> - Modalidad: {{c.cargo.modalidad}}</h3>
             {% else %} <h3> - Modalidad: no hay modalidad asignada todavía</h3>
             {% endif %}
@@ -55,12 +174,116 @@
 
             {% if c.cargas_extras %} <h3> - Cargas horarias extras: {{c.cargas_extras}}</h3>
             {% else %} <h3> - Cargas horarias extras: no hay cargas extras asociadas</h3>
-            {% endif %} -->
+            {% endif %} 
             <h3> - Categoria: {{c.categoria.desc_categ}}</h3>
             <h3> - Fecha alta: {{c.cargo.fecha_alta}}</h3>
-            <h3> - Fecha baja: {{c.cargo.fecha_baja}}</h3>
-        {% endfor %}
+            <h3> - Fecha baja: {{c.cargo.fecha_baja}}</h3>-->
+       
+    
     {% endif %}
+
+</div>
+    
+
+  
+ 
+
+
+
+</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.7.0/flowbite.min.js"></script>
+    <script>
+        const docenteContent = [
+            {
+                href: "docentes",
+                iconName: "fa-solid fa-list",
+                title: "Ver listado"
+            },
+            {
+                href: "#",
+                iconName: "far fa-regular fa-user",
+                title: "Ver perfil"
+            },
+            {
+                href: "#",
+                iconName: "far fa-folder-open",
+                title: "Ver histórico"
+            },
+            {
+                href: "#",
+                iconName: "fas fa-chalkboard-teacher",
+                title: "Asignar otras actividades"
+            },
+            {
+                href: "#",
+                iconName: "fa fa-user-edit",
+                title: "Asignar modalidad"
+            },
+            {
+                href: "#",
+                iconName: "fas fa-file-upload",
+                title: "Cargar documentos"
+            },
+        ];
+        const gralContent = [
+            {
+                href: "#",
+                iconName: "fas fa-user-clock",
+                title: "Asignar franja horaria"
+            },
+            {
+                href: "#",
+                iconName: "fas fa-clipboard-list",
+                title: "Listar comisiones sin asignar"
+            }
+        ];
+        const contentSideBar = document.getElementById("content-side-bar");
+        contentSideBar.innerHTML = `<div class="text-white font-semibold text-lg">Docente</div>`;
+        docenteContent.forEach((e) => {
+            contentSideBar.innerHTML += `
+                <li>
+                    <a href='${e.href}' class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-red-900 group">
+                        <i class="${e.iconName} text-gray-200 text-opacity-90"></i>
+                        <span class="ml-3 text-gray-200">${e.title}</span>
+                    </a>
+                </li>
+            `;
+        });
+        contentSideBar.innerHTML += `<div class="pt-2 text-white font-semibold text-lg">General</div>`;
+        gralContent.forEach((e) => {
+            contentSideBar.innerHTML += `
+                <li>
+                    <a href='${e.href}' class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-red-900 group">
+                        <i class="${e.iconName} text-gray-200 text-opacity-90"></i>
+                        <span class="ml-3 text-gray-200">${e.title}</span>
+                    </a>
+                </li>
+            `;
+        });
+    </script>
+
+   
+   
+   
+ 
+    
+    <!--  -->
+    <style>
+        .drop-area {
+            border: 2px dashed gray;
+            height: 200px;
+            width: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            text-align: center;
+        }
+        .drop-area.dragover {
+           border-color: blue;
+        }
+    </style>
+
 </body>
 
 </html>

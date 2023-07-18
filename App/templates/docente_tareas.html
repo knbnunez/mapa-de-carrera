@@ -22,12 +22,12 @@
 {% else %}
     <h3>El docente no pudo ser recuperado y no se encontraba en bases internas</h3>
 {% endif %}
-<!-- Cargos -->
+ Cargos 
 
 <form action="{% url 'docente-asignar-tareas' legajo=docente.legajo %}" method="busca">
   
 </form>
-<ul id="lista-docentes"> 
+<ul id="nro_cargo"> 
     {% for c in cargos %}
     <li class="cargos"> 
        <a href="{% url 'docente-asignar-tareas-1' legajo=docente.legajo nro_cargo=c.cargo.nro_cargo %}"> 
