@@ -21,16 +21,18 @@ class DocenteBusquedaView(TemplateView):
         response = requests.get(url_buscadocente, auth=(self.username, self.password))
         # if response.status_code == 200:
         docentes = response.json()
-        print(docentes)
+        # print(docentes)
         
         return render(request, self.template_name, {'docentes': docentes})
         # else :
             # return render(request, self.template_name, {"docentes":})
-    def busca(request):
-        url=self.url_mapuche+'agentes/'+legajo
-        queryset = request.Get.get('q')
-        if queryset:
-            docentes = Docente.objects.filter(legajo=queryset).first()
-            if docentes:
-                url = reverse('docente-detalle', kwargs={'legajo':queryset})
-        return render(request, 'docente_detalle.html', {'queryset':queryset} )
+    
+    # COMMENT: No está siendo utilizado
+    # def busca(self, request):
+    #     url=self.url_mapuche+'agentes/'+legajo
+    #     queryset = request.Get.get('q')
+    #     if queryset:
+    #         docentes = Docente.objects.filter(legajo=queryset).first()
+    #         if docentes:
+    #             url = reverse('docente-detalle', kwargs={'legajo':queryset})
+    #     return render(request, 'docente_detalle.html', {'queryset':queryset} )

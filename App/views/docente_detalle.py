@@ -55,6 +55,11 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
             except ConnectTimeout: pass # Si no se pudo recuperar el correo de la API se muestra lo que tenga cargado -> None o sumail@untdf.edu.ar
         # print(docente.correo_electronico)
         
+        ###################################################################################################################################
+        # TAREA: poner la restricción y definir la modalidad correspondiente, semi y exclusivo solo pueden tener una modadlidad posible.
+        # el único que puede llegar a quedar en blanco, es el semi
+        ###################################################################################################################################
+
         # Info cargo docente --------------------------------------------------------
         cargos = None # Hay que inicializar sí o sí, sino no se van a cargar los nuevos valores del if que viene más abajo
         cargos_activos = [] # Lista de diccionarios auxiliar, facilita mostrar nombre de categoria, dedicación, otros. En lugar de mostrar solo el código  
@@ -77,30 +82,36 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
                     )
                     if Cargo.objects.filter(nro_cargo=c.get('cargo')).exists(): # Update si hubo cambios (intuímos por error en mapuche), errores no nos interesa dejar como histórico
                         cargo = Cargo.objects.get(nro_cargo=c.get('cargo')) # Recupero el cargo que voy a actualizar
+                        
+                        ###########################################################################################################
+                        # TAREA: ya no existe la Modalidad_Dedicacion, ahora es Modalidad y Dedicacion
+                        ###########################################################################################################
+                        
                         # Modalidad-Dedicación
-                        modalidad_dedicacion = Modalidad_Dedicacion.objects.get(id=cargo.modalidad_dedicacion.id)
-                        modalidad_dedicacion.dedicacion = dedicacion # Update dedicación por las dudas de que haya cambiado.
-                        modalidad_dedicacion.save()
+                        # modalidad_dedicacion = Modalidad_Dedicacion.objects.get(id=cargo.modalidad_dedicacion.id)
+                        # modalidad_dedicacion.dedicacion = dedicacion # Update dedicación por las dudas de que haya cambiado.
+                        # modalidad_dedicacion.save()
+                        
                         # Actualizo
-                        cargo.modalidad_dedicacion = modalidad_dedicacion
+                        # cargo.modalidad_dedicacion = modalidad_dedicacion
                         cargo.categoria = categoria
                         cargo.fecha_alta = c.get('fecha_alta')
                         cargo.fecha_baja = c.get('fecha_baja')
                         cargo.save()
                     else: 
-                        modalidad_dedicacion = Modalidad_Dedicacion.objects.create(
-                            # modalidad -> la definimos luego
-                            dedicacion = dedicacion
-                            # restriccion de horas se definen implícitamente cuando se le asigne modalidad
-                            # error -> no
-                        )
+                        # modalidad_dedicacion = Modalidad_Dedicacion.objects.create(
+                        #     # modalidad -> la definimos luego
+                        #     dedicacion = dedicacion
+                        #     # restriccion de horas se definen implícitamente cuando se le asigne modalidad
+                        #     # error -> no
+                        # )
                         cargo = Cargo.objects.create(
                             nro_cargo = c.get('cargo'),
                             docente = docente,
                             # resol -> Default,
                             # depend_desemp -> Default, TODO: asociar data Guaraní
                             # depend_design -> Ídem depend_desemp,
-                            modalidad_dedicacion = modalidad_dedicacion,
+                            # modalidad_dedicacion = modalidad_dedicacion,
                             # cargas de horarias -> TODO: faltan definirlas bien
                             categoria = categoria,
                             fecha_alta = c.get('fecha_alta'),
