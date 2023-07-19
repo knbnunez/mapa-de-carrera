@@ -67,10 +67,13 @@
                             Numero
                         </th>
                         <th scope="col" class="px-6 py-3">
+                            Categoria
+                        </th>
+                        <th scope="col" class="px-6 py-3">
                             Dedicación
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Categoria
+                            Modalidad
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Fecha de alta
@@ -91,10 +94,13 @@
                             {{c.cargo.nro_cargo}}
                         </th>
                         <td class="px-6 py-4">
+                            {{c.categoria.desc_categ}}
+                        </td>
+                        <td class="px-6 py-4">
                             {{c.dedicacion.desc_dedic}}
                         </td>
                         <td class="px-6 py-4">
-                            {{c.categoria.desc_categ}}
+                            {{c.modalidad.desc_modal}}
                         </td>
                         <td class="px-6 py-4">
                             {{c.cargo.fecha_alta}}

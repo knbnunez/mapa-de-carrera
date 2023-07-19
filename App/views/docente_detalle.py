@@ -17,25 +17,29 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
         legajo = str(legajo) # TODO: Revisar si la conversión afecta a las consultas a la base de datos. En el modelo, legajo es Integer     
         
         # Info persona docente ---------------------------------------------------
-        docente = None
+        docente = None # Inicializo
         url = self.url_mapuche+'agentes/'+legajo # /agentes/{legajo}
         try:
             response = requests.get(url, auth=(self.username, self.password), timeout=5)
             if response.status_code == 200:
                 data = response.json()
-                if Docente.objects.filter(legajo=legajo).exists(): # Existe en la DB UPDATE
+                # Recuperación o creación en la base de datos (en caso de no existir)
+                if Docente.objects.filter(legajo=legajo).exists(): 
                     docente = Docente.objects.get(legajo=legajo)
                     docente.numero_documento = data.get('numero_documento')
                     docente.nombre_apellido  = data.get('agente')
-                    docente.save() # No actualizo el legajo porque no tiene sentido... Si se hubiese cambiado el legajo no lo hubiese encontrado...
-                else: # No existe en la DB CREATE
+                    # No actualizo el legajo porque no tiene sentido... Si se hubiese cambiado el legajo no lo hubiese encontrado...
+                    docente.save() 
+                else:
                     docente = Docente.objects.create(
                         numero_documento = data.get('numero_documento'),
                         legajo           = data.get('legajo'),
                         nombre_apellido  = data.get('agente')
                     )
         except ConnectTimeout:
-            pass # Se trata al final junto con el status_code <> 200
+            # Se trata al final junto con el status_code <> 200
+            pass 
+        #
         if (docente is None) and (Docente.objects.filter(legajo=legajo).exists()):
             docente = Docente.objects.get(legajo=legajo) # Lo recupero
         elif (docente is None) and (not Docente.objects.filter(legajo=legajo).exists()): 
@@ -73,56 +77,68 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
                     # print(c)
                     cargo = None
                     aux_dict = {}
-                    dedicacion, _ = Dedicacion.objects.get_or_create(desc_dedic=c.get('desc_dedic'))
-                    # print('dedicacion: ',dedicacion)
-                    # print(f"categoria: {c.get('categoria')}. descripcion: {c.get('desc_categ')}")
+                    
+                    # Categoria
                     categoria, _ = Categoria.objects.get_or_create(
                         codigo=c.get('categoria'), 
                         desc_categ=c.get('desc_categ')
                     )
+
+                    ###################
+                    #       NEW       #  
+                    ###################
+
+                    # DEDICACIÓN:
+                    # Simple    =>  { 'Docencia/Desarrollo profesional' }
+                    # Exclusivo =>  { 'Docencia e Investigación' }
+                    # Semided.  =>  { 'Docencia/Desarrollo profesional' OR 'Docencia e Investigación' }
+
+                    # Dedicación: desde Mapuche vienen como: --> {'Simple', 'Semided.', 'Exclusiva'} <--
+                    dedicacion, _ = Dedicacion.objects.get_or_create(desc_dedic=c.get('desc_dedic'))
+                    
+                    # Modalidad: sobre la dedicación recuperada, tomamos la decisión de qué valor puede tomar modalidad
+                    if 'Simple' in dedicacion.desc_dedic:
+                        modalidad, _ = Modalidad.objects.get_or_create(desc_modal='Docencia/Desarrollo profesional')
+                    elif 'Exclusiva' in dedicacion.desc_dedic:
+                        modalidad, _ = Modalidad.objects.get_or_create(desc_modal='Docencia e Investigación')
+                    # Caso else: en principio sería por descarte "Semiexclusiva" o "Semided." (que es como lo llaman en Mapuche)
+                    else:
+                        # Lo puedo dejar en null hasta que se la asignen, está permitido en nuestro modelo, luego en "ASIGNAR MODALIDAD" se recuperará una de las dos desc_modal posibles y se le asignará
+                        modalidad = None
+                    
+
+                    # Caso: cargo existe en la BD, realizamos actualización de datos
                     if Cargo.objects.filter(nro_cargo=c.get('cargo')).exists(): # Update si hubo cambios (intuímos por error en mapuche), errores no nos interesa dejar como histórico
                         cargo = Cargo.objects.get(nro_cargo=c.get('cargo')) # Recupero el cargo que voy a actualizar
-                        
-                        ###########################################################################################################
-                        # TAREA: ya no existe la Modalidad_Dedicacion, ahora es Modalidad y Dedicacion
-                        ###########################################################################################################
-                        
-                        # Modalidad-Dedicación
-                        # modalidad_dedicacion = Modalidad_Dedicacion.objects.get(id=cargo.modalidad_dedicacion.id)
-                        # modalidad_dedicacion.dedicacion = dedicacion # Update dedicación por las dudas de que haya cambiado.
-                        # modalidad_dedicacion.save()
-                        
-                        # Actualizo
-                        # cargo.modalidad_dedicacion = modalidad_dedicacion
+
+                        cargo.modalidad = modalidad # 
+                        cargo.dedicacion = dedicacion # 
+                        cargo.categoria = categoria
                         cargo.categoria = categoria
                         cargo.fecha_alta = c.get('fecha_alta')
                         cargo.fecha_baja = c.get('fecha_baja')
                         cargo.save()
                     else: 
-                        # modalidad_dedicacion = Modalidad_Dedicacion.objects.create(
-                        #     # modalidad -> la definimos luego
-                        #     dedicacion = dedicacion
-                        #     # restriccion de horas se definen implícitamente cuando se le asigne modalidad
-                        #     # error -> no
-                        # )
                         cargo = Cargo.objects.create(
                             nro_cargo = c.get('cargo'),
                             docente = docente,
                             # resol -> Default,
                             # depend_desemp -> Default, TODO: asociar data Guaraní
                             # depend_design -> Ídem depend_desemp,
-                            # modalidad_dedicacion = modalidad_dedicacion,
                             # cargas de horarias -> TODO: faltan definirlas bien
                             categoria = categoria,
+                            dedicacion = dedicacion,
+                            modalidad = modalidad,
                             fecha_alta = c.get('fecha_alta'),
                             fecha_baja = c.get('fecha_baja')
                         )
                     
                     aux_dict['cargo'] = cargo
-                    # dependencias -> TODO: Relacionar con los datos de Guaraní
-                    aux_dict['dedicacion'] = dedicacion
-                    # cargas de horarias -> TODO: faltan definirlas bien
                     aux_dict['categoria'] = categoria
+                    aux_dict['dedicacion'] = dedicacion
+                    aux_dict['modalidad'] = modalidad
+                    # dependencias -> TODO: Relacionar con los datos de Guaraní
+                    # cargas de horarias -> TODO: faltan definirlas bien
                     
                     #
                     fecha_baja = None # Inicializo para usar dentro del if y almacenar el valor
@@ -141,10 +157,11 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
             cargos = Cargo.objects.all(docente=docente)
             for c in cargos:
                 aux_dict['cargo'] = cargo
-                # dependencias -> TODO: Relacionar con los datos de Guaraní
-                aux_dict['dedicacion'] = dedicacion
-                # cargas de horarias -> TODO: faltan definirlas bien
                 aux_dict['categoria'] = categoria
+                aux_dict['dedicacion'] = dedicacion
+                aux_dict['modalidad'] = modalidad
+                # dependencias -> TODO: Relacionar con los datos de Guaraní
+                # cargas de horarias -> TODO: faltan definirlas bien
                 #
                 fecha_baja = None
                 if aux_dict['cargo'].fecha_baja is None: fecha_baja = datetime.datetime.strptime(aux_dict['cargo'].fecha_baja, '%Y-%m-%d').date()
