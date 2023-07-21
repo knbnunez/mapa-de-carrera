@@ -51,7 +51,7 @@
             {% endif %}
             <!-- Cargos -->
 
-            {% if cargos %}
+            {% if cargos_activos %}
             <div class="flex flex-col pb-3">
                 <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Cargos: </dt>
                 <dd class="text-lg font-semibold dark:text-black"></dd>
@@ -87,11 +87,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for c in cargos %}
+                    {% for c in cargos_activos %}
                     <tr
                         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{c.cargo.nro_cargo}}
+                            {{c.nro_cargo}}
                         </th>
                         <td class="px-6 py-4">
                             {{c.categoria.desc_categ}}
@@ -103,10 +103,10 @@
                             {{c.modalidad.desc_modal}}
                         </td>
                         <td class="px-6 py-4">
-                            {{c.cargo.fecha_alta}}
+                            {{c.fecha_alta|date:"SHORT_DATE_FORMAT"}}
                         </td>
                         <td class="px-6 py-4">
-                            {{c.cargo.fecha_baja}}
+                            {{c.fecha_baja|date:"SHORT_DATE_FORMAT"}}
                         </td>
                         <td class="px-6 py-4 text-right">
                             <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Descargar

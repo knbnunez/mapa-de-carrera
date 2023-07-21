@@ -16,7 +16,9 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
     def get(self, request, legajo): # Se puede recuperar el param atr llamándolo como esta definido en urls.py en este caso: legajo
         legajo = str(legajo) # TODO: Revisar si la conversión afecta a las consultas a la base de datos. En el modelo, legajo es Integer     
         
-        # Info persona docente ---------------------------------------------------
+        # .............................................................................. #
+        # ............................ Info persona docente ............................ #
+        # .............................................................................. #
         docente = None # Inicializo
         url = self.url_mapuche+'agentes/'+legajo # /agentes/{legajo}
         try:
@@ -43,8 +45,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
         if (docente is None) and (Docente.objects.filter(legajo=legajo).exists()):
             docente = Docente.objects.get(legajo=legajo) # Lo recupero
         elif (docente is None) and (not Docente.objects.filter(legajo=legajo).exists()): 
-            cargos_activos = None
-            return render(request, self.template_name, {'docente': docente, 'cargos':cargos_activos}) # materias, comisiones...
+            return render(request, self.template_name, {'docente': docente, 'cargos_activos': None}) # Faltaría agregar las materias, comisiones... que también serían = None
 
         # Correo docente --------------------------------------------------------
         if docente is not None:
@@ -107,6 +108,25 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
                         modalidad = None
                     
 
+
+                    #
+                    fecha_baja = None # Inicializo para usar dentro del if y almacenar el valor
+                    activo = None # Ídem
+                    # print('fecha baja: ',aux_dict['fecha_baja'])
+                    
+                    #...................................................................................#
+                    # !Comment IMPORTANTE: los valores null de la API se traducen a None implícitamente
+                    
+                    if c.get('fecha_baja') is not None: # Obtengo el valor de la fecha_baja para poder comparar
+                        fecha_baja = datetime.datetime.strptime(c.get('fecha_baja'), '%Y-%m-%d').date()
+                    fecha_actual = datetime.date.today() # Obtengo la fecha actual
+        
+                    if (fecha_baja is None) or (fecha_baja >= fecha_actual): # Comparo los dates obtenidos y Add a cargos_activos // para el template
+                        activo = 1
+                        # cargos_activos.append(aux_dict) --> Lo hago en una recorrida de los cargos activos
+                    else: activo = 0 # Else --> fecha_baja < fecha_actual(fecha_actual)
+
+
                     # Caso: cargo existe en la BD, realizamos actualización de datos
                     if Cargo.objects.filter(nro_cargo=c.get('cargo')).exists(): # Update si hubo cambios (intuímos por error en mapuche), errores no nos interesa dejar como histórico
                         cargo = Cargo.objects.get(nro_cargo=c.get('cargo')) # Recupero el cargo que voy a actualizar
@@ -117,6 +137,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
                         cargo.categoria = categoria
                         cargo.fecha_alta = c.get('fecha_alta')
                         cargo.fecha_baja = c.get('fecha_baja')
+                        cargo.activo = activo
                         cargo.save()
                     else: 
                         cargo = Cargo.objects.create(
@@ -130,43 +151,38 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
                             dedicacion = dedicacion,
                             modalidad = modalidad,
                             fecha_alta = c.get('fecha_alta'),
-                            fecha_baja = c.get('fecha_baja')
+                            fecha_baja = c.get('fecha_baja'),
+                            activo = activo
                         )
                     
-                    aux_dict['cargo'] = cargo
-                    aux_dict['categoria'] = categoria
-                    aux_dict['dedicacion'] = dedicacion
-                    aux_dict['modalidad'] = modalidad
+                    # aux_dict['cargo'] = cargo
+                    # aux_dict['categoria'] = categoria
+                    # aux_dict['dedicacion'] = dedicacion
+                    # aux_dict['modalidad'] = modalidad
                     # dependencias -> TODO: Relacionar con los datos de Guaraní
-                    # cargas de horarias -> TODO: faltan definirlas bien
-                    
-                    #
-                    fecha_baja = None # Inicializo para usar dentro del if y almacenar el valor
-                    # print('fecha baja: ',aux_dict['fecha_baja'])
-                    # IMPORTANTE: los valores null de la API se traducen a None implícitamente
-                    if aux_dict['cargo'].fecha_baja is not None:
-                        fecha_baja = datetime.datetime.strptime(aux_dict['cargo'].fecha_baja, '%Y-%m-%d').date()
-                    cur_date = datetime.date.today() # Debería venir en formato yyyy-mm-dd
-                    # Add a cargos_activos // para el template
-                    if (fecha_baja is None) or (fecha_baja >= cur_date): # REVISAR SI EL null DE LA API ES UN null de python O SI LLEGA COMO UN STRING
-                        cargos_activos.append(aux_dict)
-
-        except ConnectTimeout: pass
+                    # cargas de horarias -> TODO: faltan definirlas bien             
+        except ConnectTimeout: pass # Lo trato a continuación:
         
-        if (cargos is None) and (Cargo.objects.filter(docente=docente).exists()): # Lo recupero
-            cargos = Cargo.objects.all(docente=docente)
+        # Si se lograron almacenar cargos para el docente, los voy a almacenar los activos para poder mostrarlos por pantalla
+        if (Cargo.objects.filter(docente=docente).exists()): # Caso en el que existe al menos un cargo en la BD, lo recupero
+            # print('docente: ', docente)
+            cargos = Cargo.objects.filter(docente=docente, activo=1)
+            # print('cargos: ', cargos)
             for c in cargos:
-                aux_dict['cargo'] = cargo
-                aux_dict['categoria'] = categoria
-                aux_dict['dedicacion'] = dedicacion
-                aux_dict['modalidad'] = modalidad
-                # dependencias -> TODO: Relacionar con los datos de Guaraní
-                # cargas de horarias -> TODO: faltan definirlas bien
+                # print(c)
+                cargos_activos.append(c) # Los añadimos al diccionario que recibirá al template
+                
+                # ----------- #
+                # POR HACER...
                 #
-                fecha_baja = None
-                if aux_dict['cargo'].fecha_baja is None: fecha_baja = datetime.datetime.strptime(aux_dict['cargo'].fecha_baja, '%Y-%m-%d').date()
-                cur_date = datetime.date.today()
-                if (fecha_baja is None) or (fecha_baja >= cur_date): cargos_activos.append(aux_dict)
+                #Agregar comisiones(y materia correspondiente), tareas extras
+                #
+                # .............................................................................. #
+                # ......... Visualización de las cargas horarias asignadas al docente .......... #
+                # .............................................................................. #
+                #
+                # !Comment: Debería mostar algo sólo si existen cargas horarias ya creadas para el cargo, sino eso estaría vacío
+                
 
         # Dependencia de designación # Por ahora no sabemos de donde sacarla
         # Dependencia desempeño      # Ídem 
@@ -180,35 +196,13 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
         # print(sga_elementos.objects.using('guarani').all())
         # # usuarios_externos = UsuarioExterno.objects.using('db_externa').all()
 
-        # Sólo aplica el caso de "Existe" una carga_horaria asignada al docente... Sino no debería mostrar nada...
-        if cargos_activos is not None:
-            for dict in cargos_activos:
-                c = dict.get('cargo')
-                cargas_horarias = Carga_Horaria.objects.filter(cargo=c) # Puedo recibir más de uno... uso filter
-                dict['carga_horaria'] = []
-                if cargas_horarias: # Contiene elementos
-                    for ch in cargas_horarias: 
-                        # Es carga de materia o de tipo extra?
-                        if ch.comision: # Es no None --> Recupero materia y plan de estudio
-                            
-                            # Tema n:n
-                            # recupera materia --> elemento
-                            # Tema n:n
-                            # recupera carrera --> plan de estudios 
-                        
-                            print(ch.comision)
-                        # dict['carga_horaria'].append(ch)
-                
-                    
-                
-
 
         # Funciona correcto!
         # materias = Materias.objects.using('guarani').all()
         # for materia in materias:
         #     print(materia.nombre)
   
-        return render(request, self.template_name, {'docente': docente, 'cargos':cargos_activos}) # materias, comisiones...
+        return render(request, self.template_name, {'docente': docente, 'cargos_activos': cargos_activos}) # materias, comisiones, tareas extras
 
         
 
