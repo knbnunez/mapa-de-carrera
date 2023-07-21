@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Instituto(models.Model):
@@ -108,7 +109,7 @@ class Comision_Carrera(models.Model):
     
 class Cargo(models.Model):
     # Mapuche
-    nro_cargo = models.IntegerField(primary_key=True) # En la API de Mapuche lo usan como si fuera un nro de legajo
+    nro_cargo = models.IntegerField(primary_key=True) # En la API de Mapuche lo usan como si fuera un nro de legajo, nosotros lo vamos a usar como nro_cargo, desde Mapuche se consume como: 'cargo'
     docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
     # Propio
     resolucion = models.ForeignKey(Resolucion, on_delete=models.CASCADE, null=True, default=None)
@@ -126,6 +127,12 @@ class Cargo(models.Model):
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, null=True)
     fecha_alta = models.DateField()
     fecha_baja = models.DateField(null=True, blank=True)
+    activo = models.IntegerField(        
+        validators=[
+            MinValueValidator(0, message='El valor debe ser 0 o 1.'),
+            MaxValueValidator(1, message='El valor debe ser 0 o 1.')
+        ]
+    )
 
 
 # Tanto para las comisiones como para las tareas extras (van a tener que inventar horas y fechas desde y hasta si no las tienen definidas)
