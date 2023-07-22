@@ -11,8 +11,8 @@ urlpatterns = [
     # path('', IndexView.as_view(), name='index'),
     path('', DocenteBusquedaView.as_view(), name='docente'),
     path('docentes/', DocenteBusquedaView.as_view(), name='docente'),
-    path('docentes/<int:legajo>/detalles', DocenteDetalleView.as_view(), name='docente-detalle'),
-    path('docentes/<int:legajo>/asignar-modalidad', DocenteModalidadView.as_view(), name='docente-asignar-modalidad'),
-    path('docentes/<int:legajo>/asignar-tareas', DocenteTareasView.as_view(), name='docente-asignar-tareas'),
-    path('docentes/<int:legajo>/asignar-tareas/<int:nro_cargo>', DocenteTareasView1.as_view(), name='docente-asignar-tareas-1'),
+    path('docentes/<int:legajo>/detalles', DocenteDetalleView.as_view(), name='detalles'),
+    path('docentes/<int:legajo>/asignar-modalidad', DocenteModalidadView.as_view(), name='asignar-modalidad'),
+    path('docentes/<int:legajo>/asignar-tareas', DocenteTareasView.as_view(), name='asignar-tareas'),
+    path('docentes/<int:legajo>/asignar-tareas/<int:nro_cargo>', DocenteTareasView1.as_view(), name='asignar-tareas-1'),
 ]

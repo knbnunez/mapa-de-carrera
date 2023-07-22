@@ -10,7 +10,7 @@
   </style>
 {% endblock %}
 
-{% block sidebar %}{% include 'sidebar_legajo.html' %}{% endblock %}
+{% block sidebar %}{% include 'sidebar_legajo.html' with legajo=legajo %}{% endblock %}
 
 {% block body-content %}
 <div class="p-1 pl-7 sm:ml-64">

@@ -16,8 +16,14 @@
             <img src="https://untdf.edu.ar/img/isologotipo_chico.png" class="h-6 mr-3 sm:h-7" alt="UNTDF Logo" />
             <span class="self-center text-xl font-semibold whitespace-nowrap text-gray-50">Mapa de carreras</span>
         </a>
-        <ul id="content-side-bar" class="space-y-2 font-medium"><!-- content con js -->
+        <!-- Lo puedo ver correctamente, tiene un valor -->
+        {{ legajo }}
+        <ul id="content-side-bar" class="space-y-2 font-medium">
+            <!-- DA EL ERROR COMO SI NO TUVIERA CONTENIDO LEGAJO... -->
+            <a href="{% url 'asignar-modalidad' legajo=legajo %}">Asignar modalidad</a>
+            <!-- content con js -->
         </ul>
+        
     </div>
 </aside>
 
@@ -25,6 +31,16 @@
 <!-- Acá iría el contenido -->
 <!-- </div> -->
 
+
+<script>
+    const urlSplit = window.location.href.split('/'); // Obtengo un arreglo de los elementos que componenen la url actual xx/yyy/zzz = ["xx", "yyy", "zzz"]
+    // console.log(urlSplit);
+    const idxLegajo = urlSplit.indexOf('detalles') - 1; // Encuentra la posición del elemento que contiene el nro de legajo a partir del "detalle" que es un valor fijo
+    // console.log(idxLegajo);
+    let legajo = null;
+    if (idxLegajo !== -1) legajo = urlSplit[idxLegajo];
+    // console.log({legajo: legajo});
+</script>
 
 <script>
     // TAREA: 
@@ -51,6 +67,7 @@
             title: "Asignar otras actividades"
         },
         {
+            // href: "{% url 'asignar-modalidad' legajo=legajo %}",
             href: "#",
             iconName: "fa fa-user-edit",
             title: "Asignar modalidad"
@@ -74,8 +91,9 @@
         }
     ];
     const contentSideBar = document.getElementById("content-side-bar");
-    contentSideBar.innerHTML = `<div class="text-white font-semibold text-lg">Docente</div>`;
+    contentSideBar.innerHTML += `<div class="text-white font-semibold text-lg">Docente</div>`;
     docenteContent.forEach((e) => {
+        // console.log(e.href);
         contentSideBar.innerHTML += `
         <li>
             <a href='${e.href}' class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-red-900 group">

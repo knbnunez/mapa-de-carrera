@@ -45,7 +45,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
         if (docente is None) and (Docente.objects.filter(legajo=legajo).exists()):
             docente = Docente.objects.get(legajo=legajo) # Lo recupero
         elif (docente is None) and (not Docente.objects.filter(legajo=legajo).exists()): 
-            return render(request, self.template_name, {'docente': docente, 'cargos_activos': None}) # Faltaría agregar las materias, comisiones... que también serían = None
+            return render(request, self.template_name, {'legajo': int(legajo), 'docente': docente, 'cargos_activos': None}) # Faltaría agregar las materias, comisiones... que también serían = None
 
         # Correo docente --------------------------------------------------------
         if docente is not None:
@@ -202,7 +202,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
         # for materia in materias:
         #     print(materia.nombre)
   
-        return render(request, self.template_name, {'docente': docente, 'cargos_activos': cargos_activos}) # materias, comisiones, tareas extras
+        return render(request, self.template_name, {'legajo': int(legajo), 'docente': docente, 'cargos_activos': cargos_activos}) # materias, comisiones, tareas extras
 
         
 
