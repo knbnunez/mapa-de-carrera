@@ -1,6 +1,115 @@
 {% extends 'index.html' %}
 
-{% block sidebar %}{% include 'sidebar_legajo.html' %}{% endblock %}
+{% block sidebar %}
+<div> <!-- div a fines de agrupar y poder ocultar todo el contenido -->
+    <!-- Botón para desplegar cuando se achica el tamaño de la página -->
+    <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button"
+    class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+    <span class="sr-only">Desplegar</span>
+    <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <path clip-rule="evenodd" fill-rule="evenodd"
+            d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+        </path>
+    </svg>
+    </button>
+    <aside id="logo-sidebar"
+    class="fixed top-0 left-0 z-40 w-65 h-screen transition-transform -translate-x-full sm:translate-x-0"
+    aria-label="Sidebar">
+    <div class="h-full px-3 py-4 overflow-y-auto bg-red-800">
+        <a href="#" class="flex items-center pl-2.5 mb-4 pb-3 border-b-[1px] border-white">
+            <img src="https://untdf.edu.ar/img/isologotipo_chico.png" class="h-6 mr-3 sm:h-7" alt="UNTDF Logo" />
+            <span class="self-center text-xl font-semibold whitespace-nowrap text-gray-50">Mapa de carreras</span>
+        </a>
+        <ul id="content-side-bar" class="space-y-2 font-medium">
+            <!-- content con js -->
+        </ul>
+        
+    </div>
+    </aside>
+    <script>
+    const urlSplit = window.location.href.split('/'); // Obtengo un arreglo de los elementos que componenen la url actual xx/yyy/zzz = ["xx", "yyy", "zzz"]
+    // console.log(urlSplit);
+    const idxLegajo = urlSplit.indexOf('detalles') - 1; // Encuentra la posición del elemento que contiene el nro de legajo a partir del "detalle" que es un valor fijo
+    // console.log(idxLegajo);
+    let legajo = null;
+    if (idxLegajo !== -1) legajo = urlSplit[idxLegajo];
+    // console.log({legajo: legajo});
+    </script>
+
+    <script>
+    // TAREA: 
+    // - Hay que corregir los href
+    const docenteContent = [
+        {
+            href: "{% url 'docente' %}",
+            iconName: "fa-solid fa-list",
+            title: "Ver listado"
+        },
+        {
+            href: "#",
+            iconName: "far fa-regular fa-user",
+            title: "Ver perfil"
+        },
+        {
+            href: "#",
+            iconName: "far fa-folder-open",
+            title: "Ver histórico"
+        },
+        {
+            href: "#",
+            iconName: "fas fa-chalkboard-teacher",
+            title: "Asignar otras actividades"
+        },
+        {
+            href: "{% url 'asignar-modalidad' legajo=docente.legajo %}",
+            iconName: "fa fa-user-edit",
+            title: "Asignar modalidad"
+        },
+        {
+            href: "#",
+            iconName: "fas fa-file-upload",
+            title: "Cargar documentos"
+        },
+    ];
+    const gralContent = [
+        {
+            href: "#",
+            iconName: "fas fa-user-clock",
+            title: "Asignar franja horaria"
+        },
+        {
+            href: "#",
+            iconName: "fas fa-clipboard-list",
+            title: "Listar comisiones sin asignar"
+        }
+    ];
+    const contentSideBar = document.getElementById("content-side-bar");
+    contentSideBar.innerHTML += `<div class="text-white font-semibold text-lg">Docente</div>`;
+    docenteContent.forEach((e) => {
+        // console.log(e.href);
+        contentSideBar.innerHTML += `
+        <li>
+            <a href='${e.href}' class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-red-900 group">
+                <i class="${e.iconName} text-gray-200 text-opacity-90"></i>
+                <span class="ml-3 text-gray-200">${e.title}</span>
+            </a>
+        </li>
+    `;
+    });
+    contentSideBar.innerHTML += `<div class="pt-2 text-white font-semibold text-lg">General</div>`;
+    gralContent.forEach((e) => {
+        contentSideBar.innerHTML += `
+        <li>
+            <a href='${e.href}' class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-red-900 group">
+                <i class="${e.iconName} text-gray-200 text-opacity-90"></i>
+                <span class="ml-3 text-gray-200">${e.title}</span>
+            </a>
+        </li>
+    `;
+    });
+    </script>
+</div>
+{% endblock %}
 
 {% block body-content %}
     <div class="h-2/3 sm:ml-64 flex bg-gray-200 items-center justify-center">
@@ -81,9 +190,6 @@
     <div class="h-1/3 sm:ml-64 flex flex-row bg-gray-400">
         
     </div>
-
-    <!-- Librerías # TAREA: reemplazar por lirberías descargadas -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.7.0/flowbite.min.js"></script>
 
     <!-- Options Cargo -->
     <script>

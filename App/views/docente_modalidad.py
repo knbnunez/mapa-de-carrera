@@ -19,7 +19,7 @@ class DocenteModalidadView(TemplateView):
         docente = Docente.objects.get(legajo=legajo)
         # cargo = Cargo.objects.get(docente=docente).filter(activo=1) 
 
-        return render(request, self.template_name)
+        return render(request, self.template_name, {'docente': docente})
 
     # TO DO: almacenar la modalidad y la dedicación que viene en la consulta para la tabla intermedia que genera la restricción de horas + el archivo adjunto
 
