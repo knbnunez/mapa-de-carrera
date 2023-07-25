@@ -112,174 +112,83 @@
 {% endblock %}
 
 {% block body-content %}
-    <div class="h-2/3 sm:ml-64 flex bg-gray-200 items-center justify-center">
+    <div class="h-2/3 sm:ml-64 flex bg-gray-200 items-center justify-evenly flex-col">
         <div class="h-24 w-full bg-yellow-100 flex items-center justify-center">
+            
             <!-- Dropdown-list Cargo -->
             <div class="h-full w-full bg-green-200 flex flex-col items-center justify-center">
-                <select id="select-cargo" class="h-2/5 w-2/3 pl-4 bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
-                    <!-- Options cargadas con js -->
+                <select id="select-cargo" class="h-2/5 w-2/3 pl-4 bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300" onchange="mostrarDatos()">
+                    <option disabled selected>Seleccione un Cargo</option>
+                    {% for cargo in cargos %}
+                        <option value="{{ cargo.nro_cargo }}">Cargo N° {{ cargo.nro_cargo }}</option>
+                    {% endfor %}    
                 </select>
             </div>
+            
             <!-- Dropdown-list Modalidad -->
             <div class="h-full w-full bg-red-200 flex flex-col items-center justify-center">
                 <select id="select-modalidad" class="h-2/5 w-2/3 pl-4 bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
-                    <!-- Options cargadas con js -->
+                    <option disabled selected>Seleccione una Modalidad</option>
+                    {% for modalidad in modalidades %}
+                        <option value="{{ modalidad.desc_modal }}"">{{ modalidad.desc_modal }}</option>
+                    {% endfor %}
                 </select>
             </div>
         </div>
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        
+        <div id="div-table" class="relative overflow-x-auto shadow-md sm:rounded-lg w-1/2 flex items-center justify-center">
             <!-- Datos personales -->
-            <!-- <table class="w-full text-sm text-left text-gray-500">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <table class="table-auto w-full text-sm text-left text-gray-400">
+                <thead class="text-xs text-gray-400 uppercase bg-gray-700">
                     <tr>
-                        <th scope="col" class="px-6 py-3">
-                            Numero
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Categoria
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Dedicación
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Modalidad
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Fecha de alta
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Fecha de baja
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            <span class="sr-only">Edit</span>
-                        </th>
+                        <th scope="col" class="px-6 py-3">Numero</th>
+                        <th scope="col" class="px-6 py-3">Categoria</th>
+                        <th scope="col" class="px-6 py-3">Dedicación</th>
+                        <th scope="col" class="px-6 py-3">Modalidad</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for c in cargos %}
-                    <tr
-                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{c.cargo.nro_cargo}}
-                        </th>
-                        <td class="px-6 py-4">
-                            {{c.categoria.desc_categ}}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{c.dedicacion.desc_dedic}}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{c.modalidad.desc_modal}}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{c.cargo.fecha_alta}}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{c.cargo.fecha_baja}}
-                        </td>
-                        <td class="px-6 py-4 text-right">
-                            <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Descargar
-                                Resolucion</a>
-                        </td>
+                    {% for cargo in cargos %}
+                    <tr class="bg-gray-800 border-b border-gray-700">
+                        <td class="{{ cargo.nro_cargo }} px-6 py-4 font-semibold text-gray-300 ">{{cargo.nro_cargo}}</td>
+                        <td class="{{ cargo.nro_cargo }} px-6 py-4 ">{{cargo.categoria.desc_categ}}</td>
+                        <td class="{{ cargo.nro_cargo }} px-6 py-4 ">{{cargo.dedicacion.desc_dedic}}</td>
+                        <td class="{{ cargo.nro_cargo }} px-6 py-4 ">{{cargo.modalidad.desc_modal}}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
-            </table> -->
+            </table>
         </div>
+
     </div>
     <div class="h-1/3 sm:ml-64 flex flex-row bg-gray-400">
         
     </div>
 
-    <!-- Options Cargo -->
-    <script>
-        // TAREA: replace opciones de cargo con valor consumido desde Mapuche
-        const optionsCargo = ["111", "222", "333"];
-        const selectCargo = document.getElementById('select-cargo');
-        selectCargo.innerHTML = `<option disabled selected>Seleccione un Cargo</option>`;
-        optionsCargo.forEach((data) => {
-            selectCargo.innerHTML += `<option value="${data}"">Cargo N° ${data}</option>`;
-        });
-    </script>
-    <!-- Options Modalidad -->
-    <script>
-        // TAREA: replace opciones de modalidad con las consumidas desde la Base de Datos
-        const optionsModalidad = ["Docencia/Desarrollo profesional", "Docencia e Investigación"];
-        const selectModalidad = document.getElementById('select-modalidad');
-        selectModalidad.innerHTML = `<option disabled selected>Seleccione una Modalidad</option>`;
-        optionsModalidad.forEach((data) => {
-            selectModalidad.innerHTML += `<option value="${data}"">${data}</option>`;
-        });
-    </script>
+
     <!-- Tabla datos personales -->
-    
-
-    <!-- DEPRECATED -->
     <script>
-        // -------------------------------------------------------------------
-        // cargoDropdown
+        const divTable = document.getElementById('div-table');
+        divTable.style.display = "none";
 
-        // Obtenemos el elemento del botón y el menú desplegable
-        const cargoDropdown = document.getElementById('cargoDropdown');
-
-        const cargoOptions = document.getElementById('cargoOptions');
-        const cargoData = ["N° 1", "N° 324", "N° 52", "N° 128"];
-        cargoData.forEach((e) => { cargoOptions.innerHTML += `<li><a class="block px-4 py-2 hover:bg-gray-300" data-option-value="${e}">${e}</a></li>` });
-
-        // Agregamos un controlador de eventos al menú desplegable
-        cargoDropdown.addEventListener('click', (event) => {
-            // Verificamos si el evento fue disparado por un enlace (<a>)
-            if (event.target.tagName === 'A') {
-                // Obtenemos el valor almacenado en el atributo data-option-value del enlace
-                const selectedValue = event.target.dataset.optionValue;
-                // Hacemos algo con el valor seleccionado
-                const nroCargo = document.getElementById('nroCargo');
-                // console.log('Valor seleccionado:', selectedValue);
-                nroCargo.innerHTML = `<span>- ${selectedValue}</span>`;
-                cargoDropdown.style.display = 'none';
-            }
+        const tds = document.querySelectorAll('table td');
+        tds.forEach(td => {
+            td.style.display = "none"; // Aplica el estilo deseado a cada elemento <td>
+            // console.log(td);
         });
 
-        document.getElementById('cargoDropdownDefaultButton').addEventListener('click', () => {
-            cargoDropdown.style.display = 'block';
-        });
-
-        // -------------------------------------------------------------------
-        // modalidadDropdown
-        const modalidadDropdown = document.getElementById('modalidadDropdown');
-        const modalidadOptions = document.getElementById('modalidadOptions');
-        const modalidadData = ["Docente investigador", "Docente"];
-        modalidadData.forEach((e) => { modalidadOptions.innerHTML += `<li><a class="block px-4 py-2 hover:bg-gray-300" data-option-value="${e}">${e}</a></li>` });
-        modalidadDropdown.addEventListener('click', (event) => {
-            if (event.target.tagName === 'A') {
-                const selectedValue = event.target.dataset.optionValue;
-                const modalidad = document.getElementById('modalidad');
-                modalidad.innerHTML = `<span>- ${selectedValue}</span>`;
-                modalidadDropdown.style.display = 'none';
-            }
-        });
-        document.getElementById('modalidadDropdownDefaultButton').addEventListener('click', () => {
-            modalidadDropdown.style.display = 'block';
-        });
-
-        // -------------------------------------------------------------------
-        // dedicaciónDropdown
-        const dedicacionDropdown = document.getElementById('dedicacionDropdown');
-        const dedicacionOptions = document.getElementById('dedicacionOptions');
-        const dedicacionData = ["Exclusivo", "Semiexclusivo", "Simple", "ToDO: Controlar restricción al tratar de guardar? o en tiempo real?"];
-        dedicacionData.forEach((e) => { dedicacionOptions.innerHTML += `<li><a class="block px-4 py-2 hover:bg-gray-300" data-option-value="${e}">${e}</a></li>` });
-        dedicacionDropdown.addEventListener('click', (event) => {
-            if (event.target.tagName === 'A') {
-                const selectedValue = event.target.dataset.optionValue;
-                const dedicacion = document.getElementById('dedicacion');
-                dedicacion.innerHTML = `<span>- ${selectedValue}</span>`;
-                dedicacionDropdown.style.display = 'none';
-            }
-        });
-        document.getElementById('deidacionDropdownDefaultButton').addEventListener('click', () => {
-            dedicacionDropdown.style.display = 'block';
-        });
-
+        const selectCargo = document.getElementById('select-cargo');
+        const mostrarDatos = () => {
+            // console.log('Value en select-cargo: ', selectCargo.value);
+            divTable.style.display = "block";
+            tds.forEach(td => {
+                // console.log(td.classList);
+                if (td.classList[0] == selectCargo.value) td.style.display = "table-cell";
+                else td.style.display = "none";
+            })
+            
+        };
+        
     </script>
 
     <!-- TODO: agregar un elemento visual para DRAG AND DROP -->
