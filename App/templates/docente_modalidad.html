@@ -165,8 +165,6 @@
         
     </div>
 
-
-    <!-- Tabla datos personales -->
     <script>
         // DISABLE inicial
         const divTable = document.getElementById('div-table');
@@ -236,63 +234,5 @@
         
     </script>
 
-    <!-- TODO: agregar un elemento visual para DRAG AND DROP -->
-    <script>
-        var uploadButton = document.getElementById('uploadButton');
-        var fileInput = document.getElementById('fileInput');
-
-        uploadButton.addEventListener('click', () => fileInput.click());
-
-        fileInput.addEventListener('change', () => {
-            var file = fileInput.files[0];
-            console.log('Archivo seleccionado:', file);
-        });
-
-
-
-
-        //  acá está la lógica del drop
-        var dropArea = document.getElementById('dropArea');
-
-        dropArea.addEventListener('dragenter', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            dropArea.classList.add('dragover');
-        });
-
-        dropArea.addEventListener('dragover', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-        });
-
-        dropArea.addEventListener('dragleave', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            dropArea.classList.remove('dragover');
-        });
-
-        dropArea.addEventListener('drop', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            var files = event.dataTransfer.files;
-            console.log('Archivos arrastrados:', files);
-            dropArea.classList.remove('dragover');
-        });
-    </script>
-    <!--  -->
-    <style>
-        .drop-area {
-            border: 2px dashed gray;
-            height: 200px;
-            width: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            text-align: center;
-        }
-        .drop-area.dragover {
-           border-color: blue;
-        }
-    </style>
+    
 {% endblock %}
