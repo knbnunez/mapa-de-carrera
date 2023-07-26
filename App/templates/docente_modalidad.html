@@ -111,12 +111,14 @@
 </div>
 {% endblock %}
 
+<!-- METER TODO EN UN FORM, INVESTIGAT ANTES... -->
+
 {% block body-content %}
-    <div class="h-2/3 sm:ml-64 flex bg-gray-200 items-center justify-evenly flex-col">
-        <div class="h-24 w-full bg-yellow-100 flex items-center justify-center">
+    <div class="h-2/3 sm:ml-64 flex items-center justify-evenly flex-col">
+        <div class="h-24 w-full flex items-center justify-center">
             
             <!-- Dropdown-list Cargo -->
-            <div class="h-full w-full bg-green-200 flex flex-col items-center justify-center">
+            <div class="h-full w-full flex flex-col items-center justify-center">
                 <select id="select-cargo" class="h-2/5 w-2/3 pl-4 bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300" onchange="mostrarDatos()">
                     <option disabled selected>Seleccione un Cargo</option>
                     {% for cargo in cargos %}
@@ -126,7 +128,7 @@
             </div>
             
             <!-- Dropdown-list Modalidad -->
-            <div class="h-full w-full bg-red-200 flex flex-col items-center justify-center">
+            <div class="h-full w-full flex flex-col items-center justify-center">
                 <select id="select-modalidad" class="h-2/5 w-2/3 pl-4 bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
                     <option disabled selected>Seleccione una Modalidad</option>
                     {% for modalidad in modalidades %}
@@ -161,8 +163,20 @@
         </div>
 
     </div>
-    <div class="h-1/3 sm:ml-64 flex flex-row bg-gray-400">
-        
+    <div class="h-1/6 sm:ml-64 flex flex-col items-center justify-start">
+        <label class="block mb-2 text-sm font-medium text-gray-900" for="file_input">Subir archivo</label>
+        <input class="block w-1/3 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="file_input_help" id="file_input" type="file">
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-700" id="file_input_help">Solamente PDF</p>
+    </div>
+    
+    <div class="h-1/6 sm:ml-64 flex flex-row">
+        <div class="w-1/3 h-full"></div>
+        <div class="w-1/3 h-full"></div>
+        <div class="w-1/3 h-full flex items-center justify-center">
+            <button class="relative w-32 h-8 px-1 py-1 bg-gray-400 text-gray-200 rounded-md shadow-md hover:bg-gray-500 text-sm font-semibold">
+                Guardar cambios
+            </button>
+        </div>
     </div>
 
     <script>
@@ -233,6 +247,6 @@
 
         
     </script>
-
     
+
 {% endblock %}
