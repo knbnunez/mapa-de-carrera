@@ -130,7 +130,7 @@
                 <select id="select-modalidad" class="h-2/5 w-2/3 pl-4 bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
                     <option disabled selected>Seleccione una Modalidad</option>
                     {% for modalidad in modalidades %}
-                        <option value="{{ modalidad.desc_modal }}"">{{ modalidad.desc_modal }}</option>
+                        <option value="{{ modalidad.desc_modal }}" class="options-modalidad">{{ modalidad.desc_modal }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -168,26 +168,71 @@
 
     <!-- Tabla datos personales -->
     <script>
+        // DISABLE inicial
         const divTable = document.getElementById('div-table');
         divTable.style.display = "none";
-
+        
         const tds = document.querySelectorAll('table td');
         tds.forEach(td => {
             td.style.display = "none"; // Aplica el estilo deseado a cada elemento <td>
             // console.log(td);
         });
 
+        let optionsModalidad = document.getElementsByClassName('options-modalidad');
+        // console.log(optionsModalidad);
+        optionsModalidad = Array.from(optionsModalidad);
+        // console.log(optionsModalidad);
+        optionsModalidad.forEach(option => {
+            option.style.display = "none";
+        });
+
+
+        // Agrandar según necesidad
+        const dedicaciones = ["Simple", "Semided.", "Exclusiva"];
+        // func aux -> return true si el contenido es una dedicación (contemplada en el array dedicaciones)
+        const esDedicacion = ((innerHTML) => {
+            let result = false;
+            dedicaciones.forEach((d) => { if (innerHTML == d) result = true });
+            return result;
+        });
+        // func aux -> return array de modalidades a visibilizar (a sacar el display = none)
+        const returnModalidades = ((dedicacion) => {
+            if (dedicacion == "Simple") return ["Docencia/Desarrollo profesional"];
+            else if (dedicacion == "Exclusiva") return ["Docencia e Investigación"];
+            else return ["Docencia/Desarrollo profesional", "Docencia e Investigación"];
+        });
+
         const selectCargo = document.getElementById('select-cargo');
+        const selectModalidad = document.getElementById('select-modalidad');
+        
+        // => OnChange
         const mostrarDatos = () => {
             // console.log('Value en select-cargo: ', selectCargo.value);
             divTable.style.display = "block";
+
+            optionsModalidad.forEach(option => {
+                option.style.display = "none";
+            });
+
             tds.forEach(td => {
                 // console.log(td.classList);
                 if (td.classList[0] == selectCargo.value) td.style.display = "table-cell";
                 else td.style.display = "none";
+
+                if ((td.classList[0] == selectCargo.value) && (esDedicacion(td.innerHTML))) {
+                    const modalidades = returnModalidades(td.innerHTML);
+                    optionsModalidad.forEach(o => {
+                        // console.log(selectCargo.value);
+                        // console.log(modalidades.includes(o.innerHTML));
+                        if (modalidades.includes(o.innerHTML)) o.style.display = "block";
+                    });
+                }
             })
-            
+
         };
+
+        
+
         
     </script>
 
