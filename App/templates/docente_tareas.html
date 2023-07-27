@@ -1,54 +1,44 @@
-{% load crispy_forms_tags %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tareas Docente</title>
+{% extends 'index.html' %}
 
-    <style>
-        .hidden{
-            display: none;
-        }
-    </style>
-</head>
-<body>
-{% if docente %}
-    <h1>Docente</h1>
-    <h3> - Documento nro: {{docente.numero_documento}}</h3>
-    <h3> - Legajo nro: {{docente.legajo}}</h3>
-    <h3> - Nombre y Apellido: {{docente.nombre_apellido}}</h3>
-{% else %}
-    <h3>El docente no pudo ser recuperado y no se encontraba en bases internas</h3>
-{% endif %}
- Cargos 
+{% block title %} <title>Detalle docente</title> {% endblock %}
 
-<form action="{% url 'docente-asignar-tareas' legajo=docente.legajo %}" method="busca">
+{% block light-style %}
+  <style>
+    .hidden {
+      display: none;
+    }
+  </style>
+{% endblock %}
+
+{% block sidebar %}{% include 'sidebar_legajo.html' %}{% endblock %}
+
+{% block body-content %}
+<div class="p-1 pl-7 sm:ml-64">
+
   
-</form>
-<ul id="nro_cargo"> 
-    {% for c in cargos %}
-    <li class="cargos"> 
-       <a href="{% url 'docente-asignar-tareas-1' legajo=docente.legajo nro_cargo=c.cargo.nro_cargo %}"> 
-            <h4> Cargo: {{c.cargo}}</h4>
-        </a>
-    </li>
-    {% endfor %}
-</ul>
+  <form method="post" action="{% url 'docente-asignar-tareas' legajo=legajo nro_cargo=nro_cargo %}">
+      {% csrf_token %}
+      <label for="fecha_desde">Fecha desde:</label>
+      <input type="date" name="fecha_desde" required>
+      <br>
 
-{% if cargos %}
-    <h1>Elija el cargo al que se le asignara Tareas Extras</h1>
-    {% for c in cargos %}
-    
-        <h3> - Nro cargo: </h3><a href="{% url 'docente-asignar-tareas-1' legajo=docente.legajo nro_cargo=c.cargo.nro_cargo %}"> {{c.cargo.nro_cargo}}</a>
-        <h3> - Dedicación: {{c.dedicacion.desc_dedic}}</h3>
-        <h3> - Categoria: {{c.categoria.desc_categ}}</h3>
-        <h3> - Fecha alta: {{c.cargo.fecha_alta}}</h3>
-        <h3> - Fecha baja: {{c.cargo.fecha_baja}}</h3></a> </li>
-    {% endfor %}
-{% endif %}
+      <label for="fecha_hasta">Fecha hasta:</label>
+      <input type="date" name="fecha_hasta" required>
+      <br>
 
+      <label for="hora_inicio">Hora inicio:</label>
+      <input type="time" name="hora_inicio" required>
+      <br>
 
-</body>
-</html>
+      <label for="hora_finalizacion">Hora finalización:</label>
+      <input type="time" name="hora_finalizacion" required>
+      <br>
+
+      <input type="submit" value="Guardar">
+  </form>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}
