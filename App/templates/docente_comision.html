@@ -1,0 +1,52 @@
+{% extends 'index.html' %}
+
+{% block title %} <title>Comision docente</title> {% endblock %}
+
+{% block light-style %}
+  <style>
+    .hidden {
+      display: none;
+    }
+  </style>
+{% endblock %}
+
+
+
+{% block body-content %}
+<div class="p-1 pl-7 sm:ml-64">
+
+  
+  <form method="post" action="{% url 'docente-asignar-comision' legajo=docente.pk nro_cargo=cargo.pk %}">
+      {% csrf_token %}
+        <!-- Mostrar dropdownlist para seleccionar Comision -->
+<label for="{{ form.comision_for_label }}">Comision:</label>
+<select name="{{ form.comision.name }}" id="{{ form.comision.id_for_label }}" class="custom-select">
+  {% for comision in form.comision.field.queryset %}
+    <option value="{{ comision.pk }}">{{ comision.nombre }}</option>
+  {% endfor %}
+</select>
+
+      <label for="fecha_desde">Fecha desde:</label>
+      <input type="date" name="fecha_desde" required>
+      <br>
+
+      <label for="fecha_hasta">Fecha hasta:</label>
+      <input type="date" name="fecha_hasta" required>
+      <br>
+
+      <label for="hora_inicio">Hora inicio:</label>
+      <input type="time" name="hora_inicio" required>
+      <br>
+
+      <label for="hora_finalizacion">Hora finalización:</label>
+      <input type="time" name="hora_finalizacion" required>
+      <br>
+
+      <input type="submit" value="Guardar">
+  </form>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

@@ -1,0 +1,12 @@
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'mapa_de_carreras',
+        'USER': 'mai',
+        'PASSWORD': '9876mdc',
+        'HOST': '10.7.180.230',
+        'PORT': '5432',
+
+    }
+}

@@ -1,6 +1,6 @@
 {% extends 'index.html' %}
 
-{% block title %} <title>Detalle docente</title> {% endblock %}
+{% block title %} <title>Tareas extra docente</title> {% endblock %}
 
 {% block light-style %}
   <style>
@@ -10,14 +10,22 @@
   </style>
 {% endblock %}
 
-{% block sidebar %}{% include 'sidebar_legajo.html' %}{% endblock %}
+
 
 {% block body-content %}
 <div class="p-1 pl-7 sm:ml-64">
 
   
-  <form method="post" action="{% url 'docente-asignar-tareas' legajo=legajo nro_cargo=nro_cargo %}">
+  <form method="post" action="{% url 'docente-asignar-tareas' legajo=docente.pk nro_cargo=cargo.pk %}">
       {% csrf_token %}
+        <!-- Mostrar dropdownlist para seleccionar Tipo_Extra -->
+        <label for="{{ form.tipo_extra.id_for_label }}">Tipo Extra:</label>
+        <select name="{{ form.tipo_extra.name }}" id="{{ form.tipo_extra.id_for_label }}">
+          {% for tipo_extra in form.tipo_extra.field.queryset %}
+            <option value="{{ tipo_extra.pk }}">{{ tipo_extra.desc_extra }}</option>
+          {% endfor %}
+        </select>
+
       <label for="fecha_desde">Fecha desde:</label>
       <input type="date" name="fecha_desde" required>
       <br>
