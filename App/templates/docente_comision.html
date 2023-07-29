@@ -67,7 +67,7 @@
             title: "Ver histórico"
         },
         {
-            href: "#",
+            href: "{% url 'docente-asignar-tareas' legajo=docente.legajo %}",
             iconName: "fas fa-chalkboard-teacher",
             title: "Asignar otras actividades"
         },
@@ -77,7 +77,7 @@
             title: "Asignar modalidad"
         },
         {
-            href: "#",
+            href: "{% url 'docente-asignar-comision' legajo=docente.legajo %}",
             iconName: "fas fa-user-clock",
             title: "Asignar comision"
         },
