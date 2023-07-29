@@ -127,15 +127,25 @@
 <div class="p-1 pl-7 sm:ml-64">
 
   
-  <form method="post" action="{% url 'docente-asignar-comision' legajo=docente.pk nro_cargo=cargo.pk %}">
+  <form method="post" action="{% url 'docente-asignar-comision' legajo=docente.pk %}">
       {% csrf_token %}
+      <!-- Mostrar dropdownlist para seleccionar Cargo -->
+      <label for="{{ form.cargo.id_for_label }}">Cargo:</label>
+      <select name="{{ form.cargo.name }}" id="{{ form.cargo.id_for_label }}">
+        {% for cargo in cargo %}
+          <option value="{{ cargo.pk }}">{{ cargo.nro_cargo }}</option>
+        {% endfor %}
+      </select>
+
         <!-- Mostrar dropdownlist para seleccionar Comision -->
-<label for="{{ form.comision_for_label }}">Comision:</label>
-<select name="{{ form.comision.name }}" id="{{ form.comision.id_for_label }}" class="custom-select">
-  {% for comision in form.comision.field.queryset %}
-    <option value="{{ comision.pk }}">{{ comision.nombre }}</option>
-  {% endfor %}
-</select>
+
+
+        <label for="{{ form.comision.id_for_label }}">Comision:</label>
+        <select name="{{ form.comision.name }}" id="{{ form.comision.id_for_label }}" class="custom-select">
+          {% for comision in comision %}
+            <option value="{{ comision.pk }}">{{ comision.nombre }} - {{comision.materia.nombre}} </option>
+          {% endfor %}
+        </select>
 
       <label for="fecha_desde">Fecha desde:</label>
       <input type="date" name="fecha_desde" required>

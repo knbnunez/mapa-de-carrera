@@ -20,7 +20,7 @@ class DocenteTareasView(TemplateView): # Detalle para un único docente
     def get_context_data(self, **kwargs):
      context = super().get_context_data(**kwargs)
      docente = get_object_or_404(Docente, pk=self.kwargs['legajo'])
-     cargos = Cargo.objects.filter(docente=docente) 
+     cargos = Cargo.objects.filter(docente=docente, activo=1) 
      #cargo = get_object_or_404(Cargo, pk=self.kwargs['nro_cargo'], docente=docente)
      context['docente'] = docente
      context['cargo'] = cargos

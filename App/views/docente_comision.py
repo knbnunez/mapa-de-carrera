@@ -20,23 +20,26 @@ class DocenteComisionView(TemplateView): # Detalle para un único docente
     def get_context_data(self, **kwargs):
      context = super().get_context_data(**kwargs)
      docente = get_object_or_404(Docente, pk=self.kwargs['legajo'])
-     cargo = get_object_or_404(Cargo, pk=self.kwargs['nro_cargo'], docente=docente)
+     cargos = Cargo.objects.filter(docente=docente, activo=1)  # Filtra solo los cargos activos del docente
+     comisiones = Comision.objects.select_related('materia')  # Obtener comisiones con sus materias
      context['docente'] = docente
-     context['cargo'] = cargo
+     context['cargo'] = cargos
+     context['comision'] = comisiones
      context['form'] = self.form_class() 
      return context
     
     
-    def post(self, request, legajo, nro_cargo):
+    def post(self, request, legajo):
         # Obtener el docente y el cargo asociados a los IDs proporcionados
         docente = get_object_or_404(Docente, pk=legajo)
-        cargo = get_object_or_404(Cargo, pk=nro_cargo, docente=docente)
-
+        cargos = Cargo.objects.filter(docente=docente, activo=1) 
+        comisiones = Comision.objects.select_related('materia') 
         form = self.form_class(request.POST)
         if form.is_valid():
             # Guardar el formulario si es válido
             carga_extra = form.save(commit=False)
-            carga_extra.cargo = cargo
+            carga_extra.cargo = cargos
+            carga_extra.comision = comisiones 
             carga_extra.save()
 
-        return render(request, 'docente_comision.html', {'docente': docente, 'cargo': cargo, 'form': form})
+        return render(request, 'docente_comision.html', {'docente': docente, 'cargo': cargos, 'comisiones': comisiones,'form': form})
