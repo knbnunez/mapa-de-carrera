@@ -122,7 +122,7 @@
                 <div class="h-full w-full flex flex-col items-center justify-center">
                     <select id="select-cargo" name="select-cargo" class="h-2/5 w-2/3 pl-4 bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300" onchange="mostrarDatos()">
                         <option disabled selected>Seleccione un Cargo</option>
-                        {% for cargo in cargos %}
+                        {% for cargo in cargo %}
                             <option value="{{ cargo.nro_cargo }}">Cargo N° {{ cargo.nro_cargo }}</option>
                         {% endfor %}    
                     </select>

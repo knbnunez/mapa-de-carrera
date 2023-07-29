@@ -9,4 +9,4 @@ class cargoForm(ModelForm):
     
     class Meta:
         model = Carga_Horaria
-        fields = ['tipo_extra', 'fecha_desde', 'fecha_hasta', 'hora_inicio', 'hora_finalizacion']
+        fields = ['cargo','tipo_extra', 'fecha_desde', 'fecha_hasta', 'hora_inicio', 'hora_finalizacion']
