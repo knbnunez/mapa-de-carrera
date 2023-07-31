@@ -14,4 +14,4 @@ urlpatterns = [
     path('docentes/<int:legajo>/detalles', DocenteDetalleView.as_view(), name='docente-detalle'),
     path('docentes/<int:legajo>/asignar-modalidad', DocenteModalidadView.as_view(), name='docente-asignar-modalidad'),
     path('docentes/<int:legajo>/<int:nro_cargo>/asignar-tareas', DocenteTareasView.as_view(), name='docente-asignar-tareas'),
-    ]
+]

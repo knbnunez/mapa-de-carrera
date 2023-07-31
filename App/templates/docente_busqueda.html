@@ -49,7 +49,7 @@
                 DNI: 
                   <a 
                     class="text-sm text-gray-800 truncate font-semibold" 
-                    href="{% url 'detalles' legajo=d.legajo %}"
+                    href="{% url 'docente-detalle' legajo=d.legajo %}"
                   >
                     {{d.numero_documento}}
                   </a>
@@ -58,7 +58,7 @@
                 Apellido y nombre: 
                   <a 
                     class="text-sm text-gray-800 truncate font-semibold" 
-                    href="{% url 'detalles' legajo=d.legajo %}"
+                    href="{% url 'docente-detalle' legajo=d.legajo %}"
                   >
                     {{d.agente}}
                   </a>
@@ -69,7 +69,7 @@
                 Legajo: 
                 <a 
                   class="text-sm text-gray-800 truncate" 
-                  href="{% url 'detalles' legajo=d.legajo %}"
+                  href="{% url 'docente-detalle' legajo=d.legajo %}"
                 >
                   {{d.legajo}}
                 </a>
