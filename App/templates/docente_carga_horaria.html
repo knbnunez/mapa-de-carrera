@@ -47,48 +47,11 @@
     </script>
 
     <script>
-    // TAREA: 
-    // - Hay que corregir los href
-    const docenteContent = [
-        {
-            href: "{% url 'docente' %}",
-            iconName: "fa-solid fa-list",
-            title: "Ver listado"
-        },
-        {
-            href: "#",
-            iconName: "far fa-regular fa-user",
-            title: "Ver perfil"
-        },
-        {
-            href: "#",
-            iconName: "far fa-folder-open",
-            title: "Ver histórico"
-        },
-        {
-            href: "{% url 'docente-asignar-tareas' legajo=docente.legajo %}",
-            iconName: "fas fa-chalkboard-teacher",
-            title: "Asignar otras actividades"
-        },
-        {
-            href: "{% url 'docente-asignar-modalidad' legajo=docente.legajo %}",
-            iconName: "fa fa-user-edit",
-            title: "Asignar modalidad"
-        },
-        {
-            href: "{% url 'docente-asignar-comision' legajo=docente.legajo %}",
-            iconName: "fas fa-user-clock",
-            title: "Asignar comision"
-        },
-        {
-            href: "#",
-            iconName: "fas fa-file-upload",
-            title: "Cargar documentos"
-        },
-    ];
+  
+   
     const gralContent = [
         {
-            href: "#",
+            href: "{% url 'docente-carga'  %}",
             iconName: "fas fa-user-clock",
             title: "Asignar franja horaria"
         },
@@ -129,45 +92,12 @@
 {% block body-content %}
 <div class="p-1 pl-7 sm:ml-64">
 
-  
-  <form method="post" action="{% url 'docente-asignar-tareas' legajo=docente.pk  %}">
-      {% csrf_token %}
-      <!-- Mostrar dropdownlist para seleccionar Cargo -->
-      <label for="{{ form.cargo.id_for_label }}">Cargo:</label>
-      <select name="{{ form.cargo.name }}" id="{{ form.cargo.id_for_label }}">
-        {% for cargo in cargo %}
-          <option value="{{ cargo.pk }}">{{ cargo.nro_cargo }}</option>
-        {% endfor %}
-      </select>
-
-        <!-- Mostrar dropdownlist para seleccionar Tipo_Extra -->
-        <label for="{{ form.tipo_extra.id_for_label }}">Tipo Extra:</label>
-        <select name="{{ form.tipo_extra.name }}" id="{{ form.tipo_extra.id_for_label }}">
-          {% for tipo_extra in form.tipo_extra.field.queryset %}
-            <option value="{{ tipo_extra.pk }}">{{ tipo_extra.desc_extra }}</option>
-          {% endfor %}
-        </select>
-
-      <label for="fecha_desde">Fecha desde:</label>
-      <input type="date" name="fecha_desde" required>
-      <br>
-
-      <label for="fecha_hasta">Fecha hasta:</label>
-      <input type="date" name="fecha_hasta" required>
-      <br>
-
-      <label for="hora_inicio">Hora inicio:</label>
-      <input type="time" name="hora_inicio" required>
-      <br>
-
-      <label for="hora_finalizacion">Hora finalización:</label>
-      <input type="time" name="hora_finalizacion" required>
-      <br>
-
-      <input type="submit" value="Guardar">
-  </form>
-
-{% endblock %}
+    <h1>Asignar Carga Horaria</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Asignar">
+    </form>{% endblock %}
 
 {% block scripts %}
 

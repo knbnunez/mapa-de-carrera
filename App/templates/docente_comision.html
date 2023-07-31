@@ -1,6 +1,6 @@
 {% extends 'index.html' %}
 
-{% block title %} <title>Tareas extra docente</title> {% endblock %}
+{% block title %} <title>Comision docente</title> {% endblock %}
 
 {% block light-style %}
   <style>
@@ -8,6 +8,7 @@
       display: none;
     }
   </style>
+  
 {% endblock %}
 
 {% block sidebar %}
@@ -127,10 +128,11 @@
 {% endblock %}
 
 {% block body-content %}
+
 <div class="p-1 pl-7 sm:ml-64">
 
   
-  <form method="post" action="{% url 'docente-asignar-tareas' legajo=docente.pk  %}">
+  <form method="post" action="{% url 'docente-asignar-comision' legajo=docente.pk %}">
       {% csrf_token %}
       <!-- Mostrar dropdownlist para seleccionar Cargo -->
       <label for="{{ form.cargo.id_for_label }}">Cargo:</label>
@@ -140,11 +142,13 @@
         {% endfor %}
       </select>
 
-        <!-- Mostrar dropdownlist para seleccionar Tipo_Extra -->
-        <label for="{{ form.tipo_extra.id_for_label }}">Tipo Extra:</label>
-        <select name="{{ form.tipo_extra.name }}" id="{{ form.tipo_extra.id_for_label }}">
-          {% for tipo_extra in form.tipo_extra.field.queryset %}
-            <option value="{{ tipo_extra.pk }}">{{ tipo_extra.desc_extra }}</option>
+        <!-- Mostrar dropdownlist para seleccionar Comision -->
+
+
+        <label for="{{ form.comision.id_for_label }}">Comision:</label>
+        <select name="{{ form.comision.name }}" id="{{ form.comision.id_for_label }}" class="custom-select">
+          {% for comision in comision %}
+            <option value="{{ comision.pk }}">{{ comision.nombre }} - {{comision.materia.nombre}} </option>
           {% endfor %}
         </select>
 

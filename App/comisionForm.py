@@ -5,8 +5,8 @@ from django import forms
 
 
 
-class cargoForm(ModelForm):
+class comisionForm(ModelForm):
     
     class Meta:
         model = Carga_Horaria
-        fields = ['cargo','tipo_extra', 'fecha_desde', 'fecha_hasta', 'hora_inicio', 'hora_finalizacion']
+        fields = ['cargo','comision', 'fecha_desde', 'fecha_hasta', 'hora_inicio', 'hora_finalizacion']
