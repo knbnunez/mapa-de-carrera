@@ -96,14 +96,8 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Guardar">
-    </form>
-
-    {% if success %}
-        <p>¡Carga horaria asignada con éxito!</p>
-    {% endif %}
-
-{% endblock %}
+        <input type="submit" value="Asignar">
+    </form>{% endblock %}
 
 {% block scripts %}
 
