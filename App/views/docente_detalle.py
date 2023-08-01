@@ -5,6 +5,7 @@ from requests.exceptions import ConnectTimeout
 import datetime
 from App.models.mapa_de_carreras import *
 from App.models.guarani import *
+import magic
 
 
 class DocenteDetalleView(TemplateView): # Detalle para un único docente
@@ -12,6 +13,8 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
     username = 'mapumapa' # Para producción hay que crifrar las credenciales
     password = 'Mowozelu28'
     url_mapuche = 'http://10.7.180.231/mapuche/rest/'
+    
+    alert = None
 
     def get(self, request, legajo): # Se puede recuperar el param atr llamándolo como esta definido en urls.py en este caso: legajo
         legajo = str(legajo) # TODO: Revisar si la conversión afecta a las consultas a la base de datos. En el modelo, legajo es Integer     
@@ -60,10 +63,6 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
             except ConnectTimeout: pass # Si no se pudo recuperar el correo de la API se muestra lo que tenga cargado -> None o sumail@untdf.edu.ar
         # print(docente.correo_electronico)
         
-        ###################################################################################################################################
-        # TAREA: poner la restricción y definir la modalidad correspondiente, semi y exclusivo solo pueden tener una modadlidad posible.
-        # el único que puede llegar a quedar en blanco, es el semi
-        ###################################################################################################################################
 
         # Info cargo docente --------------------------------------------------------
         cargos = None # Hay que inicializar sí o sí, sino no se van a cargar los nuevos valores del if que viene más abajo
@@ -85,10 +84,6 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
                         desc_categ=c.get('desc_categ')
                     )
 
-                    ###################
-                    #       NEW       #  
-                    ###################
-
                     # DEDICACIÓN:
                     # Simple    =>  { 'Docencia/Desarrollo profesional' }
                     # Exclusivo =>  { 'Docencia e Investigación' }
@@ -107,8 +102,6 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
                         # Lo puedo dejar en null hasta que se la asignen, está permitido en nuestro modelo, luego en "ASIGNAR MODALIDAD" se recuperará una de las dos desc_modal posibles y se le asignará
                         modalidad = None
                     
-
-
                     #
                     fecha_baja = None # Inicializo para usar dentro del if y almacenar el valor
                     activo = None # Ídem
@@ -205,5 +198,21 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
         return render(request, self.template_name, {'docente': docente, 'cargos_activos': cargos_activos}) # materias, comisiones, tareas extras
 
         
+    def post(self, request, legajo):
+        archivo = request.FILES.get('input-resolucion')
+        print(archivo)
+        # if archivo is None:
+        #     # Manejo de error si no se envió ningún archivo
+        #     self.alert = "Debes proporcionar un archivo."
+        #     return self.get(request, legajo)
 
+        # # Verificar si es un archivo PDF válido
+        # mime_type = magic.from_buffer(archivo.read(), mime=True)
+        # if mime_type != 'application/pdf':
+        #     # El archivo no es un PDF válido
+        #     self.alert = "Solo se permiten archivos PDF."
+        #     return self.get(request, legajo)
 
+        # Aquí puedes guardar o procesar el archivo correctamente
+        # ...
+        return self.get(request, legajo)
