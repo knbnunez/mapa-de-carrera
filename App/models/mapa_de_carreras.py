@@ -43,15 +43,15 @@ class Docente(models.Model):
         return self.nombre_apellido
        
  
-class Resolucion(models.Model):
-    nombre = models.CharField(max_length=255)
-    # De las dudas: las fechas son las mismas que podemos obtener del endpoint de /agentes/{legajo}/cargos ???
-    fecha_inicio = models.DateField()
-    fecha_fin = models.DateField()
-    documento = models.ImageField(upload_to='pdf')
+# class Resolucion(models.Model):
+#     nombre = models.CharField(max_length=255)
+#     # De las dudas: las fechas son las mismas que podemos obtener del endpoint de /agentes/{legajo}/cargos ???
+#     fecha_inicio = models.DateField()
+#     fecha_fin = models.DateField()
+#     documento = models.ImageField(upload_to='pdf')
     
-    def __str__(self):
-        return self.nombre
+#     def __str__(self):
+#         return self.nombre
     
 
 class Categoria(models.Model):
@@ -112,13 +112,10 @@ class Cargo(models.Model):
     nro_cargo = models.IntegerField(primary_key=True) # En la API de Mapuche lo usan como si fuera un nro de legajo, nosotros lo vamos a usar como nro_cargo, desde Mapuche se consume como: 'cargo'
     docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
     # Propio
-    resolucion = models.ForeignKey(Resolucion, on_delete=models.CASCADE, null=True, default=None)
+    # resolucion = models.ForeignKey(Resolucion, on_delete=models.CASCADE, null=True, default=None)
     # Propio o Guaraní?
     dependencia_desempeno = models.ForeignKey(Instituto, on_delete=models.CASCADE, related_name='cargo_desmpeno', null=True, default=None)
     dependencia_designacion = models.ForeignKey(Instituto, on_delete=models.CASCADE, related_name='cargo_designacion', null=True, default=None)
-    
-    # Propio - Mapuche
-    # modalidad_dedicacion = models.ForeignKey(Modalidad_Dedicacion, on_delete=models.CASCADE, null=True)
 
     modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, null=True)
     dedicacion = models.ForeignKey(Dedicacion, on_delete=models.CASCADE, null=True)
@@ -133,6 +130,8 @@ class Cargo(models.Model):
             MaxValueValidator(1, message='El valor debe ser 0 o 1.')
         ]
     )
+
+    resolucion = models.BinaryField(null=True, blank=True)
 
 
 # Tanto para las comisiones como para las tareas extras (van a tener que inventar horas y fechas desde y hasta si no las tienen definidas)
