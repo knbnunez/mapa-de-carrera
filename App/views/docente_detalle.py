@@ -15,6 +15,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
     url_mapuche = 'http://10.7.180.231/mapuche/rest/'
     
     alert = None
+    cargos_activos = None
 
     def get(self, request, legajo): # Se puede recuperar el param atr llamándolo como esta definido en urls.py en este caso: legajo
         legajo = str(legajo) # TODO: Revisar si la conversión afecta a las consultas a la base de datos. En el modelo, legajo es Integer     
@@ -48,6 +49,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
         if (docente is None) and (Docente.objects.filter(legajo=legajo).exists()):
             docente = Docente.objects.get(legajo=legajo) # Lo recupero
         elif (docente is None) and (not Docente.objects.filter(legajo=legajo).exists()): 
+            DocenteDetalleView.cargos_activos = None
             return render(request, self.template_name, {'docente': docente, 'cargos_activos': None}) # Faltaría agregar las materias, comisiones... que también serían = None
 
         # Correo docente --------------------------------------------------------
@@ -194,25 +196,24 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
         # materias = Materias.objects.using('guarani').all()
         # for materia in materias:
         #     print(materia.nombre)
-  
+        
+        DocenteDetalleView.cargos_activos = cargos_activos
         return render(request, self.template_name, {'docente': docente, 'cargos_activos': cargos_activos}) # materias, comisiones, tareas extras
 
         
     def post(self, request, legajo):
-        archivo = request.FILES.get('input-resolucion')
-        print(archivo)
-        # if archivo is None:
-        #     # Manejo de error si no se envió ningún archivo
-        #     self.alert = "Debes proporcionar un archivo."
-        #     return self.get(request, legajo)
-
-        # # Verificar si es un archivo PDF válido
-        # mime_type = magic.from_buffer(archivo.read(), mime=True)
-        # if mime_type != 'application/pdf':
-        #     # El archivo no es un PDF válido
-        #     self.alert = "Solo se permiten archivos PDF."
-        #     return self.get(request, legajo)
-
-        # Aquí puedes guardar o procesar el archivo correctamente
-        # ...
+        for ca in DocenteDetalleView.cargos_activos:
+            # print(ca)
+            archivos = request.FILES.getlist('file-'+str(ca.nro_cargo))
+            # print(archivo)
+            if len(archivos) == 1:
+                a = archivos[0]
+                # print(a)
+                ca.resolucion = a
+                ca.save()
+            
+        
+        # nro_cargo = request.POST.get('cargo_number')
+        # print(nro_cargo)
+        
         return self.get(request, legajo)

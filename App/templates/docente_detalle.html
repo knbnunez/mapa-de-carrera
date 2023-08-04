@@ -7,6 +7,7 @@
     .hidden {
         display: none;
     }
+
 </style>
 {% endblock %}
 
@@ -130,9 +131,9 @@
 {% endblock %}
 
 {% block body-content %}
-<div class="p-1 pl-7 sm:ml-64">
+<div class="p-1 sm:ml-64">
 
-    <div class="p-10 pl-10 sm:ml-14">
+    <div class="p-10 sm:ml-14">
         {% if docente %}
         <div class="p-1 pl-7 sm:ml-4">
             <h1 class="text-lg font-semibold dark:text-black">{{docente.nombre_apellido}}</h1>
@@ -176,124 +177,100 @@
         </dl>
 
 
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-6 py-3">
-                            Numero
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Categoria
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Dedicación
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Modalidad
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Fecha de alta
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Fecha de baja
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            <span class="sr-only">Edit</span>
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            <span class="sr-only">Edit</span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for c in cargos_activos %}
-                    <tr class="border-b bg-gray-800 border-gray-700">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{c.nro_cargo}}
-                        </th>
-                        <td class="px-6 py-4">
-                            {{c.categoria.desc_categ}}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{c.dedicacion.desc_dedic}}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{c.modalidad.desc_modal}}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{c.fecha_alta|date:"SHORT_DATE_FORMAT"}}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{c.fecha_baja|date:"SHORT_DATE_FORMAT"}}
-                        </td>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                Numero
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Categoria
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Dedicación
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Modalidad
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Fecha de alta
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Fecha de baja
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Descarga de Resolución
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Subida de Resolución <span class="font-medium lowercase">(pdf)</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in cargos_activos %}
+                        <tr class="border-b bg-gray-800 border-gray-700">
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {{c.nro_cargo}}
+                            </th>
+                            <td class="px-6 py-4">
+                                {{c.categoria.desc_categ}}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{c.dedicacion.desc_dedic}}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{c.modalidad.desc_modal}}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{c.fecha_alta|date:"SHORT_DATE_FORMAT"}}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{c.fecha_baja|date:"SHORT_DATE_FORMAT"}}
+                            </td>
 
-                        <!-- Descarga de archivo -->
-                        {% if c.resolucion %}
-                        <td class="px-6 py-4">
-                            <a href="cambiar por una url de descarga" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Descargar Resolución</a>
-                        </td>
-                        {% else %}
-                        <td class="px-6 py-4">
-                            <span class="font-medium text-gray-500">No hay Resolución cargada</span>
-                        </td>
-                        {% endif %}
+                            <!-- Descarga de archivo -->
+                            {% if c.resolucion %}
+                            <td class="px-6 py-4">
+                                <a href="{{ c.resolucion.url }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" download>Descargar Resolución</a>
+                            </td>
+                            {% else %}
+                            <td class="px-6 py-4">
+                                <span class="font-medium text-gray-500">No hay Resolución cargada</span>
+                            </td>
+                            {% endif %}
 
-                        <!-- Form subida de archivo -->
-                        <td class="px-6 py-4">
-                            <!-- <a href="#" class="font-medium text-blue-500 hover:underline">Subir Resolución</a> -->
-                            <input type="file">
-                        </td>
-
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-
-        <!-- 
-            aux_dict['cargo'] = cargo.nro_cargo
-            # dependencias -> TODO: Relacionar con los datos de Guaraní
-            aux_dict['dedicacion'] = dedicacion.desc_dedic
-            # cargas de horarias -> TODO: faltan definirlas bien
-            aux_dict['categoria'] = categoria.desc_categ
-            aux_dict['fecha_alta'] = cargo.fecha_alta
-            aux_dict['fecha_baja'] = cargo.fecha_baja 
+                            <!-- Form subida de archivo -->
+                            <td class="px-6 py-4">
+                                <!-- Campo de carga de archivos para cada cargo -->
+                                <input
+                                    class="block w-full text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                    type="file"
+                                    name="file-{{ c.nro_cargo }}"
+                                    accept=".pdf"
+                                >
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             
-            <h3> - Nro cargo: {{c.cargo.nro_cargo}}</h3>
-            <h3> - Dedicación: {{c.dedicacion.desc_dedic}}</h3>
-            
-            {% if c.modalidad %} <h3> - Modalidad: {{c.cargo.modalidad}}</h3>
-            {% else %} <h3> - Modalidad: no hay modalidad asignada todavía</h3>
-            {% endif %}
-
-            {% if c.dependencia_desempeno %} <h3> - Dependencia de Desempeño: {{c.dependencia_desempeno}}</h3>
-            {% else %} <h3> - Dependencia de Desempeño: no hay dependencia asignada</h3>
-            {% endif %}
-
-            {% if c.dependencia_designacion %} <h3> - Dependencia de Designación: {{c.dependencia_designacion}}</h3>
-            {% else %} <h3> - Dependencia de Designación: no hay dependencia asignada</h3>
-            {% endif %}
-
-            {% if c.cargas_aulas %} <h3> - Cargas horarias frente al aula: {{c.cargas_aulas}}</h3>
-            {% else %} <h3> - Cargas horarias frente al aula: no hay cargas frente al aula asociadas</h3>
-            {% endif %}
-
-            {% if c.cargas_extras %} <h3> - Cargas horarias extras: {{c.cargas_extras}}</h3>
-            {% else %} <h3> - Cargas horarias extras: no hay cargas extras asociadas</h3>
-            {% endif %} 
-            <h3> - Categoria: {{c.categoria.desc_categ}}</h3>
-            <h3> - Fecha alta: {{c.cargo.fecha_alta}}</h3>
-            <h3> - Fecha baja: {{c.cargo.fecha_baja}}</h3>-->
-
+                <!-- Botón de submit fuera de la tabla -->
+            </div>
+            <!-- <button type="submit">Enviar</button> -->
+            <div class="mt-8 mr-12 flex justify-end">
+                <button type="submit" class="relative w-32 h-8 px-1 py-1 bg-gray-200 text-gray-700 rounded-md shadow-md hover:bg-gray-300 text-sm font-semibold">
+                    Guardar cambios
+                </button>
+            </div>
+        </form>
         {% endif %}
     </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-<script>
 
-</script>
 {% endblock %}

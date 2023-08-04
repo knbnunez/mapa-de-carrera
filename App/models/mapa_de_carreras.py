@@ -127,7 +127,7 @@ class Cargo(models.Model):
         ]
     )
 
-    resolucion = models.BinaryField(null=True, blank=True)
+    resolucion = models.FileField(upload_to='media/', null=True, blank=True)
 
 
 # Tanto para las comisiones como para las tareas extras (van a tener que inventar horas y fechas desde y hasta si no las tienen definidas)
