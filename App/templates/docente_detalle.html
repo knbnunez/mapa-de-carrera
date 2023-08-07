@@ -3,107 +3,110 @@
 {% block title %} <title>Detalle docente</title> {% endblock %}
 
 {% block light-style %}
-  <style>
+<style>
     .hidden {
-      display: none;
+        display: none;
     }
-  </style>
+
+</style>
 {% endblock %}
 
 <!-- Me fue imposible componentizarlo, no logra recuperar de manera correcta el legajo dentro de la url... -->
 {% block sidebar %}
 <div> <!-- div a fines de agrupar y poder ocultar todo el contenido -->
     <!-- Botón para desplegar cuando se achica el tamaño de la página -->
-    <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button"
-    class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-    <span class="sr-only">Desplegar</span>
-    <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-        <path clip-rule="evenodd" fill-rule="evenodd"
-            d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
-        </path>
-    </svg>
+    <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar"
+        type="button"
+        class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+        <span class="sr-only">Desplegar</span>
+        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg">
+            <path clip-rule="evenodd" fill-rule="evenodd"
+                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+            </path>
+        </svg>
     </button>
     <aside id="logo-sidebar"
-    class="fixed top-0 left-0 z-40 w-65 h-screen transition-transform -translate-x-full sm:translate-x-0"
-    aria-label="Sidebar">
-    <div class="h-full px-3 py-4 overflow-y-auto bg-red-800">
-        <a href="#" class="flex items-center pl-2.5 mb-4 pb-3 border-b-[1px] border-white">
-            <img src="https://untdf.edu.ar/img/isologotipo_chico.png" class="h-6 mr-3 sm:h-7" alt="UNTDF Logo" />
-            <span class="self-center text-xl font-semibold whitespace-nowrap text-gray-50">Mapa de carreras</span>
-        </a>
-        <ul id="content-side-bar" class="space-y-2 font-medium">
-            <!-- content con js -->
-        </ul>
-        
-    </div>
+        class="fixed top-0 left-0 z-40 w-65 h-screen transition-transform -translate-x-full sm:translate-x-0"
+        aria-label="Sidebar">
+        <div class="h-full px-3 py-4 overflow-y-auto bg-red-800">
+            <a href="#" class="flex items-center pl-2.5 mb-4 pb-3 border-b-[1px] border-white">
+                <img src="https://untdf.edu.ar/img/isologotipo_chico.png" class="h-6 mr-3 sm:h-7" alt="UNTDF Logo" />
+                <span class="self-center text-xl font-semibold whitespace-nowrap text-gray-50">Mapa de carreras</span>
+            </a>
+            <ul id="content-side-bar" class="space-y-2 font-medium">
+                <!-- content con js -->
+            </ul>
+
+        </div>
     </aside>
     <script>
-    const urlSplit = window.location.href.split('/'); // Obtengo un arreglo de los elementos que componenen la url actual xx/yyy/zzz = ["xx", "yyy", "zzz"]
-    // console.log(urlSplit);
-    const idxLegajo = urlSplit.indexOf('detalles') - 1; // Encuentra la posición del elemento que contiene el nro de legajo a partir del "detalle" que es un valor fijo
-    // console.log(idxLegajo);
-    let legajo = null;
-    if (idxLegajo !== -1) legajo = urlSplit[idxLegajo];
+        const urlSplit = window.location.href.split('/'); // Obtengo un arreglo de los elementos que componenen la url actual xx/yyy/zzz = ["xx", "yyy", "zzz"]
+        // console.log(urlSplit);
+        const idxLegajo = urlSplit.indexOf('detalles') - 1; // Encuentra la posición del elemento que contiene el nro de legajo a partir del "detalle" que es un valor fijo
+        // console.log(idxLegajo);
+        let legajo = null;
+        if (idxLegajo !== -1) legajo = urlSplit[idxLegajo];
     // console.log({legajo: legajo});
     </script>
 
     <script>
-    // TAREA: 
-    // - Hay que corregir los href
-    const docenteContent = [
-        {
-            href: "{% url 'docente' %}",
-            iconName: "fa-solid fa-list",
-            title: "Ver listado"
-        },
-        {
-            href: "#",
-            iconName: "far fa-regular fa-user",
-            title: "Ver perfil"
-        },
-        {
-            href: "#",
-            iconName: "far fa-folder-open",
-            title: "Ver histórico"
-        },
-        {
-            href: "{% url 'docente-asignar-tareas' legajo=docente.legajo %}",
-            iconName: "fas fa-chalkboard-teacher",
-            title: "Asignar otras actividades"
-        },
-        {
-            href: "{% url 'docente-asignar-modalidad' legajo=docente.legajo %}",
-            iconName: "fa fa-user-edit",
-            title: "Asignar modalidad"
-        },
-        {
-            href: "{% url 'docente-asignar-comision' legajo=docente.legajo %}",
-            iconName: "fas fa-user-clock",
-            title: "Asignar comision"
-        },
-        {
-            href: "#",
-            iconName: "fas fa-file-upload",
-            title: "Cargar documentos"
-        },
-    ];
-    const gralContent = [
-        {
-            href: "#",
-            iconName: "fas fa-user-clock",
-            title: "Asignar franja horaria"
-        },
-        {
-            href: "#",
-            iconName: "fas fa-clipboard-list",
-            title: "Listar comisiones sin asignar"
-        }
-    ];
-    const contentSideBar = document.getElementById("content-side-bar");
-    contentSideBar.innerHTML += `<div class="text-white font-semibold text-lg">Docente</div>`;
-    docenteContent.forEach((e) => {
-        // console.log(e.href);
-        contentSideBar.innerHTML += `
+        // TAREA: 
+        // - Hay que corregir los href
+        const docenteContent = [
+            {
+                href: "{% url 'docente' %}",
+                iconName: "fa-solid fa-list",
+                title: "Ver listado"
+            },
+            {
+                href: "#",
+                iconName: "far fa-regular fa-user",
+                title: "Ver perfil"
+            },
+            {
+                href: "#",
+                iconName: "far fa-folder-open",
+                title: "Ver histórico"
+            },
+            {
+                href: "{% url 'docente-asignar-tareas' legajo=docente.legajo %}",
+                iconName: "fas fa-chalkboard-teacher",
+                title: "Asignar otras actividades"
+            },
+            {
+                href: "{% url 'docente-asignar-modalidad' legajo=docente.legajo %}",
+                iconName: "fa fa-user-edit",
+                title: "Asignar modalidad"
+            },
+            {
+                href: "{% url 'docente-asignar-comision' legajo=docente.legajo %}",
+                iconName: "fas fa-user-clock",
+                title: "Asignar comision"
+            },
+            {
+                href: "#",
+                iconName: "fas fa-file-upload",
+                title: "Cargar documentos"
+            },
+        ];
+        const gralContent = [
+            {
+                href: "#",
+                iconName: "fas fa-user-clock",
+                title: "Asignar franja horaria"
+            },
+            {
+                href: "#",
+                iconName: "fas fa-clipboard-list",
+                title: "Listar comisiones sin asignar"
+            }
+        ];
+        const contentSideBar = document.getElementById("content-side-bar");
+        contentSideBar.innerHTML += `<div class="text-white font-semibold text-lg">Docente</div>`;
+        docenteContent.forEach((e) => {
+            // console.log(e.href);
+            contentSideBar.innerHTML += `
         <li>
             <a href='${e.href}' class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-red-900 group">
                 <i class="${e.iconName} text-gray-200 text-opacity-90"></i>
@@ -111,10 +114,10 @@
             </a>
         </li>
     `;
-    });
-    contentSideBar.innerHTML += `<div class="pt-2 text-white font-semibold text-lg">General</div>`;
-    gralContent.forEach((e) => {
-        contentSideBar.innerHTML += `
+        });
+        contentSideBar.innerHTML += `<div class="pt-2 text-white font-semibold text-lg">General</div>`;
+        gralContent.forEach((e) => {
+            contentSideBar.innerHTML += `
         <li>
             <a href='${e.href}' class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-red-900 group">
                 <i class="${e.iconName} text-gray-200 text-opacity-90"></i>
@@ -122,15 +125,15 @@
             </a>
         </li>
     `;
-    });
+        });
     </script>
 </div>
 {% endblock %}
 
 {% block body-content %}
-<div class="p-1 pl-7 sm:ml-64">
+<div class="p-1 sm:ml-64">
 
-    <div class="p-10 pl-10 sm:ml-14">
+    <div class="p-10 sm:ml-14">
         {% if docente %}
         <div class="p-1 pl-7 sm:ml-4">
             <h1 class="text-lg font-semibold dark:text-black">{{docente.nombre_apellido}}</h1>
@@ -174,103 +177,96 @@
         </dl>
 
 
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-6 py-3">
-                            Numero
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Categoria
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Dedicación
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Modalidad
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Fecha de alta
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Fecha de baja
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            <span class="sr-only">Edit</span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for c in cargos_activos %}
-                    <tr
-                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{c.nro_cargo}}
-                        </th>
-                        <td class="px-6 py-4">
-                            {{c.categoria.desc_categ}}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{c.dedicacion.desc_dedic}}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{c.modalidad.desc_modal}}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{c.fecha_alta|date:"SHORT_DATE_FORMAT"}}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{c.fecha_baja|date:"SHORT_DATE_FORMAT"}}
-                        </td>
-                        <td class="px-6 py-4 text-right">
-                            <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Descargar
-                                Resolucion</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                Numero
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Categoria
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Dedicación
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Modalidad
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Fecha de alta
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Fecha de baja
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Descarga de Resolución
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Subida de Resolución <span class="font-medium lowercase">(pdf)</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in cargos_activos %}
+                        <tr class="border-b bg-gray-800 border-gray-700">
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {{c.nro_cargo}}
+                            </th>
+                            <td class="px-6 py-4">
+                                {{c.categoria.desc_categ}}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{c.dedicacion.desc_dedic}}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{c.modalidad.desc_modal}}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{c.fecha_alta|date:"SHORT_DATE_FORMAT"}}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{c.fecha_baja|date:"SHORT_DATE_FORMAT"}}
+                            </td>
 
-                </tbody>
-            </table>
-        </div>
-        <!-- 
-            aux_dict['cargo'] = cargo.nro_cargo
-            # dependencias -> TODO: Relacionar con los datos de Guaraní
-            aux_dict['dedicacion'] = dedicacion.desc_dedic
-            # cargas de horarias -> TODO: faltan definirlas bien
-            aux_dict['categoria'] = categoria.desc_categ
-            aux_dict['fecha_alta'] = cargo.fecha_alta
-            aux_dict['fecha_baja'] = cargo.fecha_baja 
+                            <!-- Descarga de archivo -->
+                            {% if c.resolucion %}
+                            <td class="px-6 py-4">
+                                <a href="{{ c.resolucion.url }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" download>Descargar Resolución</a>
+                            </td>
+                            {% else %}
+                            <td class="px-6 py-4">
+                                <span class="font-medium text-gray-500">No hay Resolución cargada</span>
+                            </td>
+                            {% endif %}
+
+                            <!-- Form subida de archivo -->
+                            <td class="px-6 py-4">
+                                <!-- Campo de carga de archivos para cada cargo -->
+                                <input
+                                    class="block w-full text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                    type="file"
+                                    name="file-{{ c.nro_cargo }}"
+                                    accept=".pdf"
+                                >
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             
-            <h3> - Nro cargo: {{c.cargo.nro_cargo}}</h3>
-            <h3> - Dedicación: {{c.dedicacion.desc_dedic}}</h3>
-            
-            {% if c.modalidad %} <h3> - Modalidad: {{c.cargo.modalidad}}</h3>
-            {% else %} <h3> - Modalidad: no hay modalidad asignada todavía</h3>
-            {% endif %}
-
-            {% if c.dependencia_desempeno %} <h3> - Dependencia de Desempeño: {{c.dependencia_desempeno}}</h3>
-            {% else %} <h3> - Dependencia de Desempeño: no hay dependencia asignada</h3>
-            {% endif %}
-
-            {% if c.dependencia_designacion %} <h3> - Dependencia de Designación: {{c.dependencia_designacion}}</h3>
-            {% else %} <h3> - Dependencia de Designación: no hay dependencia asignada</h3>
-            {% endif %}
-
-            {% if c.cargas_aulas %} <h3> - Cargas horarias frente al aula: {{c.cargas_aulas}}</h3>
-            {% else %} <h3> - Cargas horarias frente al aula: no hay cargas frente al aula asociadas</h3>
-            {% endif %}
-
-            {% if c.cargas_extras %} <h3> - Cargas horarias extras: {{c.cargas_extras}}</h3>
-            {% else %} <h3> - Cargas horarias extras: no hay cargas extras asociadas</h3>
-            {% endif %} 
-            <h3> - Categoria: {{c.categoria.desc_categ}}</h3>
-            <h3> - Fecha alta: {{c.cargo.fecha_alta}}</h3>
-            <h3> - Fecha baja: {{c.cargo.fecha_baja}}</h3>-->
-
-
+                <!-- Botón de submit fuera de la tabla -->
+            </div>
+            <!-- <button type="submit">Enviar</button> -->
+            <div class="mt-8 mr-12 flex justify-end">
+                <button type="submit" class="relative w-32 h-8 px-1 py-1 bg-gray-200 text-gray-700 rounded-md shadow-md hover:bg-gray-300 text-sm font-semibold">
+                    Guardar cambios
+                </button>
+            </div>
+        </form>
         {% endif %}
-
     </div>
 </div>
 {% endblock %}

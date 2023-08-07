@@ -108,19 +108,15 @@ class Comision_Carrera(models.Model):
     
     
 class Cargo(models.Model):
-    # Mapuche
     nro_cargo = models.IntegerField(primary_key=True) # En la API de Mapuche lo usan como si fuera un nro de legajo, nosotros lo vamos a usar como nro_cargo, desde Mapuche se consume como: 'cargo'
     docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
-    # Propio
-    # resolucion = models.ForeignKey(Resolucion, on_delete=models.CASCADE, null=True, default=None)
+    
     # Propio o Guaraní?
     dependencia_desempeno = models.ForeignKey(Instituto, on_delete=models.CASCADE, related_name='cargo_desmpeno', null=True, default=None)
     dependencia_designacion = models.ForeignKey(Instituto, on_delete=models.CASCADE, related_name='cargo_designacion', null=True, default=None)
-
+    
     modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, null=True)
     dedicacion = models.ForeignKey(Dedicacion, on_delete=models.CASCADE, null=True)
-    
-    # Mapuche
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, null=True)
     fecha_alta = models.DateField()
     fecha_baja = models.DateField(null=True, blank=True)
@@ -131,7 +127,7 @@ class Cargo(models.Model):
         ]
     )
 
-    resolucion = models.BinaryField(null=True, blank=True)
+    resolucion = models.FileField(upload_to='media/', null=True, blank=True)
 
 
 # Tanto para las comisiones como para las tareas extras (van a tener que inventar horas y fechas desde y hasta si no las tienen definidas)
