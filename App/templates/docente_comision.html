@@ -152,9 +152,12 @@
           {% endfor %}
         </select>
 
-      <label for="fecha_desde">Fecha desde:</label>
-      <input type="date" name="fecha_desde" required>
-      <br>
+        <label for="{{ form.fecha_desde.id_for_label }}">Fecha desde:</label>
+        <select name="{{ form.fecha_desde.name }}" id="{{ form.fecha_desde_for_label }}">
+            {% for fecha_desde in fecha_desde %}
+            <option value="{{ fecha_desde.pk }}">{{ fecha_desde.asignacion.fecha_desde }}</option>
+            {% endfor %}
+        </select>
 
       <label for="fecha_hasta">Fecha hasta:</label>
       <input type="date" name="fecha_hasta" required>

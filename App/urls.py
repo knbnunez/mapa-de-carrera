@@ -6,7 +6,7 @@ from .views.docente_detalle import *
 from .views.docente_modalidad import *
 from .views.docente_tareas import *
 from .views.docente_comision import *
-from .views.docente_carga import *
+from .views.docente_carga_horaria import *
 
 
 urlpatterns = [

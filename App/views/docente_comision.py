@@ -5,7 +5,7 @@ from requests.exceptions import ConnectTimeout
 import datetime
 from App.models.mapa_de_carreras import *
 from App.models.guarani import *
-from App.comisionForm import comisionForm
+from App.forms.comisionForm import comisionForm
 
 class DocenteComisionView(TemplateView): # Detalle para un único docente
     template_name = 'docente_comision.html'
@@ -22,9 +22,11 @@ class DocenteComisionView(TemplateView): # Detalle para un único docente
      docente = get_object_or_404(Docente, pk=self.kwargs['legajo'])
      cargos = Cargo.objects.filter(docente=docente, activo=1)  # Filtra solo los cargos activos del docente
      comisiones = Comision.objects.select_related('materia')  # Obtener comisiones con sus materias
+     fecha_desde = SgaComisionesBH.objects.filter(comision=comisiones) 
      context['docente'] = docente
      context['cargo'] = cargos
      context['comision'] = comisiones
+     context['fecha_desde'] = fecha_desde
      context['form'] = self.form_class() 
      return context
     
@@ -34,12 +36,13 @@ class DocenteComisionView(TemplateView): # Detalle para un único docente
         docente = get_object_or_404(Docente, pk=legajo)
         cargos = Cargo.objects.filter(docente=docente, activo=1) 
         comisiones = Comision.objects.select_related('materia') 
+        fecha_desde = SgaComisionesBH.objects.all() 
         form = self.form_class(request.POST)
         if form.is_valid():
             # Guardar el formulario si es válido
             carga_extra = form.save(commit=False)
-            carga_extra.cargo = cargos
-            carga_extra.comision = comisiones 
+            #carga_extra.cargo = cargos
+            #carga_extra.comision = comisiones 
             carga_extra.save()
 
-        return render(request, 'docente_comision.html', {'docente': docente, 'cargo': cargos, 'comisiones': comisiones,'form': form})
+        return render(request, 'docente_comision.html', {'docente': docente, 'cargo': cargos, 'fecha_desde': fecha_desde,'comisiones': comisiones,'form': form})

@@ -5,7 +5,7 @@ from requests.exceptions import ConnectTimeout
 import datetime
 from App.models.mapa_de_carreras import *
 from App.models.guarani import *
-from App.cargoForm import cargoForm
+from App.forms.cargoForm import cargoForm
 
 class DocenteTareasView(TemplateView): # Detalle para un único docente
     template_name = 'docente_tareas.html'
@@ -28,7 +28,7 @@ class DocenteTareasView(TemplateView): # Detalle para un único docente
      return context
     
     
-    def post(self, request, legajo, nro_cargo):
+    def post(self, request, legajo):
         # Obtener el docente y el cargo asociados a los IDs proporcionados
         docente = get_object_or_404(Docente, pk=legajo)
         cargos = Cargo.objects.filter(docente=docente, activo=1) 
@@ -38,9 +38,7 @@ class DocenteTareasView(TemplateView): # Detalle para un único docente
         if form.is_valid():
             # Guardar el formulario si es válido
             carga_extra = form.save(commit=False)
-            carga_extra.cargo = cargos
+            #  carga_extra.cargo = cargos
             carga_extra.save()
 
         return render(request, 'docente_tareas.html', {'docente': docente, 'cargo': cargos, 'form': form})
-
-    
