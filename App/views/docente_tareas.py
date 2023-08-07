@@ -10,7 +10,7 @@ from App.forms.cargoForm import cargoForm
 class DocenteTareasView(TemplateView): # Detalle para un único docente
     template_name = 'docente_tareas.html'
     form_class = cargoForm
-    model = Carga_Horaria
+    # model = Carga_Horaria
     username = 'mapumapa' # Para producción hay que crifrar las credenciales
     password = 'Mowozelu28'
     url_mapuche = 'http://10.7.180.231/mapuche/rest/'

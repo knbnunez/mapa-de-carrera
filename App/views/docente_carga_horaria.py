@@ -6,12 +6,12 @@ from django.views import View
 import requests
 from django.views.generic import TemplateView
 from ..forms.cargaForm import cargaForm
-from App.models.mapa_de_carreras import Carga_Horaria, Carrera, Comision, Docente, Materia, Cargo
+from App.models.mapa_de_carreras import Carrera, Comision, Docente, Materia, Cargo
 
 class DocenteCargaHorariaView(TemplateView):
     template_name = 'docente_carga_horaria.html'
     form_class = cargaForm
-    model = Carga_Horaria
+    # model = Carga_Horaria
     username = 'mapumapa' # Para producción hay que crifrar las credenciales
     password = 'Mowozelu28'
     url_mapuche = 'http://10.7.180.231/mapuche/rest/'

@@ -130,15 +130,24 @@ class Cargo(models.Model):
     resolucion = models.FileField(upload_to='media/', null=True, blank=True)
 
 
-# Tanto para las comisiones como para las tareas extras (van a tener que inventar horas y fechas desde y hasta si no las tienen definidas)
 class Carga_Horaria(models.Model):
-    cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
-    comision = models.ForeignKey(Comision, on_delete=models.CASCADE, null=True, default=None) # Cuando sea tipo_extra: comision = null
-    tipo_extra = models.ForeignKey(Tipo_Extra, on_delete=models.CASCADE, null=True, default=None) # Cuando sea comision: tipo_extra = null
-    fecha_desde = models.CharField(max_length=100)
-    fecha_hasta = models.CharField(max_length=100)
-    hora_inicio = models.CharField(max_length=100)
-    hora_finalizacion = models.CharField(max_length=100)
+    hora_inicio = models.CharField(max_length=5)
+    hora_fin = models.CharField(max_length=5)
+    dia_semana = models.CharField(max_length=25)
+    fecha_desde = models.CharField(max_length=10)
+    fecha_hasta = models.CharField(max_length=10)
 
-    def __str__(self):
-        return self.nombre
+
+class Comision_CH(models.Model):
+    comision = models.ForeignKey(Comision, on_delete=models.CASCADE)
+    Carga_Horaria = models.ForeignKey(Carga_Horaria, on_delete=models.CASCADE)
+
+
+class Cargo_CH(models.Model):
+    cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
+    Carga_Horaria = models.ForeignKey(Carga_Horaria, on_delete=models.CASCADE)
+
+
+class Tipo_Extra_CH(models.Model):
+    tipo_extra = models.ForeignKey(Tipo_Extra, on_delete=models.CASCADE)
+    Carga_Horaria = models.ForeignKey(Carga_Horaria, on_delete=models.CASCADE)

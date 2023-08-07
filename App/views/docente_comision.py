@@ -10,7 +10,7 @@ from App.forms.comisionForm import comisionForm
 class DocenteComisionView(TemplateView): # Detalle para un único docente
     template_name = 'docente_comision.html'
     form_class = comisionForm
-    model = Carga_Horaria
+    # model = Carga_Horaria
     username = 'mapumapa' # Para producción hay que crifrar las credenciales
     password = 'Mowozelu28'
     url_mapuche = 'http://10.7.180.231/mapuche/rest/'
@@ -22,11 +22,14 @@ class DocenteComisionView(TemplateView): # Detalle para un único docente
      docente = get_object_or_404(Docente, pk=self.kwargs['legajo'])
      cargos = Cargo.objects.filter(docente=docente, activo=1)  # Filtra solo los cargos activos del docente
      comisiones = Comision.objects.select_related('materia')  # Obtener comisiones con sus materias
-     fecha_desde = SgaComisionesBH.objects.filter(comision=comisiones) 
+    #  fecha_desde = SgaComisionesBH.objects.filter(comision=comisiones) 
+
+    # ToDo: asignaciones: fecha_desde,, fecha_hasta, hora_inicio, hora_fin
+
      context['docente'] = docente
      context['cargo'] = cargos
      context['comision'] = comisiones
-     context['fecha_desde'] = fecha_desde
+    #  context['fecha_desde'] = fecha_desde
      context['form'] = self.form_class() 
      return context
     
@@ -36,7 +39,7 @@ class DocenteComisionView(TemplateView): # Detalle para un único docente
         docente = get_object_or_404(Docente, pk=legajo)
         cargos = Cargo.objects.filter(docente=docente, activo=1) 
         comisiones = Comision.objects.select_related('materia') 
-        fecha_desde = SgaComisionesBH.objects.all() 
+        # fecha_desde = SgaComisionesBH.objects.all() 
         form = self.form_class(request.POST)
         if form.is_valid():
             # Guardar el formulario si es válido
@@ -45,4 +48,9 @@ class DocenteComisionView(TemplateView): # Detalle para un único docente
             #carga_extra.comision = comisiones 
             carga_extra.save()
 
-        return render(request, 'docente_comision.html', {'docente': docente, 'cargo': cargos, 'fecha_desde': fecha_desde,'comisiones': comisiones,'form': form})
+        return render(request, 'docente_comision.html', {
+           'docente': docente, 
+           'cargo': cargos, 
+        #    'fecha_desde': fecha_desde,
+           'comisiones': comisiones,
+           'form': form})

@@ -73,6 +73,17 @@ class SgaAsignaciones(models.Model):
         db_table = 'sga_asignaciones'
 
 
+class SgaComisionesBH(models.Model):
+    banda_horaria = models.AutoField(primary_key=True)
+    comision = models.ForeignKey(SgaComisiones, models.DO_NOTHING, db_column='comision')
+    asignacion = models.ForeignKey(SgaAsignaciones, models.DO_NOTHING, db_column='asignacion')
+    
+    class Meta:
+        managed = False
+        db_table = 'sga_comisiones_bh'
+        # unique_together = (('comision', 'asignacion'),)
+
+
 class SgaComisionesPropuestas(models.Model):
     comision = models.ForeignKey(SgaComisiones, models.DO_NOTHING, db_column='comision', primary_key=True)
     propuesta = models.ForeignKey(SgaPropuestas, models.DO_NOTHING, db_column='propuesta')
@@ -83,18 +94,6 @@ class SgaComisionesPropuestas(models.Model):
         # unique_together = (('comision', 'propuesta', 'plan'),)
 
 
-class SgaComisionesBH(models.Model):
-    banda_horaria = models.AutoField(primary_key=True)
-    comision = models.ForeignKey(SgaComisiones, models.DO_NOTHING, db_column='comision')
-    asignacion = models.ForeignKey(SgaAsignaciones, models.DO_NOTHING, db_column='asignacion')
-    
-    class Meta:
-        managed = False
-        db_table = 'sga_comisiones_bh'
-        # unique_together = (('comision', 'asignacion'),)
-        
-
-
 # Elminar: es solo para cargar datos de prueba
 class sgaDocentes(models.Model):
     docente = models.AutoField(primary_key=True)
@@ -102,6 +101,7 @@ class sgaDocentes(models.Model):
     class Meta:
         managed = False
         db_table = 'sga_docentes'
+
 
 # Eliminar
 class sgaDocentesComision(models.Model):
