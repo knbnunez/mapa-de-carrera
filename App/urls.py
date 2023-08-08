@@ -21,7 +21,7 @@ urlpatterns = [
     path('docentes/<int:legajo>/asignar-modalidad', DocenteModalidadView.as_view(), name='docente-asignar-modalidad'),
     path('docentes/<int:legajo>/asignar-tareas', DocenteTareasView.as_view(), name='docente-asignar-tareas'),
     path('docentes/<int:legajo>/asignar-comision', DocenteComisionView.as_view(), name='docente-asignar-comision'),
-    ]
+]
 
 # Ruta para servir archivos multimedia en desarrollo
 if settings.DEBUG:

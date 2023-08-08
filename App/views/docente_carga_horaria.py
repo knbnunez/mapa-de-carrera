@@ -19,21 +19,21 @@ class DocenteCargaHorariaView(TemplateView):
 
     def get(self, request):
      
-     url_carga = self.url_mapuche+'agentes' # /agentes/{legajo}
-     response = requests.get(url_carga, auth=(self.username, self.password))
+        url_carga = self.url_mapuche+'agentes' # /agentes/{legajo}
+        response = requests.get(url_carga, auth=(self.username, self.password))
         # if response.status_code == 200:
      
-     docente = response.json()
+        docente = response.json()
      
-     return render(request, self.template_name, {'docentes': docente})
+        return render(request, self.template_name, {'docentes': docente})
     
     def get_context_data(self, **kwargs):
      
-     context = super().get_context_data(**kwargs)
-     comision = Comision.objects.select_related('materia')  # Obtener comisiones con sus materias
-     context['comision'] = comision
-     context['form'] = self.form_class() 
-     return context
+        context = super().get_context_data(**kwargs)
+        comision = Comision.objects.select_related('materia')  # Obtener comisiones con sus materias
+        context['comision'] = comision
+        context['form'] = self.form_class() 
+        return context
     
     
     

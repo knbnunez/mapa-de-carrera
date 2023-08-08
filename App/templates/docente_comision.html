@@ -3,107 +3,109 @@
 {% block title %} <title>Comision docente</title> {% endblock %}
 
 {% block light-style %}
-  <style>
+<style>
     .hidden {
-      display: none;
+        display: none;
     }
-  </style>
-  
+</style>
+
 {% endblock %}
 
 {% block sidebar %}
 <div> <!-- div a fines de agrupar y poder ocultar todo el contenido -->
     <!-- Botón para desplegar cuando se achica el tamaño de la página -->
-    <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button"
-    class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-    <span class="sr-only">Desplegar</span>
-    <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-        <path clip-rule="evenodd" fill-rule="evenodd"
-            d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
-        </path>
-    </svg>
+    <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar"
+        type="button"
+        class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+        <span class="sr-only">Desplegar</span>
+        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg">
+            <path clip-rule="evenodd" fill-rule="evenodd"
+                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+            </path>
+        </svg>
     </button>
     <aside id="logo-sidebar"
-    class="fixed top-0 left-0 z-40 w-65 h-screen transition-transform -translate-x-full sm:translate-x-0"
-    aria-label="Sidebar">
-    <div class="h-full px-3 py-4 overflow-y-auto bg-red-800">
-        <a href="#" class="flex items-center pl-2.5 mb-4 pb-3 border-b-[1px] border-white">
-            <img src="https://untdf.edu.ar/img/isologotipo_chico.png" class="h-6 mr-3 sm:h-7" alt="UNTDF Logo" />
-            <span class="self-center text-xl font-semibold whitespace-nowrap text-gray-50">Mapa de carreras</span>
-        </a>
-        <ul id="content-side-bar" class="space-y-2 font-medium">
-            <!-- content con js -->
-        </ul>
-        
-    </div>
+        class="fixed top-0 left-0 z-40 w-65 h-screen transition-transform -translate-x-full sm:translate-x-0"
+        aria-label="Sidebar">
+        <div class="h-full px-3 py-4 overflow-y-auto bg-red-800">
+            <a href="#" class="flex items-center pl-2.5 mb-4 pb-3 border-b-[1px] border-white">
+                <img src="https://untdf.edu.ar/img/isologotipo_chico.png" class="h-6 mr-3 sm:h-7" alt="UNTDF Logo" />
+                <span class="self-center text-xl font-semibold whitespace-nowrap text-gray-50">Mapa de carreras</span>
+            </a>
+            <ul id="content-side-bar" class="space-y-2 font-medium">
+                <!-- content con js -->
+            </ul>
+
+        </div>
     </aside>
     <script>
-    const urlSplit = window.location.href.split('/'); // Obtengo un arreglo de los elementos que componenen la url actual xx/yyy/zzz = ["xx", "yyy", "zzz"]
-    // console.log(urlSplit);
-    const idxLegajo = urlSplit.indexOf('detalles') - 1; // Encuentra la posición del elemento que contiene el nro de legajo a partir del "detalle" que es un valor fijo
-    // console.log(idxLegajo);
-    let legajo = null;
-    if (idxLegajo !== -1) legajo = urlSplit[idxLegajo];
+        const urlSplit = window.location.href.split('/'); // Obtengo un arreglo de los elementos que componenen la url actual xx/yyy/zzz = ["xx", "yyy", "zzz"]
+        // console.log(urlSplit);
+        const idxLegajo = urlSplit.indexOf('detalles') - 1; // Encuentra la posición del elemento que contiene el nro de legajo a partir del "detalle" que es un valor fijo
+        // console.log(idxLegajo);
+        let legajo = null;
+        if (idxLegajo !== -1) legajo = urlSplit[idxLegajo];
     // console.log({legajo: legajo});
     </script>
 
     <script>
-    // TAREA: 
-    // - Hay que corregir los href
-    const docenteContent = [
-        {
-            href: "{% url 'docente' %}",
-            iconName: "fa-solid fa-list",
-            title: "Ver listado"
-        },
-        {
-            href: "#",
-            iconName: "far fa-regular fa-user",
-            title: "Ver perfil"
-        },
-        {
-            href: "#",
-            iconName: "far fa-folder-open",
-            title: "Ver histórico"
-        },
-        {
-            href: "{% url 'docente-asignar-tareas' legajo=docente.legajo %}",
-            iconName: "fas fa-chalkboard-teacher",
-            title: "Asignar otras actividades"
-        },
-        {
-            href: "{% url 'docente-asignar-modalidad' legajo=docente.legajo %}",
-            iconName: "fa fa-user-edit",
-            title: "Asignar modalidad"
-        },
-        {
-            href: "{% url 'docente-asignar-comision' legajo=docente.legajo %}",
-            iconName: "fas fa-user-clock",
-            title: "Asignar comision"
-        },
-        {
-            href: "#",
-            iconName: "fas fa-file-upload",
-            title: "Cargar documentos"
-        },
-    ];
-    const gralContent = [
-        {
-            href: "#",
-            iconName: "fas fa-user-clock",
-            title: "Asignar franja horaria"
-        },
-        {
-            href: "#",
-            iconName: "fas fa-clipboard-list",
-            title: "Listar comisiones sin asignar"
-        }
-    ];
-    const contentSideBar = document.getElementById("content-side-bar");
-    contentSideBar.innerHTML += `<div class="text-white font-semibold text-lg">Docente</div>`;
-    docenteContent.forEach((e) => {
-        // console.log(e.href);
-        contentSideBar.innerHTML += `
+        // TAREA: 
+        // - Hay que corregir los href
+        const docenteContent = [
+            {
+                href: "{% url 'docente' %}",
+                iconName: "fa-solid fa-list",
+                title: "Ver listado"
+            },
+            {
+                href: "#",
+                iconName: "far fa-regular fa-user",
+                title: "Ver perfil"
+            },
+            {
+                href: "#",
+                iconName: "far fa-folder-open",
+                title: "Ver histórico"
+            },
+            {
+                href: "{% url 'docente-asignar-tareas' legajo=docente.legajo %}",
+                iconName: "fas fa-chalkboard-teacher",
+                title: "Asignar otras actividades"
+            },
+            {
+                href: "{% url 'docente-asignar-modalidad' legajo=docente.legajo %}",
+                iconName: "fa fa-user-edit",
+                title: "Asignar modalidad"
+            },
+            {
+                href: "{% url 'docente-asignar-comision' legajo=docente.legajo %}",
+                iconName: "fas fa-user-clock",
+                title: "Asignar comision"
+            },
+            {
+                href: "#",
+                iconName: "fas fa-file-upload",
+                title: "Cargar documentos"
+            },
+        ];
+        const gralContent = [
+            {
+                href: "#",
+                iconName: "fas fa-user-clock",
+                title: "Asignar franja horaria"
+            },
+            {
+                href: "#",
+                iconName: "fas fa-clipboard-list",
+                title: "Listar comisiones sin asignar"
+            }
+        ];
+        const contentSideBar = document.getElementById("content-side-bar");
+        contentSideBar.innerHTML += `<div class="text-white font-semibold text-lg">Docente</div>`;
+        docenteContent.forEach((e) => {
+            // console.log(e.href);
+            contentSideBar.innerHTML += `
         <li>
             <a href='${e.href}' class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-red-900 group">
                 <i class="${e.iconName} text-gray-200 text-opacity-90"></i>
@@ -111,10 +113,10 @@
             </a>
         </li>
     `;
-    });
-    contentSideBar.innerHTML += `<div class="pt-2 text-white font-semibold text-lg">General</div>`;
-    gralContent.forEach((e) => {
-        contentSideBar.innerHTML += `
+        });
+        contentSideBar.innerHTML += `<div class="pt-2 text-white font-semibold text-lg">General</div>`;
+        gralContent.forEach((e) => {
+            contentSideBar.innerHTML += `
         <li>
             <a href='${e.href}' class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-red-900 group">
                 <i class="${e.iconName} text-gray-200 text-opacity-90"></i>
@@ -122,34 +124,79 @@
             </a>
         </li>
     `;
-    });
+        });
     </script>
 </div>
 {% endblock %}
 
 {% block body-content %}
+<div class="h-full sm:ml-64 flex items-center justify-center flex-col bg-green-100">
+    <form method="post" action="{% url 'docente-asignar-comision' legajo=docente.legajo %}">
+        {% csrf_token %}
+        <!-- Dropdown - Cargo -->
+        <div class="h-full w-full flex flex-col items-center justify-center">
+            <select id="select-cargo" name="select-cargo" class="bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
+                <option disabled selected>Seleccione un Cargo</option>
+                {% for cargo in cargos %}
+                    <option value="{{ cargo.nro_cargo }}">Cargo N° {{ cargo.nro_cargo }}</option>
+                {% endfor %}    
+            </select>
+        </div>
+        
+        <!-- Dropdown - Institutos -->
+        <div class="h-full w-full flex flex-col items-center justify-center">
+            <select id="select-instituto" name="select-instituto" class="bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
+                <option disabled selected>Seleccione un Instituto</option>
+                {% for instituto in institutos %}
+                    <option value="{{ instituto.pk }}">{{ instituto.nombre }}</option>
+                {% endfor %}    
+            </select>
+        </div> 
 
-<div class="p-1 pl-7 sm:ml-64">
+        <!-- 
+            ToDo: Validar en el lado del server que realmente esté bien la relación Instituto-Carrera que están enviando, porque noté que es posible desjar pegada una carrera de un instituto seleccionado con anterioridad 
+        -->
 
-  
-  <form method="post" action="{% url 'docente-asignar-comision' legajo=docente.pk %}">
-      {% csrf_token %}
-      <!-- Mostrar dropdownlist para seleccionar Cargo -->
-      <label for="{{ form.cargo.id_for_label }}">Cargo:</label>
-      <select name="{{ form.cargo.name }}" id="{{ form.cargo.id_for_label }}">
-        {% for cargo in cargo %}
-          <option value="{{ cargo.pk }}">{{ cargo.nro_cargo }}</option>
-        {% endfor %}
-      </select>
+        <!-- Dropdown - Carreras -->
+        <div class="h-full w-full flex flex-col items-center justify-center">
+            <select id="select-carrera" name="select-carrera" class="bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
+                <option disabled selected>Seleccione una Carrera</option>
+                {% for carrera_instituto in carreras_institutos %}
+                    <option id="{{ carrera_instituto.instituto.pk }}" value="{{ carrera_instituto.carrera.pk }}">{{ carrera_instituto.carrera.nombre }}</option>
+                {% endfor %}    
+            </select>
+        </div>
 
-        <!-- Mostrar dropdownlist para seleccionar Comision -->
+        <!-- Dropdown - Materias -->
+        <div class="ml-64 h-full w-1/2 flex flex-col items-center justify-center">
+            <select id="select-materia" name="select-materia" class="bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
+                <option disabled selected>Seleccione una Materia</option>
+                {% for materia_carrera in materias_carreras %}
+                    <option id="{{ materia_carrera.carrera.pk }}" value="{{ materia_carrera.materia.pk }}">{{ materia_carrera.materia.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Dropdown - Comisiones -->
+        <div class="ml-64 h-full w-1/2 flex flex-col items-center justify-center">
+            <select id="select-comision" name="select-comision" class="bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
+                <option disabled selected>Seleccione una Comisión</option>
+                {% for comision in comisiones %}
+                    <option id="{{ comision.materia.pk }}" value="{{ comision.pk }}">{{ comision.nombre }} || {{ comision.materia.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+</div>
+
+<!-- Mostrar dropdownlist para seleccionar Comision -->
 
 
-        <label for="{{ form.comision.id_for_label }}">Comision:</label>
+<!-- <label for="{{ form.comision.id_for_label }}">Comision:</label>
         <select name="{{ form.comision.name }}" id="{{ form.comision.id_for_label }}" class="custom-select">
-          {% for comision in comision %}
+            {% for comision in comision %}
             <option value="{{ comision.pk }}">{{ comision.nombre }} - {{comision.materia.nombre}} </option>
-          {% endfor %}
+            {% endfor %}
         </select>
 
         <label for="{{ form.fecha_desde.id_for_label }}">Fecha desde:</label>
@@ -159,23 +206,97 @@
             {% endfor %}
         </select>
 
-      <label for="fecha_hasta">Fecha hasta:</label>
-      <input type="date" name="fecha_hasta" required>
-      <br>
+        <label for="fecha_hasta">Fecha hasta:</label>
+        <input type="date" name="fecha_hasta" required>
+        <br>
 
-      <label for="hora_inicio">Hora inicio:</label>
-      <input type="time" name="hora_inicio" required>
-      <br>
+        <label for="hora_inicio">Hora inicio:</label>
+        <input type="time" name="hora_inicio" required>
+        <br>
 
-      <label for="hora_finalizacion">Hora finalización:</label>
-      <input type="time" name="hora_finalizacion" required>
-      <br>
+        <label for="hora_finalizacion">Hora finalización:</label>
+        <input type="time" name="hora_finalizacion" required>
+        <br>
 
-      <input type="submit" value="Guardar">
-  </form>
+        <input type="submit" value="Guardar">
+    </form> -->
 
 {% endblock %}
 
 {% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const selectInstituto = document.getElementById("select-instituto");
+        const selectCarrera = document.getElementById("select-carrera");
+        const selectMateria = document.getElementById("select-materia");
+        const selectComision = document.getElementById("select-comision");
+        
+        const carreraOptions = selectCarrera.querySelectorAll("option");
+        const materiaOptions = selectMateria.querySelectorAll("option");
+        const comisionOptions = selectComision.querySelectorAll("option");
 
+        // Función para mostrar u ocultar las opciones de carrera según el instituto seleccionado
+        const actualizarCarreras = () => {
+            const institutoId = selectInstituto.value;
+
+            // Ocultar todas las opciones de carrera
+            carreraOptions.forEach(option => {
+                option.style.display = "none";
+            });
+
+            // Mostrar las opciones correspondientes al instituto seleccionado
+            const opcionesMostrar = selectCarrera.querySelectorAll(`option[id="${institutoId}"]`);
+            opcionesMostrar.forEach(opcion => {
+                opcion.style.display = "block";
+            });
+
+            // Al cambiar el instituto, también se debe actualizar las materias y comisiones
+            actualizarMaterias();
+        }
+
+        // Función para mostrar u ocultar las opciones de materia según la carrera seleccionada
+        const actualizarMaterias = () => {
+            const carreraId = selectCarrera.value;
+
+            // Ocultar todas las opciones de materia
+            materiaOptions.forEach(option => {
+                option.style.display = "none";
+            });
+
+            // Mostrar las opciones correspondientes a la carrera seleccionada
+            const opcionesMostrar = selectMateria.querySelectorAll(`option[id="${carreraId}"]`);
+            opcionesMostrar.forEach(opcion => {
+                opcion.style.display = "block";
+            });
+
+            // Al cambiar la carrera, también se debe actualizar las comisiones
+            actualizarComisiones();
+        }
+
+        // Función para mostrar u ocultar las opciones de comisión según la materia seleccionada
+        const actualizarComisiones = () => {
+            const materiaId = selectMateria.value;
+
+            // Ocultar todas las opciones de comisión
+            comisionOptions.forEach(option => {
+                option.style.display = "none";
+            });
+
+            // Mostrar las opciones correspondientes a la materia seleccionada
+            const opcionesMostrar = selectComision.querySelectorAll(`option[id="${materiaId}"]`);
+            opcionesMostrar.forEach(opcion => {
+                opcion.style.display = "block";
+            });
+        }
+
+        // Evento de cambio en el select-instituto
+        selectInstituto.addEventListener("change", actualizarCarreras);
+        
+        // Evento de cambio en el select-carrera
+        selectCarrera.addEventListener("change", actualizarMaterias);
+        
+        // Evento de cambio en el select-materia
+        selectMateria.addEventListener("change", actualizarComisiones);
+    });
+</script>
 {% endblock %}
