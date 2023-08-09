@@ -131,8 +131,8 @@ class Cargo(models.Model):
 
 
 class Carga_Horaria(models.Model):
-    hora_inicio = models.CharField(max_length=5)
-    hora_fin = models.CharField(max_length=5)
+    hora_inicio = models.CharField(max_length=8)
+    hora_fin = models.CharField(max_length=8)
     dia_semana = models.CharField(max_length=25)
     fecha_desde = models.CharField(max_length=10)
     fecha_hasta = models.CharField(max_length=10)
@@ -140,14 +140,15 @@ class Carga_Horaria(models.Model):
 
 class Comision_CH(models.Model):
     comision = models.ForeignKey(Comision, on_delete=models.CASCADE)
-    Carga_Horaria = models.ForeignKey(Carga_Horaria, on_delete=models.CASCADE)
+    carga_horaria = models.ForeignKey(Carga_Horaria, on_delete=models.CASCADE)
 
 
+# Debe ser llenado en asignar-comision u en el general de asignar-franja-horaria
 class Cargo_CH(models.Model):
     cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
-    Carga_Horaria = models.ForeignKey(Carga_Horaria, on_delete=models.CASCADE)
+    carga_horaria = models.ForeignKey(Carga_Horaria, on_delete=models.CASCADE)
 
 
 class Tipo_Extra_CH(models.Model):
     tipo_extra = models.ForeignKey(Tipo_Extra, on_delete=models.CASCADE)
-    Carga_Horaria = models.ForeignKey(Carga_Horaria, on_delete=models.CASCADE)
+    carga_horaria = models.ForeignKey(Carga_Horaria, on_delete=models.CASCADE)

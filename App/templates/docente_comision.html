@@ -182,7 +182,21 @@
             <select id="select-comision" name="select-comision" class="bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
                 <option disabled selected>Seleccione una Comisión</option>
                 {% for comision in comisiones %}
-                    <option id="{{ comision.materia.pk }}" value="{{ comision.pk }}">{{ comision.nombre }} || {{ comision.materia.nombre }}</option>
+                    <option id="{{ comision.materia.pk }}" value="{{ comision.pk }}">
+                        {{ comision.nombre }} || {{ comision.materia.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Dropdown - Comisiones-Carga-Horaria -->
+        <div class="ml-64 h-full w-1/2 flex flex-col items-center justify-center">
+            <select id="select-comision_ch" name="select-comision_ch" class="bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
+                <option disabled selected>Seleccione una Franja Horaria</option>
+                {% for comision_ch in comisiones_ch %}
+                    <option id="{{ comision_ch.comision.pk }}" value="{{ comision_ch.pk }}">
+                        {{ comision_ch.carga_horaria.hora_inicio }}hs - {{ comision_ch.carga_horaria.hora_fin }}hs
+                    </option>
                 {% endfor %}
             </select>
         </div>
@@ -230,25 +244,23 @@
         const selectCarrera = document.getElementById("select-carrera");
         const selectMateria = document.getElementById("select-materia");
         const selectComision = document.getElementById("select-comision");
+        const selectComisionCh = document.getElementById("select-comision_ch");
         
         const carreraOptions = selectCarrera.querySelectorAll("option");
         const materiaOptions = selectMateria.querySelectorAll("option");
         const comisionOptions = selectComision.querySelectorAll("option");
+        const comisionChOptions = selectComisionCh.querySelectorAll("option");
 
         // Función para mostrar u ocultar las opciones de carrera según el instituto seleccionado
         const actualizarCarreras = () => {
             const institutoId = selectInstituto.value;
-
+            
             // Ocultar todas las opciones de carrera
-            carreraOptions.forEach(option => {
-                option.style.display = "none";
-            });
+            carreraOptions.forEach(option => { option.style.display = "none" });
 
             // Mostrar las opciones correspondientes al instituto seleccionado
             const opcionesMostrar = selectCarrera.querySelectorAll(`option[id="${institutoId}"]`);
-            opcionesMostrar.forEach(opcion => {
-                opcion.style.display = "block";
-            });
+            opcionesMostrar.forEach(opcion => { opcion.style.display = "block" });
 
             // Al cambiar el instituto, también se debe actualizar las materias y comisiones
             actualizarMaterias();
@@ -257,17 +269,13 @@
         // Función para mostrar u ocultar las opciones de materia según la carrera seleccionada
         const actualizarMaterias = () => {
             const carreraId = selectCarrera.value;
-
+            
             // Ocultar todas las opciones de materia
-            materiaOptions.forEach(option => {
-                option.style.display = "none";
-            });
+            materiaOptions.forEach(option => { option.style.display = "none" });
 
             // Mostrar las opciones correspondientes a la carrera seleccionada
             const opcionesMostrar = selectMateria.querySelectorAll(`option[id="${carreraId}"]`);
-            opcionesMostrar.forEach(opcion => {
-                opcion.style.display = "block";
-            });
+            opcionesMostrar.forEach(opcion => { opcion.style.display = "block" });
 
             // Al cambiar la carrera, también se debe actualizar las comisiones
             actualizarComisiones();
@@ -278,25 +286,36 @@
             const materiaId = selectMateria.value;
 
             // Ocultar todas las opciones de comisión
-            comisionOptions.forEach(option => {
-                option.style.display = "none";
-            });
+            comisionOptions.forEach(option => { option.style.display = "none" });
 
             // Mostrar las opciones correspondientes a la materia seleccionada
             const opcionesMostrar = selectComision.querySelectorAll(`option[id="${materiaId}"]`);
-            opcionesMostrar.forEach(opcion => {
-                opcion.style.display = "block";
-            });
+            opcionesMostrar.forEach(opcion => { opcion.style.display = "block" });
+
+            // Al cambiar la materia, también se debe actualizar las comisiones_ch
+            actualizarComisionesCh();
+        }
+
+         // Función para mostrar u ocultar las opciones de comisión_ch según la comisión seleccionada
+        const actualizarComisionesCh = () => {
+            const comisionId = selectComision.value;
+
+            // Ocultar todas las opciones de comision_ch
+            comisionChOptions.forEach(option => { option.style.display = "none" });
+
+            // Mostrar las opciones correspondientes a la comisión seleccionada
+            const opcionesMostrar = selectComisionCh.querySelectorAll(`option[id="${comisionId}"]`);
+            opcionesMostrar.forEach(opcion => { opcion.style.display = "block" });
         }
 
         // Evento de cambio en el select-instituto
         selectInstituto.addEventListener("change", actualizarCarreras);
-        
         // Evento de cambio en el select-carrera
         selectCarrera.addEventListener("change", actualizarMaterias);
-        
         // Evento de cambio en el select-materia
         selectMateria.addEventListener("change", actualizarComisiones);
+        // Evento de cambio en el select-comision
+        selectComision.addEventListener("change", actualizarComisionesCh);
     });
 </script>
 {% endblock %}
