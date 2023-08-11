@@ -2,11 +2,12 @@ from django.views.generic import TemplateView
 from django.shortcuts import render
 import requests
 from requests.exceptions import ConnectTimeout
-import datetime
+from datetime import datetime, date
 from App.models.mapa_de_carreras import *
 from App.models.guarani import *
 import magic
-
+import math
+from decimal import Decimal
 
 class DocenteDetalleView(TemplateView): # Detalle para un único docente
     template_name = 'docente_detalle.html'
@@ -113,8 +114,8 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
                     # !Comment IMPORTANTE: los valores null de la API se traducen a None implícitamente
                     
                     if c.get('fecha_baja') is not None: # Obtengo el valor de la fecha_baja para poder comparar
-                        fecha_baja = datetime.datetime.strptime(c.get('fecha_baja'), '%Y-%m-%d').date()
-                    fecha_actual = datetime.date.today() # Obtengo la fecha actual
+                        fecha_baja = datetime.strptime(c.get('fecha_baja'), '%Y-%m-%d').date()
+                    fecha_actual = date.today() # Obtengo la fecha actual
         
                     if (fecha_baja is None) or (fecha_baja >= fecha_actual): # Comparo los dates obtenidos y Add a cargos_activos // para el template
                         activo = 1
@@ -163,6 +164,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
             # print('docente: ', docente)
             cargos = Cargo.objects.filter(docente=docente, activo=1)
             # print('cargos: ', cargos)
+            total_horas = 0.00 # será un valor decimal
             for c in cargos:
                 # print(c)
                 cargos_activos.append(c) # Los añadimos al diccionario que recibirá al template
@@ -170,13 +172,28 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
                 # ----------- #
                 # POR HACER...
                 #
-                #Agregar comisiones(y materia correspondiente), tareas extras
+                # Agregar comisiones(y materia correspondiente), tareas extras
                 #
                 # .............................................................................. #
                 # ......... Visualización de las cargas horarias asignadas al docente .......... #
                 # .............................................................................. #
                 #
                 # !Comment: Debería mostar algo sólo si existen cargas horarias ya creadas para el cargo, sino eso estaría vacío
+                comisiones_cte_ch = Cargo_CTE_CH.objects.filter(cargo=c)
+                print(comisiones_cte_ch)
+
+                for c_cte_ch in comisiones_cte_ch:
+                    if (c_cte_ch.comision_ch is not None): 
+                        hora_inicio = datetime.strptime(c_cte_ch.comision_ch.carga_horaria.hora_inicio, "%H:%M:%S")
+                        hora_fin = datetime.strptime(c_cte_ch.comision_ch.carga_horaria.hora_fin, "%H:%M:%S")
+                    elif (c_cte_ch.tipo_extra_ch is not None):
+                        hora_inicio = datetime.strptime(c_cte_ch.tipo_extra_ch.carga_horaria.hora_inicio, "%H:%M:%S")
+                        hora_fin = datetime.strptime(c_cte_ch.tipo_extra_ch.carga_horaria.hora_fin, "%H:%M:%S")
+                    #
+                    diferencia_tiempo = hora_fin - hora_inicio
+                    diferencia_horas = diferencia_tiempo.total_seconds() // 60  # Obtener la diferencia en horas redondeadas
+                    total_horas += diferencia_horas
+                print(total_horas)
                 
 
         # Dependencia de designación # Por ahora no sabemos de donde sacarla
@@ -198,7 +215,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
         #     print(materia.nombre)
         
         DocenteDetalleView.cargos_activos = cargos_activos
-        return render(request, self.template_name, {'docente': docente, 'cargos_activos': cargos_activos}) # materias, comisiones, tareas extras
+        return render(request, self.template_name, {'docente': docente, 'cargos_activos': cargos_activos, 'comisiones_cte_ch': comisiones_cte_ch, 'total_horas': total_horas }) # materias, comisiones, tareas extras
 
         
     def post(self, request, legajo):

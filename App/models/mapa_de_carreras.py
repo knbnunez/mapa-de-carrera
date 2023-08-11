@@ -143,12 +143,14 @@ class Comision_CH(models.Model):
     carga_horaria = models.ForeignKey(Carga_Horaria, on_delete=models.CASCADE)
 
 
-# Debe ser llenado en asignar-comision u en el general de asignar-franja-horaria
-class Cargo_CH(models.Model):
-    cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
-    carga_horaria = models.ForeignKey(Carga_Horaria, on_delete=models.CASCADE)
-
-
 class Tipo_Extra_CH(models.Model):
     tipo_extra = models.ForeignKey(Tipo_Extra, on_delete=models.CASCADE)
     carga_horaria = models.ForeignKey(Carga_Horaria, on_delete=models.CASCADE)
+
+
+# Debe ser llenado en asignar-comision u en el general de asignar-franja-horaria
+class Cargo_CTE_CH(models.Model):
+    cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
+    # uno siempre será null
+    comision_ch = models.ForeignKey(Comision_CH, on_delete=models.CASCADE, null=True, default=None)
+    tipo_extra_ch = models.ForeignKey(Tipo_Extra_CH, on_delete=models.CASCADE, null=True, default=None)

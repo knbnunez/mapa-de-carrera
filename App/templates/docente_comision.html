@@ -134,7 +134,7 @@
     <form method="post" action="{% url 'docente-asignar-comision' legajo=docente.legajo %}">
         {% csrf_token %}
         <!-- Dropdown - Cargo -->
-        <div class="h-full w-full flex flex-col items-center justify-center">
+        <div class="h-1/6 w-full flex flex-col items-center justify-center">
             <select id="select-cargo" name="select-cargo" class="bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
                 <option disabled selected>Seleccione un Cargo</option>
                 {% for cargo in cargos %}
@@ -144,7 +144,7 @@
         </div>
         
         <!-- Dropdown - Institutos -->
-        <div class="h-full w-full flex flex-col items-center justify-center">
+        <div class="h-1/6 w-full flex flex-col items-center justify-center">
             <select id="select-instituto" name="select-instituto" class="bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
                 <option disabled selected>Seleccione un Instituto</option>
                 {% for instituto in institutos %}
@@ -158,7 +158,7 @@
         -->
 
         <!-- Dropdown - Carreras -->
-        <div class="h-full w-full flex flex-col items-center justify-center">
+        <div class="h-1/6 w-full flex flex-col items-center justify-center">
             <select id="select-carrera" name="select-carrera" class="bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
                 <option disabled selected>Seleccione una Carrera</option>
                 {% for carrera_instituto in carreras_institutos %}
@@ -168,7 +168,7 @@
         </div>
 
         <!-- Dropdown - Materias -->
-        <div class="ml-64 h-full w-1/2 flex flex-col items-center justify-center">
+        <div class="h-1/6 w-1/2 flex flex-col items-center justify-center">
             <select id="select-materia" name="select-materia" class="bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
                 <option disabled selected>Seleccione una Materia</option>
                 {% for materia_carrera in materias_carreras %}
@@ -178,19 +178,19 @@
         </div>
 
         <!-- Dropdown - Comisiones -->
-        <div class="ml-64 h-full w-1/2 flex flex-col items-center justify-center">
+        <div class="h-1/6 w-1/2 flex flex-col items-center justify-center">
             <select id="select-comision" name="select-comision" class="bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
                 <option disabled selected>Seleccione una Comisión</option>
                 {% for comision in comisiones %}
                     <option id="{{ comision.materia.pk }}" value="{{ comision.pk }}">
-                        {{ comision.nombre }} || {{ comision.materia.nombre }}
+                        {{ comision.pk }} || {{ comision.nombre }} || {{ comision.materia.nombre }} || {{ comision.ubicacion.nombre }}
                     </option>
                 {% endfor %}
             </select>
         </div>
 
         <!-- Dropdown - Comisiones-Carga-Horaria -->
-        <div class="ml-64 h-full w-1/2 flex flex-col items-center justify-center">
+        <div class="h-1/6 w-1/2 flex flex-col items-center justify-center">
             <select id="select-comision_ch" name="select-comision_ch" class="bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
                 <option disabled selected>Seleccione una Franja Horaria</option>
                 {% for comision_ch in comisiones_ch %}
@@ -199,6 +199,12 @@
                     </option>
                 {% endfor %}
             </select>
+        </div>
+
+        <div class="mt-8 mr-12 flex justify-end">
+            <button type="submit" class="relative w-32 h-8 px-1 py-1 bg-gray-200 text-gray-700 rounded-md shadow-md hover:bg-gray-300 text-sm font-semibold">
+                Guardar cambios
+            </button>
         </div>
     </form>
 </div>
@@ -238,7 +244,7 @@
 {% endblock %}
 
 {% block scripts %}
-<!-- <script>
+<script>
     document.addEventListener("DOMContentLoaded", () => {
         const selectInstituto = document.getElementById("select-instituto");
         const selectCarrera = document.getElementById("select-carrera");
@@ -317,5 +323,5 @@
         // Evento de cambio en el select-comision
         selectComision.addEventListener("change", actualizarComisionesCh);
     });
-</script> -->
+</script>
 {% endblock %}

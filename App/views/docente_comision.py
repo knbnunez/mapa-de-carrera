@@ -30,7 +30,7 @@ class DocenteComisionView(TemplateView): # Detalle para un único docente
         materias_carreras = Materia_Carrera.objects.select_related('materia', 'carrera').all()
         comisiones = Comision.objects.select_related('materia', 'ubicacion').all()
         comisiones_ch = Comision_CH.objects.select_related('comision', 'carga_horaria').all()
-        print(comisiones_ch)
+        # print(comisiones_ch)
 
         # ToDo: asignaciones: fecha_desde, fecha_hasta, hora_inicio, hora_fin
 
@@ -52,37 +52,26 @@ class DocenteComisionView(TemplateView): # Detalle para un único docente
 
         #  context['fecha_desde'] = fecha_desde
         # context['form'] = self.form_class()
-        print("Termino de traer los datos súper rápido, qué es lo que tarda?, es del lado del cliente") 
+        # print("Termino de traer los datos súper rápido, qué es lo que tarda?, es del lado del cliente") 
         return context
     
     
     def post(self, request, legajo):
-        # Obtener el docente y el cargo asociados a los IDs proporcionados
-        # docente = get_object_or_404(Docente, pk=legajo)
-        # cargos = Cargo.objects.filter(docente=docente, activo=1) 
-        # comisiones = Comision.objects.select_related('materia') 
-        # fecha_desde = SgaComisionesBH.objects.all() 
-        # form = self.form_class(request.POST)
-        # if form.is_valid():
-        #     # Guardar el formulario si es válido
-        #     carga_extra = form.save(commit=False)
-        #     #carga_extra.cargo = cargos
-        #     #carga_extra.comision = comisiones 
-        #     carga_extra.save()
-        #   return render(request, 'docente_comision.html', {
-        #    'docente': docente, 
-        #    'cargos': cargos, 
-        # #    'fecha_desde': fecha_desde,
-        #    'comisiones': comisiones,
-        # #    'form': form
-        #    })
+        select_cargo = request.POST.get('select-cargo')
+        # print(select_cargo)
+        select_comision_ch = request.POST.get('select-comision_ch')
+        # print(select_comision_ch)
 
-        # docente = get_object_or_404(Docente, pk=self.kwargs['legajo'])
-        # cargos = Cargo.objects.filter(docente=docente, activo=1)  # Filtra solo los cargos activos del docente
-        # institutos = Instituto.objects.all
-        # carreras_institutos = Carrera_Instituto.objects.all
-        # materias_carreras = Materia_Carrera.objects.all
-        # comisiones = Comision.objects.all
+        # ToDo comprobar que sea correcta la combinación de inputs elegidos, instituto - carrera - materia - comisión - franja horaria
+
+        cargo = Cargo.objects.get(nro_cargo=select_cargo)
+        comision_ch = Comision_CH.objects.get(pk=select_comision_ch)
+        
+        comision_cte_ch, _ = Cargo_CTE_CH.objects.get_or_create(
+            cargo=cargo,
+            comision_ch=comision_ch,
+            tipo_extra_ch=None
+        )
         return self.get(request, legajo)
 
         
