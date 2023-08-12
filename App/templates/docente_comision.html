@@ -131,6 +131,9 @@
 
 {% block body-content %}
 <div class="h-full sm:ml-64 flex items-center justify-center flex-col bg-green-100">
+    {% if alert is not none %}
+        <div class="h-1/6 sm:ml-64 flex flex-col items-center justify-start"><script> alert("{{ alert }}")</script></div>
+    {% endif %}
     <form method="post" action="{% url 'docente-asignar-comision' legajo=docente.legajo %}">
         {% csrf_token %}
         <!-- Dropdown - Cargo -->
@@ -152,10 +155,6 @@
                 {% endfor %}    
             </select>
         </div> 
-
-        <!-- 
-            ToDo: Validar en el lado del server que realmente esté bien la relación Instituto-Carrera que están enviando, porque noté que es posible desjar pegada una carrera de un instituto seleccionado con anterioridad 
-        -->
 
         <!-- Dropdown - Carreras -->
         <div class="h-1/6 w-full flex flex-col items-center justify-center">
@@ -183,7 +182,7 @@
                 <option disabled selected>Seleccione una Comisión</option>
                 {% for comision in comisiones %}
                     <option id="{{ comision.materia.pk }}" value="{{ comision.pk }}">
-                        {{ comision.pk }} || {{ comision.nombre }} || {{ comision.materia.nombre }} || {{ comision.ubicacion.nombre }}
+                        {{ comision.nombre }} {{ comision.materia.nombre }} ({{ comision.ubicacion.nombre }})
                     </option>
                 {% endfor %}
             </select>
@@ -195,7 +194,7 @@
                 <option disabled selected>Seleccione una Franja Horaria</option>
                 {% for comision_ch in comisiones_ch %}
                     <option id="{{ comision_ch.comision.pk }}" value="{{ comision_ch.pk }}">
-                        {{ comision_ch.carga_horaria.hora_inicio }}hs - {{ comision_ch.carga_horaria.hora_fin }}hs
+                        {{ comision_ch.carga_horaria.hora_inicio }}hs - {{ comision_ch.carga_horaria.hora_fin }}hs {{ comision_ch.carga_horaria.dia_semana }}
                     </option>
                 {% endfor %}
             </select>
@@ -209,37 +208,6 @@
     </form>
 </div>
 
-<!-- Mostrar dropdownlist para seleccionar Comision -->
-
-
-<!-- <label for="{{ form.comision.id_for_label }}">Comision:</label>
-        <select name="{{ form.comision.name }}" id="{{ form.comision.id_for_label }}" class="custom-select">
-            {% for comision in comision %}
-            <option value="{{ comision.pk }}">{{ comision.nombre }} - {{comision.materia.nombre}} </option>
-            {% endfor %}
-        </select>
-
-        <label for="{{ form.fecha_desde.id_for_label }}">Fecha desde:</label>
-        <select name="{{ form.fecha_desde.name }}" id="{{ form.fecha_desde_for_label }}">
-            {% for fecha_desde in fecha_desde %}
-            <option value="{{ fecha_desde.pk }}">{{ fecha_desde.asignacion.fecha_desde }}</option>
-            {% endfor %}
-        </select>
-
-        <label for="fecha_hasta">Fecha hasta:</label>
-        <input type="date" name="fecha_hasta" required>
-        <br>
-
-        <label for="hora_inicio">Hora inicio:</label>
-        <input type="time" name="hora_inicio" required>
-        <br>
-
-        <label for="hora_finalizacion">Hora finalización:</label>
-        <input type="time" name="hora_finalizacion" required>
-        <br>
-
-        <input type="submit" value="Guardar">
-    </form> -->
 
 {% endblock %}
 

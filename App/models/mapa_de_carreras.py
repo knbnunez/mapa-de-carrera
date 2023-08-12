@@ -131,11 +131,11 @@ class Cargo(models.Model):
 
 
 class Carga_Horaria(models.Model):
-    hora_inicio = models.CharField(max_length=8)
-    hora_fin = models.CharField(max_length=8)
+    hora_inicio = models.TimeField()
+    hora_fin = models.TimeField()
     dia_semana = models.CharField(max_length=25)
-    fecha_desde = models.CharField(max_length=10)
-    fecha_hasta = models.CharField(max_length=10)
+    fecha_desde = models.DateField()
+    fecha_hasta = models.DateField()
 
 
 class Comision_CH(models.Model):

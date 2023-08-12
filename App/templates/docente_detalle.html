@@ -271,6 +271,87 @@
         <div>
             <p>Total horas: {{ total_horas }}</p>
         </div>
+
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Cargo
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Comision/Tarea
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Hora inicio
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Hora fin
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Dia de semana
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Desde la Fecha
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Hasta la Fecha
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cte in comisiones_cte_ch %}
+                    <tr class="border-b bg-gray-800 border-gray-700">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{cte.cargo.nro_cargo}}
+                        </th>
+
+                        {% if cte.comision_ch is not none %}
+                        <td class="px-6 py-4">
+                            {{ cte.comision_ch.comision.nombre }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ cte.comision_ch.carga_horaria.hora_inicio }}hs
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ cte.comision_ch.carga_horaria.hora_fin }}hs
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ cte.comision_ch.carga_horaria.dia_semana }}
+                        </td>
+                        <th scope="col" class="px-6 py-3">
+                            {{ cte.comision_ch.carga_horaria.fecha_desde|date:"SHORT_DATE_FORMAT" }}
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            {{ cte.comision_ch.carga_horaria.fecha_hasta|date:"SHORT_DATE_FORMAT" }}
+                        </th>
+
+                        {% else %}
+                        <td class="px-6 py-4">
+                            {{ cte.tipo_extra_ch.tipo_extra.desc_extra }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ cte.tipo_extra_ch.carga_horaria.hora_inicio }}hs
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ cte.tipo_extra_ch.carga_horaria.hora_fin }}hs
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ cte.tipo_extra_ch.carga_horaria.dia_semana }}
+                        </td>
+                        <th scope="col" class="px-6 py-3">
+                            {{ cte.tipo_extra_ch.carga_horaria.fecha_desde|date:"SHORT_DATE_FORMAT" }}
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            {{ cte.tipo_extra_ch.carga_horaria.fecha_hasta|date:"SHORT_DATE_FORMAT" }}
+                        </th>
+
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 {% endblock %}
