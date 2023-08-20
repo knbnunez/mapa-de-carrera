@@ -119,13 +119,17 @@
 <!-- METER TODO EN UN FORM, INVESTIGAT ANTES... -->
 
 {% block body-content %}
-    <form method="post" action="{% url 'docente-asignar-modalidad' legajo=docente.legajo %}" class="h-full">{% csrf_token %}
-        <div class="h-2/3 sm:ml-64 flex items-center justify-evenly flex-col">
-            <div class="h-24 w-full flex items-center justify-center">
-                
+<div class="h-full sm:ml-64 pt-28 pb-28 flex flex-col items-center justify-center">
+    
+    <form class="flex flex-col h-full w-full" method="post" action="{% url 'docente-asignar-modalidad' legajo=docente.legajo %}">
+        {% csrf_token %}
+        
+        <!-- <div class="h-full flex items-center justify-evenly bg-green-200"> -->
+            
+            <div class="h-1/3 w-full flex sm:flex-row flex-col items-center justify-center">
                 <!-- Dropdown-list Cargo -->
-                <div class="h-full w-full flex flex-col items-center justify-center">
-                    <select id="select-cargo" name="select-cargo" class="h-2/5 w-2/3 pl-4 bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300" onchange="mostrarDatos()">
+                <div class="h-full w-full flex items-center justify-center">
+                    <select id="select-cargo" name="select-cargo" class="h-9 w-[60%] pl-4 bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300" onchange="mostrarDatos()">
                         <option disabled selected>Seleccione un Cargo</option>
                         {% for cargo in cargos %}
                             <option value="{{ cargo.nro_cargo }}">Cargo N° {{ cargo.nro_cargo }}</option>
@@ -134,8 +138,8 @@
                 </div>
                 
                 <!-- Dropdown-list Modalidad -->
-                <div class="h-full w-full flex flex-col items-center justify-center">
-                    <select id="select-modalidad" name="select-modalidad" class="h-2/5 w-2/3 pl-4 bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
+                <div class="h-full w-full flex items-center justify-center">
+                    <select id="select-modalidad" name="select-modalidad" class="h-9 w-[60%] pl-4 bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
                         <option disabled selected>Seleccione una Modalidad</option>
                         {% for modalidad in modalidades %}
                             <option value="{{ modalidad.desc_modal }}" class="options-modalidad">{{ modalidad.desc_modal }}</option>
@@ -144,119 +148,111 @@
                 </div>
             </div>
             
-            <div id="div-table" class="relative overflow-x-auto shadow-md sm:rounded-lg w-1/2 flex items-center justify-center">
-                <!-- Datos personales -->
-                <table class="table-auto w-full text-sm text-left text-gray-400">
-                    <thead class="text-xs text-gray-400 uppercase bg-gray-700">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">Numero</th>
-                            <th scope="col" class="px-6 py-3">Categoria</th>
-                            <th scope="col" class="px-6 py-3">Dedicación</th>
-                            <th scope="col" class="px-6 py-3">Modalidad</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for cargo in cargos %}
-                        <tr class="bg-gray-800 border-b border-gray-700">
-                            <td class="{{ cargo.nro_cargo }} px-6 py-4 font-semibold text-gray-300 ">{{cargo.nro_cargo}}</td>
-                            <td class="{{ cargo.nro_cargo }} px-6 py-4 ">{{cargo.categoria.desc_categ}}</td>
-                            <td class="{{ cargo.nro_cargo }} px-6 py-4 ">{{cargo.dedicacion.desc_dedic}}</td>
-                            <td class="{{ cargo.nro_cargo }} px-6 py-4 ">{{cargo.modalidad.desc_modal}}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <!-- <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400"> -->
+
+            <div id="div-table" class="h-1/3 w-full py-8 sm:px-72 px-2">
+                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                    <!-- Datos personales -->
+                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-400 uppercase bg-gray-700">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">Numero</th>
+                                <th scope="col" class="px-6 py-3">Categoria</th>
+                                <th scope="col" class="px-6 py-3">Dedicación</th>
+                                <th scope="col" class="px-6 py-3">Modalidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cargo in cargos %}
+                            <tr class="bg-gray-800 border-b border-gray-700">
+                                <td class="{{ cargo.nro_cargo }} px-6 py-4 font-semibold text-gray-300">{{cargo.nro_cargo}}</td>
+                                <td class="{{ cargo.nro_cargo }} px-6 py-4">{{cargo.categoria.desc_categ}}</td>
+                                <td class="{{ cargo.nro_cargo }} px-6 py-4">{{cargo.dedicacion.desc_dedic}}</td>
+                                <td class="{{ cargo.nro_cargo }} px-6 py-4">{{cargo.modalidad.desc_modal}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-        </div>
-        
-        {% if alert is not none %}
-            <div class="h-1/6 sm:ml-64 flex flex-col items-center justify-start">
-                <h5>
-                    <script> alert("{{ alert }}") </script>
-                </h5>
-            </div>
-        {% endif %}
-        
-        <div class="h-1/6 sm:ml-64 flex flex-row">
-            <div class="w-1/3 h-full"></div>
-            <div class="w-1/3 h-full"></div>
-            <div class="w-1/3 h-full flex items-center justify-center">
-                <button type="submit" class="relative w-32 h-8 px-1 py-1 bg-gray-200 text-gray-700 rounded-md shadow-md hover:bg-gray-300 text-sm font-semibold">
+            <div class="h-1/3 w-full flex items-center justify-center">
+                <button type="submit" class="w-32 h-8 bg-gray-200 text-gray-700 rounded-md shadow-md hover:bg-gray-300 text-sm font-semibold">
                     Guardar cambios
                 </button>
             </div>
-        </div>
-    </form>
 
-    <script>
-        // DISABLE inicial
-        const divTable = document.getElementById('div-table');
-        divTable.style.display = "none";
+        <!-- </div> -->
         
-        const tds = document.querySelectorAll('table td');
-        tds.forEach(td => {
-            td.style.display = "none"; // Aplica el estilo deseado a cada elemento <td>
-            // console.log(td);
-        });
+        {% if alert is not none %}
+        <div class="h-1/6 sm:ml-64 flex flex-col items-center justify-start"><script> alert("{{ alert }}")</script></div>
+        {% endif %}
 
-        let optionsModalidad = document.getElementsByClassName('options-modalidad');
-        // console.log(optionsModalidad);
-        optionsModalidad = Array.from(optionsModalidad);
-        // console.log(optionsModalidad);
+    </form>
+</div>
+
+<script>
+    // DISABLE inicial
+    const divTable = document.getElementById('div-table');
+    divTable.style.display = "none";
+    
+    const tds = document.querySelectorAll('table td');
+    tds.forEach(td => {
+        td.style.display = "none"; // Aplica el estilo deseado a cada elemento <td>
+        // console.log(td);
+    });
+
+    let optionsModalidad = document.getElementsByClassName('options-modalidad');
+    // console.log(optionsModalidad);
+    optionsModalidad = Array.from(optionsModalidad);
+    // console.log(optionsModalidad);
+    optionsModalidad.forEach(option => {
+        option.style.display = "none";
+    });
+
+
+    // Agrandar según necesidad
+    const dedicaciones = ["Simple", "Semided.", "Exclusiva"];
+    // func aux -> return true si el contenido es una dedicación (contemplada en el array dedicaciones)
+    const esDedicacion = ((innerHTML) => {
+        let result = false;
+        dedicaciones.forEach((d) => { if (innerHTML == d) result = true });
+        return result;
+    });
+    // func aux -> return array de modalidades a visibilizar (a sacar el display = none)
+    const returnModalidades = ((dedicacion) => {
+        if (dedicacion == "Simple") return ["Docencia/Desarrollo profesional"];
+        else if (dedicacion == "Exclusiva") return ["Docencia e Investigación"];
+        else return ["Docencia/Desarrollo profesional", "Docencia e Investigación"];
+    });
+
+    const selectCargo = document.getElementById('select-cargo');
+    const selectModalidad = document.getElementById('select-modalidad');
+    
+    // => OnChange
+    const mostrarDatos = () => {
+        // console.log('Value en select-cargo: ', selectCargo.value);
+        divTable.style.display = "block";
+
         optionsModalidad.forEach(option => {
             option.style.display = "none";
         });
 
+        tds.forEach(td => {
+            // console.log(td.classList);
+            if (td.classList[0] == selectCargo.value) td.style.display = "table-cell";
+            else td.style.display = "none";
 
-        // Agrandar según necesidad
-        const dedicaciones = ["Simple", "Semided.", "Exclusiva"];
-        // func aux -> return true si el contenido es una dedicación (contemplada en el array dedicaciones)
-        const esDedicacion = ((innerHTML) => {
-            let result = false;
-            dedicaciones.forEach((d) => { if (innerHTML == d) result = true });
-            return result;
-        });
-        // func aux -> return array de modalidades a visibilizar (a sacar el display = none)
-        const returnModalidades = ((dedicacion) => {
-            if (dedicacion == "Simple") return ["Docencia/Desarrollo profesional"];
-            else if (dedicacion == "Exclusiva") return ["Docencia e Investigación"];
-            else return ["Docencia/Desarrollo profesional", "Docencia e Investigación"];
-        });
-
-        const selectCargo = document.getElementById('select-cargo');
-        const selectModalidad = document.getElementById('select-modalidad');
-        
-        // => OnChange
-        const mostrarDatos = () => {
-            // console.log('Value en select-cargo: ', selectCargo.value);
-            divTable.style.display = "block";
-
-            optionsModalidad.forEach(option => {
-                option.style.display = "none";
-            });
-
-            tds.forEach(td => {
-                // console.log(td.classList);
-                if (td.classList[0] == selectCargo.value) td.style.display = "table-cell";
-                else td.style.display = "none";
-
-                if ((td.classList[0] == selectCargo.value) && (esDedicacion(td.innerHTML))) {
-                    const modalidades = returnModalidades(td.innerHTML);
-                    optionsModalidad.forEach(o => {
-                        // console.log(selectCargo.value);
-                        // console.log(modalidades.includes(o.innerHTML));
-                        if (modalidades.includes(o.innerHTML)) o.style.display = "block";
-                    });
-                }
-            })
-
-        };
-
-        
-
-        
-    </script>
-    
-
+            if ((td.classList[0] == selectCargo.value) && (esDedicacion(td.innerHTML))) {
+                const modalidades = returnModalidades(td.innerHTML);
+                optionsModalidad.forEach(o => {
+                    // console.log(selectCargo.value);
+                    // console.log(modalidades.includes(o.innerHTML));
+                    if (modalidades.includes(o.innerHTML)) o.style.display = "block";
+                });
+            }
+        })
+    };
+</script>
 {% endblock %}

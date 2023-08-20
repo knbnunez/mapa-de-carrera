@@ -13,8 +13,9 @@ class DocenteModalidadView(TemplateView):
     def get(self, request, legajo):
         legajo = str(legajo) 
         docente = Docente.objects.get(legajo=legajo)
-        # -->   # cargos = Cargo.objects.filter(docente=docente, activo=1) # = cargos_activos
-        cargos = Cargo.objects.filter(docente=docente) 
+        # -->   
+        cargos = Cargo.objects.filter(docente=docente, activo=1) # = cargos_activos
+        # cargos = Cargo.objects.filter(docente=docente) 
         modalidades = Modalidad.objects.all
 
         return render(request, self.template_name, {'docente': docente, 'cargos': cargos, 'modalidades': modalidades, 'alert': self.alert})

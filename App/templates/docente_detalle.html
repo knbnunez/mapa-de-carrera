@@ -176,7 +176,6 @@
             </div>
         </dl>
 
-
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -227,9 +226,16 @@
                             <td class="px-6 py-4">
                                 {{c.fecha_alta|date:"SHORT_DATE_FORMAT"}}
                             </td>
+                            
+                            {% if c.fecha_baja is not None %}
                             <td class="px-6 py-4">
                                 {{c.fecha_baja|date:"SHORT_DATE_FORMAT"}}
                             </td>
+                            {% else %}
+                            <td class="px-6 py-4">
+                                No Definida
+                            </td>
+                            {% endif %}
 
                             <!-- Descarga de archivo -->
                             {% if c.resolucion %}
@@ -268,10 +274,11 @@
         </form>
         {% endif %}
 
-        <div>
-            <p>Total horas: {{ total_horas }}</p>
+        <div class="flex flex-col mb-3">
+            <dd class="text-lg font-semibold dark:text-black">Total Horas: {{ total_horas }}</dd>
         </div>
-
+        
+        {% if comisiones_cte_ch is not None %}
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -306,7 +313,7 @@
                             {{cte.cargo.nro_cargo}}
                         </th>
 
-                        {% if cte.comision_ch is not none %}
+                        {% if cte.comision_ch is not None %}
                         <td class="px-6 py-4">
                             {{ cte.comision_ch.comision.nombre }}
                         </td>
@@ -319,10 +326,10 @@
                         <td class="px-6 py-4">
                             {{ cte.comision_ch.carga_horaria.dia_semana }}
                         </td>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6 py-3 font-medium">
                             {{ cte.comision_ch.carga_horaria.fecha_desde|date:"SHORT_DATE_FORMAT" }}
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6 py-3 font-medium">
                             {{ cte.comision_ch.carga_horaria.fecha_hasta|date:"SHORT_DATE_FORMAT" }}
                         </th>
 
@@ -339,10 +346,10 @@
                         <td class="px-6 py-4">
                             {{ cte.tipo_extra_ch.carga_horaria.dia_semana }}
                         </td>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6 py-3 font-medium">
                             {{ cte.tipo_extra_ch.carga_horaria.fecha_desde|date:"SHORT_DATE_FORMAT" }}
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6 py-3 font-medium">
                             {{ cte.tipo_extra_ch.carga_horaria.fecha_hasta|date:"SHORT_DATE_FORMAT" }}
                         </th>
 
@@ -352,6 +359,8 @@
                 </tbody>
             </table>
         </div>
+        {% endif %}
+            
     </div>
 </div>
 {% endblock %}

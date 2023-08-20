@@ -22,10 +22,14 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
     def get(self, request, legajo): # Se puede recuperar el param atr llamándolo como esta definido en urls.py en este caso: legajo
         legajo = str(legajo) # TODO: Revisar si la conversión afecta a las consultas a la base de datos. En el modelo, legajo es Integer     
         
+        docente = None # Inicializo
+        cargos = None 
+        cargos_activos = None
+        comisiones_cte_ch = None
+
         # .............................................................................. #
         # ............................ Info persona docente ............................ #
         # .............................................................................. #
-        docente = None # Inicializo
         url = self.url_mapuche+'agentes/'+legajo # /agentes/{legajo}
         try:
             response = requests.get(url, auth=(self.username, self.password), timeout=5)
@@ -52,7 +56,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
             docente = Docente.objects.get(legajo=legajo) # Lo recupero
         elif (docente is None) and (not Docente.objects.filter(legajo=legajo).exists()): 
             DocenteDetalleView.cargos_activos = None
-            return render(request, self.template_name, {'docente': docente, 'cargos_activos': None}) # Faltaría agregar las materias, comisiones... que también serían = None
+            return render(request, self.template_name, {'docente': docente, 'cargos_activos': cargos_activos, 'comisiones_cte_ch': comisiones_cte_ch, 'total_horas': None }) # Faltaría agregar las materias, comisiones... que también serían = None
 
         # Correo docente --------------------------------------------------------
         if docente is not None:
@@ -69,7 +73,6 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
         
 
         # Info cargo docente --------------------------------------------------------
-        cargos = None # Hay que inicializar sí o sí, sino no se van a cargar los nuevos valores del if que viene más abajo
         cargos_activos = [] # Lista de diccionarios auxiliar, facilita mostrar nombre de categoria, dedicación, otros. En lugar de mostrar solo el código  
         url = self.url_mapuche+'agentes/'+legajo+'/cargos' # /agentes/{legajo}/cargos
         try:
@@ -155,30 +158,40 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
         # Si se lograron almacenar cargos para el docente, los voy a almacenar los activos para poder mostrarlos por pantalla
         if (Cargo.objects.filter(docente=docente).exists()): # Caso en el que existe al menos un cargo en la BD, lo recupero
             cargos = Cargo.objects.filter(docente=docente, activo=1)
+            comisiones_cte_ch = []
             total_horas = 0.00 # será un valor decimal
             for c in cargos:
                 cargos_activos.append(c) # Los añadimos al diccionario que recibirá al template
 
                 # !Comment: Debería mostar algo sólo si existen cargas horarias ya creadas para el cargo, sino eso estaría vacío --> eso tiene que ser un control en el Template
                 current_date = timezone.now().date()
-                comisiones_cte_ch = Cargo_CTE_CH.objects.filter(
+                comisiones_cte_ch_aux = Cargo_CTE_CH.objects.filter(
                     cargo=c,
                     comision_ch__carga_horaria__fecha_hasta__gte=current_date
                 )
-                print(comisiones_cte_ch)
+                # print(comisiones_cte_ch_aux)
 
-                for c_cte_ch in comisiones_cte_ch:
+                for c_cte_ch in comisiones_cte_ch_aux:
+                    print(c_cte_ch.cargo)
+                    comisiones_cte_ch.append(c_cte_ch)
+                    
                     if (c_cte_ch.comision_ch is not None): 
+                        print(c_cte_ch.comision_ch.carga_horaria.fecha_hasta)
                         hora_inicio = c_cte_ch.comision_ch.carga_horaria.hora_inicio
                         hora_fin = c_cte_ch.comision_ch.carga_horaria.hora_fin
+                    
                     elif (c_cte_ch.tipo_extra_ch is not None):
+                        print(c_cte_ch.tipo_extra_ch.carga_horaria.fecha_hasta)
                         hora_inicio = c_cte_ch.tipo_extra_ch.carga_horaria.hora_inicio
                         hora_fin = c_cte_ch.tipo_extra_ch.carga_horaria.hora_fin
+                    
                     # Calcular la diferencia de tiempo manualmente
                     diferencia_horas = hora_fin.hour - hora_inicio.hour
-                    diferencia_minutos = hora_fin.minute - hora_inicio.minute
+                    if hora_fin.minute == 59: diferencia_minutos = (hora_fin.minute - hora_inicio.minute) + 1
+                    else: diferencia_minutos = hora_fin.minute - hora_inicio.minute
+                    
                     total_horas += diferencia_horas + diferencia_minutos / 60
-                print(total_horas)
+                    print(total_horas)
                 
 
         # Dependencia de designación # Por ahora no sabemos de donde sacarla
@@ -189,7 +202,8 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
         # materias = Materias.objects.using('guarani').all()
         # for materia in materias:
         #     print(materia.nombre)
-        
+
+
         DocenteDetalleView.cargos_activos = cargos_activos
         return render(request, self.template_name, {'docente': docente, 'cargos_activos': cargos_activos, 'comisiones_cte_ch': comisiones_cte_ch, 'total_horas': total_horas }) # materias, comisiones, tareas extras
 
