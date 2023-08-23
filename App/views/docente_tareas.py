@@ -24,7 +24,7 @@ class DocenteTareasView(TemplateView): # Detalle para un único docente
      #cargo = get_object_or_404(Cargo, pk=self.kwargs['nro_cargo'], docente=docente)
      context['docente'] = docente
      context['cargo'] = cargos
-     context['form'] = self.form_class() 
+    # context['form'] = self.form_class() 
      return context
     
     
