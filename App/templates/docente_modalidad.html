@@ -120,7 +120,9 @@
 
 {% block body-content %}
 <div class="h-full sm:ml-64 pt-28 pb-28 flex flex-col items-center justify-center">
-    
+    <div class="p-1 pl-7 sm:ml-4">
+        <h1 class="text-lg font-semibold dark:text-black">{{docente.nombre_apellido}}</h1>
+    </div>
     <form class="flex flex-col h-full w-full" method="post" action="{% url 'docente-asignar-modalidad' legajo=docente.legajo %}">
         {% csrf_token %}
         
