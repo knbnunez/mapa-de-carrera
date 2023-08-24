@@ -20,7 +20,10 @@ class DocenteComisionView(TemplateView): # Detalle para un único docente
         institutos = Instituto.objects.all()
         carreras_institutos = Carrera_Instituto.objects.select_related('carrera', 'instituto').all()
         materias_carreras = Materia_Carrera.objects.select_related('materia', 'carrera').all()
-        comisiones = Comision.objects.filter(comision_ch__carga_horaria__fecha_hasta__gte=current_date).select_related('materia', 'ubicacion').distinct()
+        # Descomentar!
+        # comisiones = Comision.objects.filter(comision_ch__carga_horaria__fecha_hasta__gte=current_date).select_related('materia', 'ubicacion').distinct()
+        # Para poder ver todas las comisiones relaciondas
+        comisiones = Comision.objects.select_related('materia', 'ubicacion').distinct()
         comisiones_ch = Comision_CH.objects.select_related('comision', 'carga_horaria').filter(carga_horaria__fecha_hasta__gte=current_date)
 
         context['docente'] = docente
