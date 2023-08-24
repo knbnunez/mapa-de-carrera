@@ -176,7 +176,7 @@
                     <select id="select-materia" name="select-materia" class="h-9 w-2/3 pl-2 bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
                         <option disabled selected>Seleccione una Materia</option>
                         {% for materia_carrera in materias_carreras %}
-                            <option id="{{ materia_carrera.carrera.pk }}" value="{{ materia_carrera.materia.pk }}">{{ materia_carrera.materia.nombre }}</option>
+                            <option id="{{ materia_carrera.carrera.pk }}" value="{{ materia_carrera.materia.pk }}">{{ materia_carrera.materia.pk }}-{{ materia_carrera.materia.nombre }}</option>
                         {% endfor %}
                     </select>
                 </div>
