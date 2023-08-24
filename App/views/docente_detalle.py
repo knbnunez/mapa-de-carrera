@@ -5,7 +5,7 @@ from requests.exceptions import ConnectTimeout
 from datetime import datetime, date, timedelta
 from App.models.mapa_de_carreras import *
 from App.models.guarani import *
-import magic
+
 import math
 from decimal import Decimal
 from django.utils import timezone

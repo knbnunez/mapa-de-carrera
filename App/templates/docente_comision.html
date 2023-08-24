@@ -136,7 +136,9 @@
     {% if alert is not none %}
         <div class="flex flex-col h-12 w-12 sm:ml-64 items-center justify-start"><script> alert("{{ alert }}")</script></div>
     {% endif %}
-
+    <div class="p-1 pl-7 sm:ml-4">
+        <h1 class="text-lg font-semibold dark:text-black">{{docente.nombre_apellido}}</h1>
+    </div>
     <form class="flex flex-col h-full w-full" method="post" action="{% url 'docente-asignar-comision' legajo=docente.legajo %}">
         {% csrf_token %}
                 
@@ -177,7 +179,7 @@
                     <select id="select-materia" name="select-materia" class="h-9 w-2/3 pl-2 bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
                         <option disabled selected>Seleccione una Materia</option>
                         {% for materia_carrera in materias_carreras %}
-                            <option id="{{ materia_carrera.carrera.pk }}" value="{{ materia_carrera.materia.pk }}">{{ materia_carrera.materia.nombre }}</option>
+                            <option id="{{ materia_carrera.carrera.pk }}" value="{{ materia_carrera.materia.pk }}">{{ materia_carrera.materia.pk }}-{{ materia_carrera.materia.nombre }}</option>
                         {% endfor %}
                     </select>
                 </div>
