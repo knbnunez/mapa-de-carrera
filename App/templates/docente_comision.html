@@ -14,9 +14,7 @@
 {% block sidebar %}
 <div> <!-- div a fines de agrupar y poder ocultar todo el contenido -->
     <!-- Botón para desplegar cuando se achica el tamaño de la página -->
-    <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar"
-        type="button"
-        class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+    <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
         <span class="sr-only">Desplegar</span>
         <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg">
@@ -25,10 +23,8 @@
             </path>
         </svg>
     </button>
-    <aside id="logo-sidebar"
-        class="fixed top-0 left-0 z-40 w-65 h-screen transition-transform -translate-x-full sm:translate-x-0"
-        aria-label="Sidebar">
-        <div class="h-full px-3 py-4 overflow-y-auto bg-red-800">
+    <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-65 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+        <div class="h-full w-[90%] px-3 py-4 overflow-y-auto bg-red-800">
             <a href="#" class="flex items-center pl-2.5 mb-4 pb-3 border-b-[1px] border-white">
                 <img src="https://untdf.edu.ar/img/isologotipo_chico.png" class="h-6 mr-3 sm:h-7" alt="UNTDF Logo" />
                 <span class="self-center text-xl font-semibold whitespace-nowrap text-gray-50">Mapa de carreras</span>
@@ -82,16 +78,11 @@
                 href: "{% url 'docente-asignar-comision' legajo=docente.legajo %}",
                 iconName: "fas fa-user-clock",
                 title: "Asignar comision"
-            },
-            {
-                href: "#",
-                iconName: "fas fa-file-upload",
-                title: "Cargar documentos"
-            },
+            }
         ];
         const gralContent = [
             {
-                href: "#",
+                href: "{% url 'docente-carga' %}",
                 iconName: "fas fa-user-clock",
                 title: "Asignar franja horaria"
             },
@@ -99,7 +90,12 @@
                 href: "#",
                 iconName: "fas fa-clipboard-list",
                 title: "Listar comisiones sin asignar"
-            }
+            },
+            {
+                href: "#",
+                iconName: "fas fa-clock",
+                title: "Listar docentes con sobrecarga y déficit"
+            },
         ];
         const contentSideBar = document.getElementById("content-side-bar");
         contentSideBar.innerHTML += `<div class="text-white font-semibold text-lg">Docente</div>`;
@@ -218,8 +214,6 @@
         </div>
     </form>
 </div>
-
-
 {% endblock %}
 
 {% block scripts %}
