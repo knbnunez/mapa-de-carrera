@@ -125,11 +125,31 @@
 
 {% block body-content %}
 <div class="p-1 pl-7 sm:ml-64">
-
-  
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        {{ form.cargo.label_tag }}
+        {{ form.cargo }}
+        
+        {{ form.tipo_extra.label_tag }}
+        {{ form.tipo_extra }}
+        
+        {{ form.carga_horaria.label_tag }}
+        {{ form.carga_horaria }}
+        
+        <button type="submit">Asignar Tareas</button>
+      </form>
+            
+      
+      
+      
+      
+      
+  <!-- 
   <form method="post" action="{% url 'docente-asignar-tareas' legajo=docente.pk  %}">
       {% csrf_token %}
-      <!-- Mostrar dropdownlist para seleccionar Cargo -->
+       Mostrar dropdownlist para seleccionar Cargo 
       <label for="{{ form.cargo.id_for_label }}">Cargo:</label>
       <select name="{{ form.cargo.name }}" id="{{ form.cargo.id_for_label }}">
         {% for cargo in cargo %}
@@ -137,7 +157,7 @@
         {% endfor %}
       </select>
 
-        <!-- Mostrar dropdownlist para seleccionar Tipo_Extra -->
+        <!-- Mostrar dropdownlist para seleccionar Tipo_Extra 
         <label for="{{ form.tipo_extra.id_for_label }}">Tipo Extra:</label>
         <select name="{{ form.tipo_extra.name }}" id="{{ form.tipo_extra.id_for_label }}">
           {% for tipo_extra in tipo_extra %}
@@ -155,7 +175,7 @@
       
 
       <input type="submit" value="Guardar">
-  </form>
+  </form>-->
 
 {% endblock %}
 

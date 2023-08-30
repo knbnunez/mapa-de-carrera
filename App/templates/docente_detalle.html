@@ -276,6 +276,27 @@
             <dd class="text-lg font-semibold dark:text-black">Total Horas: {{ total_horas }}</dd>
         </div>
         
+         <!--Si {{c.dedicacion.id}}= 5 
+                    si Total_horas >10 entonces superavit 
+                    si Total_horas <6 entonces deficit
+                
+        if dedicacion.desc_dedic == 'Simple' and modalidad.desc_modal == 'Docencia/Desarrollo profesional':
+            Total_horas < 4 
+             <div class="flex flex-col mb-3">
+            <dd class="text-lg font-semibold dark:text-black">Total Horas: deficit </dd>
+        </div>
+            Total_horas > 6  superavit
+        elif dedicacion.desc_dedic == 'Semided.' and modalidad.desc_modal == 'Docencia/Desarrollo profesional':
+            Total_horas < 6  deficit
+            Total_horas > 10  superavit
+        elif dedicacion.desc_dedic == 'Semided.' and modalidad.desc_modal == 'Docencia e Investigación':
+            Total_horas < 4  deficit
+            Total_horas > 6  superavit
+        elif dedicacion.desc_dedic == 'Exclusiva' and modalidad.desc_modal == 'Docencia e Investigación':
+            Total_horas < 4  deficit
+            Total_horas > 8  superavit     -->
+        
+       
         {% if comisiones_cte_ch is not None %}
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">

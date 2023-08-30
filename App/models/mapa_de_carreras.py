@@ -80,7 +80,7 @@ class Tipo_Extra(models.Model):
     desc_extra = models.CharField(max_length=255)
     
     def __str__(self):
-        return self.nombre     
+        return self.desc_extra    
 
     
 class Ubicacion(models.Model):

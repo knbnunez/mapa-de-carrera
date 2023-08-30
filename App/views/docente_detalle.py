@@ -196,7 +196,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
 
         # Dependencia de designación # Por ahora no sabemos de donde sacarla
         # Dependencia desempeño      # Ídem 
-
+        # Hay que cargarlo de los procesado por emilio 
 
         # Funciona correcto!
         # materias = Materias.objects.using('guarani').all()
