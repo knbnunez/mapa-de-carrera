@@ -56,7 +56,7 @@
                 title: "Ver listado"
             },
             {
-                href: "#",
+                href: "{% url 'docente-detalle' legajo=docente.legajo %}",
                 iconName: "far fa-regular fa-user",
                 title: "Ver perfil"
             },
@@ -273,7 +273,10 @@
         {% endif %}
 
         <div class="flex flex-col mb-3">
-            <dd class="text-lg font-semibold dark:text-black">Total Horas: {{ total_horas }}</dd>
+            ToDo: hacer el semáforo
+            {% for ct in cargos_horas %}
+            <span class="font-semibold">Total horas <span class="text-lg font-semibold">[ {{ ct.total_horas }} ]</span> <span class="text-xs">  cargo {{ ct.cargo.nro_cargo }}</span></span>
+            {% endfor %}
         </div>
         
          <!--Si {{c.dedicacion.id}}= 5 

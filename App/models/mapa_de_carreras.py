@@ -99,12 +99,12 @@ class Comision(models.Model):
         return self.nombre
     
     
-class Comision_Carrera(models.Model):
-    comision = models.ForeignKey(Comision, on_delete=models.CASCADE)
-    carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE)
+# class Comision_Carrera(models.Model):
+#     comision = models.ForeignKey(Comision, on_delete=models.CASCADE)
+#     carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE)
     
-    def __str__(self):
-        return self.nombre
+#     def __str__(self):
+#         return self.nombre
     
     
 class Cargo(models.Model):
@@ -131,9 +131,9 @@ class Cargo(models.Model):
 
 
 class Carga_Horaria(models.Model):
+    dia_semana = models.CharField(max_length=25)
     hora_inicio = models.TimeField()
     hora_fin = models.TimeField()
-    dia_semana = models.CharField(max_length=25)
     fecha_desde = models.DateField()
     fecha_hasta = models.DateField()
 

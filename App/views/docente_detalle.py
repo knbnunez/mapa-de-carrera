@@ -56,7 +56,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
             docente = Docente.objects.get(legajo=legajo) # Lo recupero
         elif (docente is None) and (not Docente.objects.filter(legajo=legajo).exists()): 
             DocenteDetalleView.cargos_activos = None
-            return render(request, self.template_name, {'docente': docente, 'cargos_activos': cargos_activos, 'comisiones_cte_ch': comisiones_cte_ch, 'total_horas': None }) # Faltaría agregar las materias, comisiones... que también serían = None
+            return render(request, self.template_name, {'docente': docente, 'cargos_activos': cargos_activos, 'comisiones_cte_ch': comisiones_cte_ch, 'cargos_horas': None }) # Faltaría agregar las materias, comisiones... que también serían = None
 
         # Correo docente --------------------------------------------------------
         if docente is not None:
@@ -159,7 +159,8 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
         if (Cargo.objects.filter(docente=docente).exists()): # Caso en el que existe al menos un cargo en la BD, lo recupero
             cargos = Cargo.objects.filter(docente=docente, activo=1)
             comisiones_cte_ch = []
-            total_horas = 0.00 # será un valor decimal
+            cargos_horas = []
+            
             for c in cargos:
                 cargos_activos.append(c) # Los añadimos al diccionario que recibirá al template
 
@@ -171,6 +172,8 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
                 )
                 # print(comisiones_cte_ch_aux)
 
+                total_horas = 0.00 # será un valor decimal
+            
                 for c_cte_ch in comisiones_cte_ch_aux:
                     print(c_cte_ch.cargo)
                     comisiones_cte_ch.append(c_cte_ch)
@@ -187,12 +190,14 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
                     
                     # Calcular la diferencia de tiempo manualmente
                     diferencia_horas = hora_fin.hour - hora_inicio.hour
-                    if hora_fin.minute == 59: diferencia_minutos = (hora_fin.minute - hora_inicio.minute) + 1
+                    if (hora_fin.minute % 10 == 9): diferencia_minutos = (hora_fin.minute - hora_inicio.minute) + 1
                     else: diferencia_minutos = hora_fin.minute - hora_inicio.minute
                     
-                    total_horas += diferencia_horas + diferencia_minutos / 60
+                    total_horas += diferencia_horas + (diferencia_minutos / 60)
                     print(total_horas)
-                
+
+                #
+                cargos_horas.append({"cargo": c, "total_horas": total_horas})
 
         # Dependencia de designación # Por ahora no sabemos de donde sacarla
         # Dependencia desempeño      # Ídem 
@@ -205,7 +210,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
 
 
         DocenteDetalleView.cargos_activos = cargos_activos
-        return render(request, self.template_name, {'docente': docente, 'cargos_activos': cargos_activos, 'comisiones_cte_ch': comisiones_cte_ch, 'total_horas': total_horas }) # materias, comisiones, tareas extras
+        return render(request, self.template_name, {'docente': docente, 'cargos_activos': cargos_activos, 'comisiones_cte_ch': comisiones_cte_ch, 'cargos_horas': cargos_horas }) # materias, comisiones, tareas extras
 
         
     def post(self, request, legajo):

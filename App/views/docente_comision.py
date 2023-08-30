@@ -15,16 +15,18 @@ class DocenteComisionView(TemplateView): # Detalle para un único docente
         cargos = Cargo.objects.filter(docente=docente, activo=1)  # Filtra solo los cargos activos del docente
 
         current_date = timezone.now().date()
+        # print(current_date)
 
         # Opción más eficiente según chatGpt (spoiler, funciona):
         institutos = Instituto.objects.all()
         carreras_institutos = Carrera_Instituto.objects.select_related('carrera', 'instituto').all()
-        materias_carreras = Materia_Carrera.objects.select_related('materia', 'carrera').all()
-        # Descomentar!
-        # comisiones = Comision.objects.filter(comision_ch__carga_horaria__fecha_hasta__gte=current_date).select_related('materia', 'ubicacion').distinct()
-        # Para poder ver todas las comisiones relaciondas
-        comisiones = Comision.objects.select_related('materia', 'ubicacion').distinct()
+        # materias_carreras = Materia_Carrera.objects.select_related('materia', 'carrera').all()
+        materias_carreras = Materia_Carrera.objects.select_related('materia', 'carrera').filter(materia__comision__comision_ch__carga_horaria__fecha_hasta__gte=current_date).distinct()
+        # for mc in materias_carreras: print(mc.materia.nombre)
+
+        comisiones = Comision.objects.filter(comision_ch__carga_horaria__fecha_hasta__gte=current_date).select_related('materia', 'ubicacion').distinct()
         comisiones_ch = Comision_CH.objects.select_related('comision', 'carga_horaria').filter(carga_horaria__fecha_hasta__gte=current_date)
+        # for c_ch in comisiones_ch: print(f"id_com: {c_ch.comision} fecha_hasta: {c_ch.carga_horaria.fecha_hasta}")
 
         context['docente'] = docente
         context['cargos'] = cargos
