@@ -76,12 +76,7 @@
             href: "{% url 'docente-asignar-comision' legajo=docente.legajo %}",
             iconName: "fas fa-user-clock",
             title: "Asignar comision"
-        },
-        {
-            href: "#",
-            iconName: "fas fa-file-upload",
-            title: "Cargar documentos"
-        },
+        }
     ];
     const gralContent = [
         {
@@ -145,26 +140,19 @@
         <!-- Mostrar dropdownlist para seleccionar Tipo_Extra -->
         <label for="{{ form.tipo_extra.id_for_label }}">Tipo Extra:</label>
         <select name="{{ form.tipo_extra.name }}" id="{{ form.tipo_extra.id_for_label }}">
-          {% for tipo_extra in form.tipo_extra.field.queryset %}
+          {% for tipo_extra in tipo_extra %}
             <option value="{{ tipo_extra.pk }}">{{ tipo_extra.desc_extra }}</option>
           {% endfor %}
         </select>
 
-      <label for="fecha_desde">Fecha desde:</label>
-      <input type="date" name="fecha_desde" required>
-      <br>
 
-      <label for="fecha_hasta">Fecha hasta:</label>
-      <input type="date" name="fecha_hasta" required>
-      <br>
-
-      <label for="hora_inicio">Hora inicio:</label>
-      <input type="time" name="hora_inicio" required>
-      <br>
-
-      <label for="hora_finalizacion">Hora finalización:</label>
-      <input type="time" name="hora_finalizacion" required>
-      <br>
+        <label for="{{ form.carga_horaria.id_for_label }}">Carga Horaria:</label>
+        <select name="{{ form.carga_horaria.name }}" id="{{ form.carga_horaria.id_for_label }}">
+            {% for carga_horaria in carga_horaria %}
+              <option value="{{ carga_horaria.pk }}">{{ carga_horaria.dia_semana }}-{{ carga_horaria.hora_inicio }}-{{ carga_horaria.hora_fin }}</option>
+            {% endfor %}
+          </select>
+      
 
       <input type="submit" value="Guardar">
   </form>
