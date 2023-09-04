@@ -1,4 +1,6 @@
 from django.urls import include, path
+
+from App.views.docente_historico import DocenteHistoricoView
 #from .views.carga_datos import *
 from .views.index import *
 from .views.docente_busqueda import *
@@ -21,6 +23,7 @@ urlpatterns = [
     path('docentes/', DocenteBusquedaView.as_view(), name='docente'),
     path('carga-horaria', DocenteCargaHorariaView.as_view(), name='docente-carga'),
     path('docentes/<int:legajo>/detalles', DocenteDetalleView.as_view(), name='docente-detalle'),
+    path('docentes/<int:legajo>/historico', DocenteHistoricoView.as_view(), name='docente-historico'),
     path('docentes/<int:legajo>/asignar-modalidad', DocenteModalidadView.as_view(), name='docente-asignar-modalidad'),
     path('docentes/<int:legajo>/asignar-tareas', DocenteTareasView.as_view(), name='docente-asignar-tareas'),
     path('docentes/<int:legajo>/asignar-comision', DocenteComisionView.as_view(), name='docente-asignar-comision'),

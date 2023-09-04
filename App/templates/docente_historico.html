@@ -1,6 +1,6 @@
 {% extends 'index.html' %}
 
-{% block title %} <title>Detalle docente</title> {% endblock %}
+{% block title %} <title>Histórico</title> {% endblock %}
 
 {% block light-style %}
 <style>
@@ -147,27 +147,13 @@
                 <dd class="text-lg font-semibold dark:text-black">{{docente.legajo}}</dd>
             </div>
 
-
-
-            {% if docente.correo_electronico %}
-            <div class="flex flex-col pb-3">
-                <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Correo electrónico: </dt>
-                <dd class="text-lg font-semibold dark:text-black">{{docente.correo_electronico}}</dd>
-            </div>
-
-            {% else %}
-            <div class="flex flex-col pb-3">
-                <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Correo electrónico: </dt>
-                <dd class="text-lg font-semibold dark:text-black">no se cargó ningún mail</dd>
-            </div>
-
-            {% endif %}
+           
             {% else %}
             <h3>El docente no pudo ser recuperado y no se encontraba en bases internas</h3>
             {% endif %}
             <!-- Cargos -->
 
-            {% if cargos_activos %}
+            {% if cargos_historicos %}
             <div class="flex flex-col pb-3">
                 <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Cargos: </dt>
                 <dd class="text-lg font-semibold dark:text-black"></dd>
@@ -207,7 +193,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for c in cargos_activos %}
+                        {% for c in cargos_historicos %}
                         <tr class="border-b bg-gray-800 border-gray-700">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 {{c.nro_cargo}}
@@ -272,116 +258,7 @@
         </form>
         {% endif %}
 
-        <div class="flex flex-col mb-3">
-            ToDo: hacer el semáforo
-            {% for ct in cargos_horas %}
-            <span class="font-semibold">Total horas <span class="text-lg font-semibold">[ {{ ct.total_horas }} ]</span> <span class="text-xs">  cargo {{ ct.cargo.nro_cargo }}</span></span>
-            {% endfor %}
-        </div>
-        
-         <!--Si {{c.dedicacion.id}}= 5 
-                    si Total_horas >10 entonces superavit 
-                    si Total_horas <6 entonces deficit
-                
-        if dedicacion.desc_dedic == 'Simple' and modalidad.desc_modal == 'Docencia/Desarrollo profesional':
-            Total_horas < 4 
-             <div class="flex flex-col mb-3">
-            <dd class="text-lg font-semibold dark:text-black">Total Horas: deficit </dd>
-        </div>
-            Total_horas > 6  superavit
-        elif dedicacion.desc_dedic == 'Semided.' and modalidad.desc_modal == 'Docencia/Desarrollo profesional':
-            Total_horas < 6  deficit
-            Total_horas > 10  superavit
-        elif dedicacion.desc_dedic == 'Semided.' and modalidad.desc_modal == 'Docencia e Investigación':
-            Total_horas < 4  deficit
-            Total_horas > 6  superavit
-        elif dedicacion.desc_dedic == 'Exclusiva' and modalidad.desc_modal == 'Docencia e Investigación':
-            Total_horas < 4  deficit
-            Total_horas > 8  superavit     -->
-        
-       
-        {% if comisiones_cte_ch is not None %}
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-6 py-3">
-                            Cargo
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Comision/Tarea
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Hora inicio
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Hora fin
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Dia de semana
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Desde la Fecha
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Hasta la Fecha
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for cte in comisiones_cte_ch %}
-                    <tr class="border-b bg-gray-800 border-gray-700">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{cte.cargo.nro_cargo}}
-                        </th>
-
-                        {% if cte.comision_ch is not None %}
-                        <td class="px-6 py-4">
-                            {{ cte.comision_ch.comision.nombre }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ cte.comision_ch.carga_horaria.hora_inicio }}hs
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ cte.comision_ch.carga_horaria.hora_fin }}hs
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ cte.comision_ch.carga_horaria.dia_semana }}
-                        </td>
-                        <th scope="col" class="px-6 py-3 font-medium">
-                            {{ cte.comision_ch.carga_horaria.fecha_desde|date:"SHORT_DATE_FORMAT" }}
-                        </th>
-                        <th scope="col" class="px-6 py-3 font-medium">
-                            {{ cte.comision_ch.carga_horaria.fecha_hasta|date:"SHORT_DATE_FORMAT" }}
-                        </th>
-
-                        {% else %}
-                        <td class="px-6 py-4">
-                            {{ cte.tipo_extra_ch.tipo_extra.desc_extra }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ cte.tipo_extra_ch.carga_horaria.hora_inicio }}hs
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ cte.tipo_extra_ch.carga_horaria.hora_fin }}hs
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ cte.tipo_extra_ch.carga_horaria.dia_semana }}
-                        </td>
-                        <th scope="col" class="px-6 py-3 font-medium">
-                            {{ cte.tipo_extra_ch.carga_horaria.fecha_desde|date:"SHORT_DATE_FORMAT" }}
-                        </th>
-                        <th scope="col" class="px-6 py-3 font-medium">
-                            {{ cte.tipo_extra_ch.carga_horaria.fecha_hasta|date:"SHORT_DATE_FORMAT" }}
-                        </th>
-
-                        {% endif %}
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% endif %}
+      
             
     </div>
 </div>
