@@ -27,6 +27,7 @@ class DocenteComisionView(TemplateView): # Detalle para un único docente
         comisiones = Comision.objects.filter(comision_ch__carga_horaria__fecha_hasta__gte=current_date).select_related('materia', 'ubicacion').distinct()
         comisiones_ch = Comision_CH.objects.select_related('comision', 'carga_horaria').filter(carga_horaria__fecha_hasta__gte=current_date)
         # for c_ch in comisiones_ch: print(f"id_com: {c_ch.comision} fecha_hasta: {c_ch.carga_horaria.fecha_hasta}")
+        tipos_dictados = Tipo_Dictado.objects.all()
 
         context['docente'] = docente
         context['cargos'] = cargos
@@ -35,6 +36,7 @@ class DocenteComisionView(TemplateView): # Detalle para un único docente
         context['materias_carreras'] = materias_carreras
         context['comisiones'] = comisiones
         context['comisiones_ch'] = comisiones_ch
+        context['tipos_dictados'] = tipos_dictados
         context['alert'] = self.alert
         return context
     
@@ -42,11 +44,17 @@ class DocenteComisionView(TemplateView): # Detalle para un único docente
     def post(self, request, legajo):
         select_cargo = request.POST.get('select-cargo')
         select_comision_ch = request.POST.get('select-comision_ch')
+        select_tipo_dictado = request.POST.get('select-tipo_dictado')
        
         try:
             cargo = Cargo.objects.get(nro_cargo=select_cargo)
+            tipo_dictado = Tipo_Dictado.objects.get(pk=select_tipo_dictado)
             comision_ch = Comision_CH.objects.get(pk=select_comision_ch)
+            comision_ch.tipo_dictado = tipo_dictado
+            comision_ch.save()
+            print("El problema está?")
             comision_cte_ch, _ = Cargo_CTE_CH.objects.get_or_create(cargo=cargo, comision_ch=comision_ch, tipo_extra_ch=None)
+            print("O acá?")
             self.alert = None
         except (Cargo.DoesNotExist, Comision_CH.DoesNotExist):
             self.alert = "El Cargo, la Comision o la Franja Horaria estaban vacíos o mal cargados!"

@@ -199,10 +199,10 @@
                                 Fecha de baja
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Descarga de Resolución
+                                Subir Resolución <span class="font-medium lowercase">(pdf)</span>
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Subida de Resolución <span class="font-medium lowercase">(pdf)</span>
+                                Descargar Resolución
                             </th>
                         </tr>
                     </thead>
@@ -234,6 +234,17 @@
                                 No Definida
                             </td>
                             {% endif %}
+                            
+                            <!-- Form subida de archivo -->
+                            <td class="px-6 py-4">
+                                <!-- Campo de carga de archivos para cada cargo -->
+                                <input
+                                    class="block w-full text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                    type="file"
+                                    name="file-{{ c.nro_cargo }}"
+                                    accept=".pdf"
+                                >
+                            </td>
 
                             <!-- Descarga de archivo -->
                             {% if c.resolucion %}
@@ -246,16 +257,6 @@
                             </td>
                             {% endif %}
 
-                            <!-- Form subida de archivo -->
-                            <td class="px-6 py-4">
-                                <!-- Campo de carga de archivos para cada cargo -->
-                                <input
-                                    class="block w-full text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                                    type="file"
-                                    name="file-{{ c.nro_cargo }}"
-                                    accept=".pdf"
-                                >
-                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>

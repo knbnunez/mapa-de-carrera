@@ -126,7 +126,7 @@
 {% endblock %}
 
 {% block body-content %}
-<div class="h-full sm:ml-64 pt-28 pb-28 flex flex-col items-center justify-center">
+<div class="h-full sm:ml-72 pt-28 pb-28 flex flex-col items-center justify-center">
     
     {% if alert is not none %}
         <div class="flex flex-col h-12 w-12 sm:ml-64 items-center justify-start"><script> alert("{{ alert }}")</script></div>
@@ -174,7 +174,7 @@
                     <select id="select-materia" name="select-materia" class="h-9 w-2/3 pl-2 bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
                         <option disabled selected>Seleccione una Materia</option>
                         {% for materia_carrera in materias_carreras %}
-                            <option id="{{ materia_carrera.carrera.pk }}" value="{{ materia_carrera.materia.pk }}">{{ materia_carrera.materia.pk }}-{{ materia_carrera.materia.nombre }}</option>
+                            <option id="{{ materia_carrera.carrera.pk }}" value="{{ materia_carrera.materia.pk }}">{{ materia_carrera.materia.nombre }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -187,7 +187,7 @@
                         <option disabled selected>Seleccione una Comisión</option>
                         {% for comision in comisiones %}
                             <option id="{{ comision.materia.pk }}" value="{{ comision.pk }}">
-                                {{ comision.nombre }} {{ comision.materia.nombre }} ({{ comision.ubicacion.nombre }})
+                                {{ comision.nombre }} ({{ comision.ubicacion.nombre }})
                             </option>
                         {% endfor %}
                     </select>
@@ -200,6 +200,18 @@
                         {% for comision_ch in comisiones_ch %}
                             <option id="{{ comision_ch.comision.pk }}" value="{{ comision_ch.pk }}">
                                 {{ comision_ch.carga_horaria.hora_inicio }}hs - {{ comision_ch.carga_horaria.hora_fin }}hs {{ comision_ch.carga_horaria.dia_semana }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Dropdown - Tipo Dictado -->
+                <div class="h-1/3 w-full flex items-center justify-center">
+                    <select id="select-tipo_dictado" name="select-tipo_dictado" class="h-9 w-2/3 pl-2 bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
+                        <option disabled selected>Seleccione un Tipo de Dictado (a asignar)</option>
+                        {% for tipo_dictado in tipos_dictados %}
+                            <option id="{{ tipo_dictado.pk }}" value="{{ tipo_dictado.pk }}">
+                                {{ tipo_dictado.nombre }}
                             </option>
                         {% endfor %}
                     </select>
