@@ -167,10 +167,10 @@ class DocenteHistoricoView(TemplateView): # Detalle para un único docente
                         hora_inicio = c_cte_ch.comision_ch.carga_horaria.hora_inicio
                         hora_fin = c_cte_ch.comision_ch.carga_horaria.hora_fin
                     
-                    elif (c_cte_ch.tipo_extra_ch is not None):
-                        print(c_cte_ch.tipo_extra_ch.carga_horaria.fecha_hasta)
-                        hora_inicio = c_cte_ch.tipo_extra_ch.carga_horaria.hora_inicio
-                        hora_fin = c_cte_ch.tipo_extra_ch.carga_horaria.hora_fin
+                    # elif (c_cte_ch.tipo_extra_ch is not None):
+                    #     print(c_cte_ch.tipo_extra_ch.carga_horaria.fecha_hasta)
+                    #     hora_inicio = c_cte_ch.tipo_extra_ch.carga_horaria.hora_inicio
+                    #     hora_fin = c_cte_ch.tipo_extra_ch.carga_horaria.hora_fin
                     
                     # Calcular la diferencia de tiempo manualmente
                     diferencia_horas = hora_fin.hour - hora_inicio.hour

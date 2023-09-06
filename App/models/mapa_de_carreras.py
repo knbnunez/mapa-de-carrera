@@ -98,15 +98,11 @@ class Comision(models.Model):
     def __str__(self):
         return self.nombre
     
-    
-# class Comision_Carrera(models.Model):
-#     comision = models.ForeignKey(Comision, on_delete=models.CASCADE)
-#     carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE)
-    
-#     def __str__(self):
-#         return self.nombre
-    
-    
+
+class Tipo_Dictado(models.Model):
+    nombre = models.CharField(max_length=255)
+
+
 class Cargo(models.Model):
     nro_cargo = models.IntegerField(primary_key=True) # En la API de Mapuche lo usan como si fuera un nro de legajo, nosotros lo vamos a usar como nro_cargo, desde Mapuche se consume como: 'cargo'
     docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
@@ -141,16 +137,19 @@ class Carga_Horaria(models.Model):
 class Comision_CH(models.Model):
     comision = models.ForeignKey(Comision, on_delete=models.CASCADE)
     carga_horaria = models.ForeignKey(Carga_Horaria, on_delete=models.CASCADE)
+    tipo_dictado = models.ForeignKey(Tipo_Dictado, on_delete=models.CASCADE, default=1)
 
 
 class Tipo_Extra_CH(models.Model):
     tipo_extra = models.ForeignKey(Tipo_Extra, on_delete=models.CASCADE)
-    carga_horaria = models.ForeignKey(Carga_Horaria, on_delete=models.CASCADE)
+    cant_horas = models.IntegerField()
+    fecha_desde = models.DateField()
+    fecha_hasta = models.DateField()
 
 
-# Debe ser llenado en asignar-comision u en el general de asignar-franja-horaria
+# Los datos se cargan cuando se asignan cargos a franjas horarias de comisiones
 class Cargo_CTE_CH(models.Model):
     cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
-    # uno siempre será null
+    # Uno de los dos siempre será NULL
     comision_ch = models.ForeignKey(Comision_CH, on_delete=models.CASCADE, null=True, default=None)
     tipo_extra_ch = models.ForeignKey(Tipo_Extra_CH, on_delete=models.CASCADE, null=True, default=None)

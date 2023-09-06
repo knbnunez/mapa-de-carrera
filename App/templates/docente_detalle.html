@@ -275,7 +275,8 @@
         <div class="flex flex-col mb-3">
             ToDo: hacer el semáforo
             {% for ct in cargos_horas %}
-            <span class="font-semibold">Total horas <span class="text-lg font-semibold">[ {{ ct.total_horas }} ]</span> <span class="text-xs">  cargo {{ ct.cargo.nro_cargo }}</span></span>
+            <!-- <span class="font-semibold">Total horas <span class="text-lg font-semibold">({{ ct.total_horas }})</span> <span class="text-xs">(cargo {{ ct.cargo.nro_cargo }})</span></span> -->
+            <span class="text-lg font-semibold text-gray-500">Total de horas para ({{ ct.cargo.nro_cargo }}): <span class="text-black">{{ ct.total_horas }}hs</span></span>
             {% endfor %}
         </div>
         
@@ -300,7 +301,8 @@
             Total_horas > 8  superavit     -->
         
        
-        {% if comisiones_cte_ch is not None %}
+        {% if cargas_cte_ch is not None %}
+        <!-- Comisiones table -->
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -309,7 +311,10 @@
                             Cargo
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Comision/Tarea
+                            Materia/Comision
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Tipo
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Hora inicio
@@ -329,15 +334,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for cte in comisiones_cte_ch %}
+                    {% for cte in cargas_cte_ch %}
                     <tr class="border-b bg-gray-800 border-gray-700">
+                        {% if cte.comision_ch is not None %}
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{cte.cargo.nro_cargo}}
                         </th>
-
-                        {% if cte.comision_ch is not None %}
                         <td class="px-6 py-4">
-                            {{ cte.comision_ch.comision.nombre }}
+                            {{ cte.comision_ch.comision.materia.nombre }} ({{ cte.comision_ch.comision.nombre }})
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ cte.comision_ch.tipo_dictado.nombre }}
                         </td>
                         <td class="px-6 py-4">
                             {{ cte.comision_ch.carga_horaria.hora_inicio }}hs
@@ -354,27 +361,54 @@
                         <th scope="col" class="px-6 py-3 font-medium">
                             {{ cte.comision_ch.carga_horaria.fecha_hasta|date:"SHORT_DATE_FORMAT" }}
                         </th>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-                        {% else %}
+        <!-- Tareas Extras table -->
+        <div class="mt-6 relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Cargo
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Tarea Extra
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Cantidad de Horas
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Desde la Fecha
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Hasta la Fecha
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cte in cargas_cte_ch %}
+                    <tr class="border-b bg-gray-800 border-gray-700">
+                        {% if cte.tipo_extra_ch is not None %}
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{cte.cargo.nro_cargo}}
+                        </th>
                         <td class="px-6 py-4">
                             {{ cte.tipo_extra_ch.tipo_extra.desc_extra }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ cte.tipo_extra_ch.carga_horaria.hora_inicio }}hs
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ cte.tipo_extra_ch.carga_horaria.hora_fin }}hs
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ cte.tipo_extra_ch.carga_horaria.dia_semana }}
+                            {{ cte.tipo_extra_ch.cant_horas }}hs
                         </td>
                         <th scope="col" class="px-6 py-3 font-medium">
-                            {{ cte.tipo_extra_ch.carga_horaria.fecha_desde|date:"SHORT_DATE_FORMAT" }}
+                            {{ cte.tipo_extra_ch.fecha_desde|date:"SHORT_DATE_FORMAT" }}
                         </th>
                         <th scope="col" class="px-6 py-3 font-medium">
-                            {{ cte.tipo_extra_ch.carga_horaria.fecha_hasta|date:"SHORT_DATE_FORMAT" }}
+                            {{ cte.tipo_extra_ch.fecha_hasta|date:"SHORT_DATE_FORMAT" }}
                         </th>
-
                         {% endif %}
                     </tr>
                     {% endfor %}

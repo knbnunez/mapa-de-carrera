@@ -5,6 +5,7 @@ from requests.exceptions import ConnectTimeout
 from datetime import datetime, date, timedelta
 from App.models.mapa_de_carreras import *
 from App.models.guarani import *
+from django.db.models import Q
 
 import math
 from decimal import Decimal
@@ -25,7 +26,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
         docente = None # Inicializo
         cargos = None 
         cargos_activos = None
-        comisiones_cte_ch = None
+        cargas_cte_ch = None
 
         # .............................................................................. #
         # ............................ Info persona docente ............................ #
@@ -56,7 +57,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
             docente = Docente.objects.get(legajo=legajo) # Lo recupero
         elif (docente is None) and (not Docente.objects.filter(legajo=legajo).exists()): 
             DocenteDetalleView.cargos_activos = None
-            return render(request, self.template_name, {'docente': docente, 'cargos_activos': cargos_activos, 'comisiones_cte_ch': comisiones_cte_ch, 'cargos_horas': None }) # Faltaría agregar las materias, comisiones... que también serían = None
+            return render(request, self.template_name, {'docente': docente, 'cargos_activos': cargos_activos, 'cargas_cte_ch': cargas_cte_ch, 'cargos_horas': None }) # Faltaría agregar las materias, comisiones... que también serían = None
 
         # Correo docente --------------------------------------------------------
         if docente is not None:
@@ -158,7 +159,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
         # Si se lograron almacenar cargos para el docente, los voy a almacenar los activos para poder mostrarlos por pantalla
         if (Cargo.objects.filter(docente=docente).exists()): # Caso en el que existe al menos un cargo en la BD, lo recupero
             cargos = Cargo.objects.filter(docente=docente, activo=1)
-            comisiones_cte_ch = []
+            cargas_cte_ch = []
             cargos_horas = []
             
             for c in cargos:
@@ -166,51 +167,47 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
 
                 # !Comment: Debería mostar algo sólo si existen cargas horarias ya creadas para el cargo, sino eso estaría vacío --> eso tiene que ser un control en el Template
                 current_date = timezone.now().date()
-                comisiones_cte_ch_aux = Cargo_CTE_CH.objects.filter(
-                    cargo=c,
-                    comision_ch__carga_horaria__fecha_hasta__gte=current_date
+                # cte_ch_aux = Cargo_CTE_CH.objects.filter(
+                #     cargo=c,
+                #     comision_ch__carga_horaria__fecha_hasta__gte=current_date
+                # )
+                cte_ch_aux = Cargo_CTE_CH.objects.filter(
+                    Q(cargo=c) &
+                    (Q(comision_ch__carga_horaria__fecha_hasta__gte=current_date) |
+                    Q(tipo_extra_ch__fecha_hasta__gte=current_date))
                 )
-                # print(comisiones_cte_ch_aux)
+                # print(cte_ch_aux)
 
                 total_horas = 0.00 # será un valor decimal
             
-                for c_cte_ch in comisiones_cte_ch_aux:
-                    print(c_cte_ch.cargo)
-                    comisiones_cte_ch.append(c_cte_ch)
+                for cte_ch in cte_ch_aux:
+                    print(cte_ch.cargo)
+                    cargas_cte_ch.append(cte_ch)
                     
-                    if (c_cte_ch.comision_ch is not None): 
-                        print(c_cte_ch.comision_ch.carga_horaria.fecha_hasta)
-                        hora_inicio = c_cte_ch.comision_ch.carga_horaria.hora_inicio
-                        hora_fin = c_cte_ch.comision_ch.carga_horaria.hora_fin
+                    if (cte_ch.comision_ch is not None): 
+                        print(cte_ch.comision_ch.carga_horaria.fecha_hasta)
+                        hora_inicio = cte_ch.comision_ch.carga_horaria.hora_inicio
+                        hora_fin = cte_ch.comision_ch.carga_horaria.hora_fin
+                        #
+                        # Calcular la diferencia de tiempo manualmente
+                        diferencia_horas = hora_fin.hour - hora_inicio.hour
+                        if (hora_fin.minute % 10 == 9): diferencia_minutos = (hora_fin.minute - hora_inicio.minute) + 1
+                        else: diferencia_minutos = hora_fin.minute - hora_inicio.minute
+                        #
+                        total_horas += diferencia_horas + (diferencia_minutos / 60)
                     
-                    elif (c_cte_ch.tipo_extra_ch is not None):
-                        print(c_cte_ch.tipo_extra_ch.carga_horaria.fecha_hasta)
-                        hora_inicio = c_cte_ch.tipo_extra_ch.carga_horaria.hora_inicio
-                        hora_fin = c_cte_ch.tipo_extra_ch.carga_horaria.hora_fin
+                    elif (cte_ch.tipo_extra_ch is not None):
+                        print(cte_ch.tipo_extra_ch.fecha_hasta)
+                        cant_horas_tarea = cte_ch.tipo_extra_ch.cant_horas
+                        total_horas += cant_horas_tarea
                     
-                    # Calcular la diferencia de tiempo manualmente
-                    diferencia_horas = hora_fin.hour - hora_inicio.hour
-                    if (hora_fin.minute % 10 == 9): diferencia_minutos = (hora_fin.minute - hora_inicio.minute) + 1
-                    else: diferencia_minutos = hora_fin.minute - hora_inicio.minute
-                    
-                    total_horas += diferencia_horas + (diferencia_minutos / 60)
                     print(total_horas)
 
                 #
                 cargos_horas.append({"cargo": c, "total_horas": total_horas})
 
-        # Dependencia de designación # Por ahora no sabemos de donde sacarla
-        # Dependencia desempeño      # Ídem 
-        # Hay que cargarlo de los procesado por emilio 
-
-        # Funciona correcto!
-        # materias = Materias.objects.using('guarani').all()
-        # for materia in materias:
-        #     print(materia.nombre)
-
-
         DocenteDetalleView.cargos_activos = cargos_activos
-        return render(request, self.template_name, {'docente': docente, 'cargos_activos': cargos_activos, 'comisiones_cte_ch': comisiones_cte_ch, 'cargos_horas': cargos_horas }) # materias, comisiones, tareas extras
+        return render(request, self.template_name, {'docente': docente, 'cargos_activos': cargos_activos, 'cargas_cte_ch': cargas_cte_ch, 'cargos_horas': cargos_horas }) # materias, comisiones, tareas extras
 
         
     def post(self, request, legajo):
