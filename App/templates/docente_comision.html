@@ -129,7 +129,7 @@
 <div class="h-full sm:ml-72 pt-28 pb-28 flex flex-col items-center justify-center">
     
     {% if alert is not none %}
-        <div class="flex flex-col h-12 w-12 sm:ml-64 items-center justify-start"><script> alert("{{ alert }}")</script></div>
+        <script> alert("{{ alert }}")</script>
     {% endif %}
     <div class="p-1 pl-7 sm:ml-4">
         <h1 class="text-lg font-semibold dark:text-black">{{docente.nombre_apellido}}</h1>

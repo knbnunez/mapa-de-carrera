@@ -37,7 +37,7 @@ class DocenteComisionView(TemplateView): # Detalle para un único docente
         context['comisiones'] = comisiones
         context['comisiones_ch'] = comisiones_ch
         context['tipos_dictados'] = tipos_dictados
-        context['alert'] = self.alert
+        context['alert'] = DocenteComisionView.alert
         return context
     
     
@@ -53,7 +53,7 @@ class DocenteComisionView(TemplateView): # Detalle para un único docente
             comision_ch.tipo_dictado = tipo_dictado
             comision_ch.save()
             comision_cte_ch, _ = Cargo_CTE_CH.objects.get_or_create(cargo=cargo, comision_ch=comision_ch, tipo_extra_ch=None)
-            self.alert = None
+            DocenteComisionView.alert = None
         except (Cargo.DoesNotExist, Comision_CH.DoesNotExist):
-            self.alert = "El Cargo, la Comision o la Franja Horaria estaban vacíos o mal cargados!"
+            DocenteComisionView.alert = "El Cargo, la Comision o la Franja Horaria estaban vacíos o mal cargados!"
         return self.get(request, legajo)
