@@ -7,7 +7,10 @@
     .hidden {
         display: none;
     }
-
+    /* Aplica estilos a todos los botones de examinar archivo */
+    input[type="file"]::file-selector-button {
+            font-size: 12px;
+        }
 </style>
 {% endblock %}
 
@@ -47,8 +50,6 @@
     </script>
 
     <script>
-        // TAREA: 
-        // - Hay que corregir los href
         const docenteContent = [
             {
                 href: "{% url 'docente' %}",
@@ -66,11 +67,6 @@
                 title: "Ver histórico"
             },
             {
-                href: "{% url 'docente-asignar-tareas' legajo=docente.legajo %}",
-                iconName: "fas fa-chalkboard-teacher",
-                title: "Asignar otras actividades"
-            },
-            {
                 href: "{% url 'docente-asignar-modalidad' legajo=docente.legajo %}",
                 iconName: "fa fa-user-edit",
                 title: "Asignar modalidad"
@@ -80,7 +76,11 @@
                 iconName: "fas fa-user-clock",
                 title: "Asignar comision"
             },
-            
+            {
+                href: "{% url 'docente-asignar-tareas' legajo=docente.legajo %}",
+                iconName: "fas fa-chalkboard-teacher",
+                title: "Asignar otras actividades"
+            },
         ];
         const gralContent = [
             {
@@ -162,6 +162,7 @@
 
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
+            <!-- Table -->
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -185,10 +186,10 @@
                                 Fecha de baja
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Descarga de Resolución
+                                Subir Resolución <span class="font-medium lowercase">(pdf)</span>
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Subida de Resolución <span class="font-medium lowercase">(pdf)</span>
+                                Descargar Resolución
                             </th>
                         </tr>
                     </thead>
@@ -221,17 +222,6 @@
                             </td>
                             {% endif %}
 
-                            <!-- Descarga de archivo -->
-                            {% if c.resolucion %}
-                            <td class="px-6 py-4">
-                                <a href="{{ c.resolucion.url }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" download>Descargar Resolución</a>
-                            </td>
-                            {% else %}
-                            <td class="px-6 py-4">
-                                <span class="font-medium text-gray-500">No hay Resolución cargada</span>
-                            </td>
-                            {% endif %}
-
                             <!-- Form subida de archivo -->
                             <td class="px-6 py-4">
                                 <!-- Campo de carga de archivos para cada cargo -->
@@ -242,6 +232,17 @@
                                     accept=".pdf"
                                 >
                             </td>
+
+                            <!-- Descarga de archivo -->
+                            {% if c.resolucion %}
+                            <td class="px-6 py-4">
+                                <a href="{{ c.resolucion.url }}" class="font-medium text-[13px] text-blue-600 dark:text-blue-500 hover:underline" download>Descargar Resolución</a>
+                            </td>
+                            {% else %}
+                            <td class="px-6 py-4">
+                                <span class="font-medium text-gray-500">No hay Resolución cargada</span>
+                            </td>
+                            {% endif %}
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -249,17 +250,15 @@
             
                 <!-- Botón de submit fuera de la tabla -->
             </div>
-            <!-- <button type="submit">Enviar</button> -->
-            <div class="mt-8 mr-12 flex justify-end">
+            <!-- Button -->
+            <div class="mt-8 flex justify-end">
                 <button type="submit" class="relative w-32 h-8 px-1 py-1 bg-gray-200 text-gray-700 rounded-md shadow-md hover:bg-gray-300 text-sm font-semibold">
                     Guardar cambios
                 </button>
             </div>
         </form>
         {% endif %}
-
-      
-            
+  
     </div>
 </div>
 {% endblock %}

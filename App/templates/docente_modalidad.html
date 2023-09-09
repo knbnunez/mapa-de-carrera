@@ -1,5 +1,7 @@
 {% extends 'index.html' %}
 
+{% block title %} <title>Asignar modalidad</title> {% endblock %}
+
 {% block sidebar %}
 <div> <!-- div a fines de agrupar y poder ocultar todo el contenido -->
     <!-- Botón para desplegar cuando se achica el tamaño de la página -->
@@ -34,8 +36,6 @@
     </script>
 
     <script>
-    // TAREA: 
-    // - Hay que corregir los href
     const docenteContent = [
         {
             href: "{% url 'docente' %}",
@@ -53,11 +53,6 @@
             title: "Ver histórico"
         },
         {
-            href: "{% url 'docente-asignar-tareas' legajo=docente.legajo %}",
-            iconName: "fas fa-chalkboard-teacher",
-            title: "Asignar otras actividades"
-        },
-        {
             href: "{% url 'docente-asignar-modalidad' legajo=docente.legajo %}",
             iconName: "fa fa-user-edit",
             title: "Asignar modalidad"
@@ -66,8 +61,12 @@
             href: "{% url 'docente-asignar-comision' legajo=docente.legajo %}",
             iconName: "fas fa-user-clock",
             title: "Asignar comision"
-        }
-        
+        },
+        {
+            href: "{% url 'docente-asignar-tareas' legajo=docente.legajo %}",
+            iconName: "fas fa-chalkboard-teacher",
+            title: "Asignar otras actividades"
+        },  
     ];
     const gralContent = [
         {
@@ -114,47 +113,37 @@
 </div>
 {% endblock %}
 
-<!-- METER TODO EN UN FORM, INVESTIGAT ANTES... -->
-
 {% block body-content %}
-<div class="h-full sm:ml-64 pt-28 pb-28 flex flex-col items-center justify-center">
-    <div class="p-1 pl-7 sm:ml-4">
+<div class="h-full sm:ml-64 pt-28 pb-20 flex flex-col items-center justify-center">
+    {% if alert is not none %}
+        <script> alert("{{ alert }}")</script>
+    {% endif %}
+
+    <!-- Nombre Docente -->
+    <div>
         <h1 class="text-lg font-semibold dark:text-black">{{docente.nombre_apellido}}</h1>
     </div>
     <form class="flex flex-col h-full w-full" method="post" action="{% url 'docente-asignar-modalidad' legajo=docente.legajo %}">
         {% csrf_token %}
-        
-        <!-- <div class="h-full flex items-center justify-evenly bg-green-200"> -->
             
-            <div class="h-1/3 w-full flex sm:flex-row flex-col items-center justify-center">
-                <!-- Dropdown-list Cargo -->
-                <div class="h-full w-full flex items-center justify-center">
-                    <select id="select-cargo" name="select-cargo" class="h-9 w-[60%] pl-4 bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300" onchange="mostrarDatos()">
-                        <option disabled selected>Seleccione un Cargo</option>
-                        {% for cargo in cargos %}
-                            <option value="{{ cargo.nro_cargo }}">Cargo N° {{ cargo.nro_cargo }}</option>
-                        {% endfor %}    
-                    </select>
-                </div>
-                
-                <!-- Dropdown-list Modalidad -->
-                <div class="h-full w-full flex items-center justify-center">
-                    <select id="select-modalidad" name="select-modalidad" class="h-9 w-[60%] pl-4 bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
-                        <option disabled selected>Seleccione una Modalidad</option>
-                        {% for modalidad in modalidades %}
-                            <option value="{{ modalidad.desc_modal }}" class="options-modalidad">{{ modalidad.desc_modal }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+        <div class="h-1/4 w-full flex sm:flex-row flex-col items-center justify-center">
+            <!-- Dropdown-list Cargo -->
+            <div class="h-1/4 w-full flex items-center justify-center">
+                <select id="select-cargo" name="select-cargo" class="h-9 sm:w-1/4 w-2/3 pl-4 bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300" onchange="mostrarDatos()">
+                    <option disabled selected>Seleccione un Cargo</option>
+                    {% for cargo in cargos %}
+                        <option value="{{ cargo.nro_cargo }}">Cargo N° {{ cargo.nro_cargo }}</option>
+                    {% endfor %}    
+                </select>
             </div>
-            
-            <!-- <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400"> -->
+        </div>
 
-            <div id="div-table" class="h-1/3 w-full py-8 sm:px-72 px-2">
-                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div class="h-1/3 w-full flex sm:flex-row flex-col">
+            
+            <div class="h-full sm:w-[60%] w-full flex items-center justify-center">
+                <div id="div-table" class="relative overflow-x-auto shadow-md sm:rounded-lg sm:ml-[10%]">
                     <!-- Datos personales -->
-                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <table class="h-full w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-400 uppercase bg-gray-700">
                             <tr>
                                 <th scope="col" class="px-6 py-3">Numero</th>
@@ -177,17 +166,33 @@
                 </div>
             </div>
 
-            <div class="h-1/3 w-full flex items-center justify-center">
-                <button type="submit" class="w-32 h-8 bg-gray-200 text-gray-700 rounded-md shadow-md hover:bg-gray-300 text-sm font-semibold">
-                    Guardar cambios
-                </button>
+            <div class="h-full sm:w-[40%] w-full flex flex-col items-center justify-center">
+                
+                <div class="h-[6.20rem] w-full flex flex-col items-center justify-center">
+                    
+                    <!-- Dropdown-list Modalidad -->
+                    <div class="h-full w-full flex sm:items-start items-center sm:justify-start justify-center">
+                        <select id="select-modalidad" name="select-modalidad" class="h-9 sm:w-[60%] w-2/3 pl-4 bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
+                            <option disabled selected>Seleccione una Modalidad</option>
+                            {% for modalidad in modalidades %}
+                                <option value="{{ modalidad.desc_modal }}" class="options-modalidad">{{ modalidad.desc_modal }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="h-full w-full flex">
+                        <div class="h-full w-[60%] flex items-end justify-end">
+                            <button type="submit" class="w-32 h-8 bg-gray-200 text-gray-700 rounded-md shadow-md hover:bg-gray-300 text-sm font-semibold">
+                                Guardar cambios
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+                
             </div>
 
-        <!-- </div> -->
-        
-        {% if alert is not none %}
-        <div class="h-1/6 sm:ml-64 flex flex-col items-center justify-start"><script> alert("{{ alert }}")</script></div>
-        {% endif %}
+        </div>
 
     </form>
 </div>

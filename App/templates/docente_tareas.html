@@ -3,11 +3,11 @@
 {% block title %} <title>Tareas extra docente</title> {% endblock %}
 
 {% block light-style %}
-  <style>
-    .hidden {
-      display: none;
-    }
-  </style>
+<style>
+.hidden {
+    display: none;
+}
+</style>
 {% endblock %}
 
 {% block sidebar %}
@@ -44,150 +44,153 @@
     </script>
 
     <script>
-    // TAREA: 
-    // - Hay que corregir los href
-    const docenteContent = [
-        {
-            href: "{% url 'docente' %}",
-            iconName: "fa-solid fa-list",
-            title: "Ver listado"
-        },
-        {
-            href: "{% url 'docente-detalle' legajo=docente.legajo %}",
-            iconName: "far fa-regular fa-user",
-            title: "Ver perfil"
-        },
-        {
-            href: "{% url 'docente-historico' legajo=docente.legajo %}",
-            iconName: "far fa-folder-open",
-            title: "Ver histórico"
-        },
-        {
-            href: "{% url 'docente-asignar-tareas' legajo=docente.legajo %}",
-            iconName: "fas fa-chalkboard-teacher",
-            title: "Asignar otras actividades"
-        },
-        {
-            href: "{% url 'docente-asignar-modalidad' legajo=docente.legajo %}",
-            iconName: "fa fa-user-edit",
-            title: "Asignar modalidad"
-        },
-        {
-            href: "{% url 'docente-asignar-comision' legajo=docente.legajo %}",
-            iconName: "fas fa-user-clock",
-            title: "Asignar comision"
-        }
-    ];
-    const gralContent = [
-        {
-            href: "{% url 'docente-carga' %}",
-            iconName: "fas fa-user-clock",
-            title: "Asignar franja horaria"
-        },
-        {
-            href: "#",
-            iconName: "fas fa-clipboard-list",
-            title: "Listar comisiones sin asignar"
-        },
-        {
-            href: "#",
-            iconName: "fas fa-clock",
-            title: "Listar docentes con sobrecarga y déficit"
-        },
-    ];
-    const contentSideBar = document.getElementById("content-side-bar");
-    contentSideBar.innerHTML += `<div class="text-white font-semibold text-lg">Docente</div>`;
-    docenteContent.forEach((e) => {
-        // console.log(e.href);
-        contentSideBar.innerHTML += `
-        <li>
-            <a href='${e.href}' class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-red-900 group">
-                <i class="${e.iconName} text-gray-200 text-opacity-90"></i>
-                <span class="ml-3 text-gray-200">${e.title}</span>
-            </a>
-        </li>
-    `;
-    });
-    contentSideBar.innerHTML += `<div class="pt-2 text-white font-semibold text-lg">General</div>`;
-    gralContent.forEach((e) => {
-        contentSideBar.innerHTML += `
-        <li>
-            <a href='${e.href}' class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-red-900 group">
-                <i class="${e.iconName} text-gray-200 text-opacity-90"></i>
-                <span class="ml-3 text-gray-200">${e.title}</span>
-            </a>
-        </li>
-    `;
-    });
+        const docenteContent = [
+            {
+                href: "{% url 'docente' %}",
+                iconName: "fa-solid fa-list",
+                title: "Ver listado"
+            },
+            {
+                href: "{% url 'docente-detalle' legajo=docente.legajo %}",
+                iconName: "far fa-regular fa-user",
+                title: "Ver perfil"
+            },
+            {
+                href: "{% url 'docente-historico' legajo=docente.legajo %}",
+                iconName: "far fa-folder-open",
+                title: "Ver histórico"
+            },
+            {
+                href: "{% url 'docente-asignar-modalidad' legajo=docente.legajo %}",
+                iconName: "fa fa-user-edit",
+                title: "Asignar modalidad"
+            },
+            {
+                href: "{% url 'docente-asignar-comision' legajo=docente.legajo %}",
+                iconName: "fas fa-user-clock",
+                title: "Asignar comision"
+            },
+            {
+                href: "{% url 'docente-asignar-tareas' legajo=docente.legajo %}",
+                iconName: "fas fa-chalkboard-teacher",
+                title: "Asignar otras actividades"
+            },
+        ];
+        const gralContent = [
+            {
+                href: "{% url 'docente-carga' %}",
+                iconName: "fas fa-user-clock",
+                title: "Asignar franja horaria"
+            },
+            {
+                href: "#",
+                iconName: "fas fa-clipboard-list",
+                title: "Listar comisiones sin asignar"
+            },
+            {
+                href: "#",
+                iconName: "fas fa-clock",
+                title: "Listar docentes con sobrecarga y déficit"
+            },
+        ];
+        const contentSideBar = document.getElementById("content-side-bar");
+        contentSideBar.innerHTML += `<div class="text-white font-semibold text-lg">Docente</div>`;
+        docenteContent.forEach((e) => {
+            // console.log(e.href);
+            contentSideBar.innerHTML += `
+            <li>
+                <a href='${e.href}' class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-red-900 group">
+                    <i class="${e.iconName} text-gray-200 text-opacity-90"></i>
+                    <span class="ml-3 text-gray-200">${e.title}</span>
+                </a>
+            </li>
+        `;
+        });
+        contentSideBar.innerHTML += `<div class="pt-2 text-white font-semibold text-lg">General</div>`;
+        gralContent.forEach((e) => {
+            contentSideBar.innerHTML += `
+            <li>
+                <a href='${e.href}' class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-red-900 group">
+                    <i class="${e.iconName} text-gray-200 text-opacity-90"></i>
+                    <span class="ml-3 text-gray-200">${e.title}</span>
+                </a>
+            </li>
+        `;
+        });
     </script>
 </div>
 {% endblock %}
 
 {% block body-content %}
-<div class="p-1 pl-7 sm:ml-64">
-    
-    <form method="post">
+<!-- <div class="p-1 pl-7 sm:ml-64"> -->
+<div class="h-full sm:ml-72 pt-28 pb-8 flex flex-col items-center justify-center">
+    <div>
+        <h1 class="text-lg font-semibold dark:text-black">{{docente.nombre_apellido}}</h1>
+    </div>
+    <form class="flex flex-col h-full w-full" method="post">
         {% csrf_token %}
         
-        {{ form.cargo.label_tag }}
-        {{ form.cargo }}
-        
-        {{ form.tipo_extra.label_tag }}
-        {{ form.tipo_extra }}
-        
-        {{ form.cant_horas.label_tag }}
-        {{ form.cant_horas }}
-        
-        {{ form.fecha_desde.label_tag }}
-        {{ form.fecha_desde }}
-        
-        {{ form.fecha_hasta.label_tag }}
-        {{ form.fecha_hasta }}
-        
-        
-      
-        
-        <button type="submit">Asignar Tareas</button>
-      </form>
+        <div class="h-1/4 w-full flex items-center justify-center pb-4">
+            <!-- {{ form.cargo.label_tag }}
+            {{ form.cargo }} -->
+            <div class="h-1/4 w-full flex items-center justify-center">
+                <select id="{{ form.cargo.id_for_label }}" name="{{ form.cargo.name }}" class="h-9 sm:w-1/4 w-2/3 pl-2 bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
+                    <option disabled selected>Seleccione un Cargo</option>
+                    {% for cargo in form.cargo.field.queryset %}
+                        <option value="{{ cargo.pk }}">{{ cargo }}</option>
+                    {% endfor %}    
+                </select>
+            </div>
+        </div>
+ 
+        <div class="h-1/3 w-full flex sm:flex-row flex-col">
             
-      
-      
-      
-      
-      
-  <!-- 
-  <form method="post" action="{% url 'docente-asignar-tareas' legajo=docente.pk  %}">
-      {% csrf_token %}
-       Mostrar dropdownlist para seleccionar Cargo 
-      <label for="{{ form.cargo.id_for_label }}">Cargo:</label>
-      <select name="{{ form.cargo.name }}" id="{{ form.cargo.id_for_label }}">
-        {% for cargo in cargo %}
-          <option value="{{ cargo.pk }}">{{ cargo.nro_cargo }}</option>
-        {% endfor %}
-      </select>
+            <div class="h-full sm:w-1/2 w-full flex flex-col items-center justify-end">
+                <!-- {{ form.tipo_extra.label_tag }}
+                {{ form.tipo_extra }} -->
+                <!-- Tarea Extra -->
+                <div class="h-full sm:w-1/2 w-2/3 flex items-center justify-center">
+                    <select id="{{ form.tipo_extra.id_for_label }}" name="{{ form.tipo_extra.name }}" class="h-9 w-full pl-2 bg-gray-200 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg focus:ring-gray-300 focus:border-gray-300">
+                        <option disabled selected>Seleccione un Tarea Extra</option>
+                        {% for tipo_extra in form.tipo_extra.field.queryset %}
+                            <option value="{{ tipo_extra.pk }}">{{ tipo_extra }}</option>
+                        {% endfor %}    
+                    </select>
+                </div>
+                <!-- Fecha Desde -->
+                <div class="h-full sm:w-1/2 w-2/3 flex items-center justify-between">
+                    <label class="mr-3 text-gray-800 text-[15px] font-semibold" style="white-space: nowrap;">Fecha desde</label>
+                    {{ form.fecha_desde }}
+                </div>
+            </div>
+            
+            <div class="h-full sm:w-1/2 w-full flex flex-col items-center justify-center">
+                <!-- Cantidad de Horas -->
+                <div class="h-full sm:w-1/2 w-2/3 flex items-center justify-between">
+                    <label class="mr-3 text-gray-800 text-[15px] font-semibold" style="white-space: nowrap;">Cantidad de horas</label>
+                    {{ form.cant_horas }}
+                </div>
+                <!-- Fecha Hasta -->
+                <div class="h-full sm:w-1/2 w-2/3 flex items-center justify-between">
+                    <label class="mr-3 text-gray-800 text-[15px] font-semibold" style="white-space: nowrap;">Fecha hasta</label>
+                    {{ form.fecha_hasta }}
+                </div>
+            </div>
+        
+        </div>
 
-        <!-- Mostrar dropdownlist para seleccionar Tipo_Extra 
-        <label for="{{ form.tipo_extra.id_for_label }}">Tipo Extra:</label>
-        <select name="{{ form.tipo_extra.name }}" id="{{ form.tipo_extra.id_for_label }}">
-          {% for tipo_extra in tipo_extra %}
-            <option value="{{ tipo_extra.pk }}">{{ tipo_extra.desc_extra }}</option>
-          {% endfor %}
-        </select>
-
-
-        <label for="{{ form.carga_horaria.id_for_label }}">Carga Horaria:</label>
-        <select name="{{ form.carga_horaria.name }}" id="{{ form.carga_horaria.id_for_label }}">
-            {% for carga_horaria in carga_horaria %}
-              <option value="{{ carga_horaria.pk }}">{{ carga_horaria.dia_semana }}-{{ carga_horaria.hora_inicio }}-{{ carga_horaria.hora_fin }}</option>
-            {% endfor %}
-          </select>
-      
-
-      <input type="submit" value="Guardar">
-  </form>-->
-
+        <div class="h-1/3 w-full flex items-center">
+            <div class="h-full sm:w-1/2 w-full flex items-center justify-center"></div>
+            <!-- Submmit -->
+            <div class="h-full sm:w-1/2 w-full flex items-center justify-center">
+                <div class="h-full sm:w-1/2 w-full flex items-center justify-end">
+                    <button type="submit" class="w-32 h-8 bg-gray-200 text-gray-700 rounded-md shadow-md hover:bg-gray-300 text-sm font-semibold">Asignar Tarea</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 {% endblock %}
 
-{% block scripts %}
 
-{% endblock %}
+{% block scripts %}{% endblock %}

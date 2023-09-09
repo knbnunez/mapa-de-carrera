@@ -125,6 +125,10 @@ class Cargo(models.Model):
 
     resolucion = models.FileField(upload_to='media/', null=True, blank=True)
 
+    #
+    def __str__(self):
+        return "Cargo N° "+str(self.nro_cargo)
+
 
 class Carga_Horaria(models.Model):
     dia_semana = models.CharField(max_length=25)
