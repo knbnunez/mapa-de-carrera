@@ -1,12 +1,8 @@
 from django.views.generic import TemplateView
 from django.shortcuts import render
-from django.urls import reverse
 from App.models.mapa_de_carreras import *
 import requests
-from django.db.models import Q
-import json
 from requests.exceptions import ConnectTimeout
-import datetime
 
 
 class DocenteBusquedaView(TemplateView):
@@ -16,23 +12,29 @@ class DocenteBusquedaView(TemplateView):
     url_mapuche = 'http://10.7.180.231/mapuche/rest/'
 
     def get(self, request):
-        # url = reverse('buscadocente')
-        url_buscadocente = self.url_mapuche+'agentes' # /agentes/{legajo}
-        response = requests.get(url_buscadocente, auth=(self.username, self.password))
-        # if response.status_code == 200:
-        docentes = response.json()
-        # print(docentes)
+        try:
+            url_buscadocente = self.url_mapuche+'agentes' # /agentes
+            response = requests.get(url_buscadocente, auth=(self.username, self.password), timeout=5)
+
+            if response.status_code == 200:
+                docentes = response.json() # json() convierte a diccionario de python    
+                
+                # Recuperar escalafón 'docentes'
+                aux = []
+                for d in docentes:
+                    cargos = requests.get(url_buscadocente+f"/{d['legajo']}/cargos", auth=(self.username, self.password)).json()
+                    es_docente = False
+                    for c in cargos:
+                        if('nodo' not in c['escalafon'].lower().replace(" ", "")): # Con esta normalización de texto, cualquier escalafon <> a 'nodo' (no docente) es considera docente
+                            es_docente = True
+                            break # Salgo del bucle
+                    if(es_docente): aux.append(d)
+
+                docentes = aux # Almacenamos todos los 'docentes' recuperados
+            
+            else: # status_code <> 200 --> Error --> Busco los datos de la base
+                docentes = Docente.objects.all() # Puede devolver vacío
+
+        except ConnectTimeout: pass # timeout 5' --> Error
         
         return render(request, self.template_name, {'docentes': docentes})
-        # else :
-            # return render(request, self.template_name, {"docentes":})
-    
-    # COMMENT: No está siendo utilizado
-    # def busca(self, request):
-    #     url=self.url_mapuche+'agentes/'+legajo
-    #     queryset = request.Get.get('q')
-    #     if queryset:
-    #         docentes = Docente.objects.filter(legajo=queryset).first()
-    #         if docentes:
-    #             url = reverse('docente-detalle', kwargs={'legajo':queryset})
-    #     return render(request, 'docente_detalle.html', {'queryset':queryset} )
