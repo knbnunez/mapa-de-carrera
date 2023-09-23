@@ -1,15 +1,12 @@
 import requests
-import math
 from django.views.generic import TemplateView
 from requests.exceptions import ConnectTimeout
 from django.shortcuts import render
-from django.db.models import Q
-from django.utils import timezone
-from datetime import datetime, date, timedelta
-from decimal import Decimal
+from datetime import datetime
 
 from App.models.mapa_de_carreras import *
 from App.models.guarani import *
+from App.functions import calcular_horas
 
 
 class DocenteDetalleView(TemplateView): # Detalle para un único docente
@@ -19,7 +16,8 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
     url_mapuche = 'http://10.7.180.231/mapuche/rest/'
     
     alert = None
-    cargos_activos = None
+    cargos_activos = []
+    cargas_cte_ch = []
 
     def get(self, request, legajo): # Se puede recuperar el param de la url llamándolo como esta definido en urls.py en este caso: legajo
         legajo = str(legajo) 
@@ -27,8 +25,6 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
         docente = None # Inicializo
         cargos = None 
         cargos_activos = None
-        cargas_cte_ch = None
-        cargos_horas = None
 
         ########################
         # Info persona docente #
@@ -57,7 +53,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
             docente = Docente.objects.get(legajo=legajo) # Lo recupero
         elif (docente is None) and (not Docente.objects.filter(legajo=legajo).exists()): 
             DocenteDetalleView.cargos_activos = None
-            return render(request, self.template_name, { 'alert':DocenteDetalleView.alert, 'docente': docente, 'cargos_activos': cargos_activos, 'cargas_cte_ch': cargas_cte_ch, 'cargos_horas': cargos_horas }) 
+            return render(request, self.template_name, { 'alert':DocenteDetalleView.alert, 'docente': docente, 'cargos_activos': DocenteDetalleView.cargos_activos, 'cargas_cte_ch': DocenteDetalleView.cargas_cte_ch }) 
 
         # Correo docente --------------------------------------------------------
         if docente is not None:
@@ -116,7 +112,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
                     
 
                     #############################
-                    # CÁLCULO DE CARGOS ACTIVOS #
+                    # MARCADO DE CARGOS ACTIVOS #
                     #############################
 
                     try:fecha_alta = datetime.strptime(c.get('fecha_alta'), '%Y-%m-%d')
@@ -129,9 +125,11 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
                     if Cargo.objects.filter(nro_cargo=c.get('cargo')).exists(): # Update si hubo cambios (intuímos por error en mapuche), errores no nos interesa dejar como histórico
                         cargo = Cargo.objects.get(nro_cargo=c.get('cargo')) # Recupero el cargo que voy a actualizar
 
-                        cargo.modalidad = modalidad # 
-                        cargo.dedicacion = dedicacion # 
-                        cargo.categoria = categoria
+                        # comparo la dedicación actual con la anterior, si es nueva, la modalidad también va a cambiar
+                        if cargo.dedicacion != dedicacion: 
+                            cargo.dedicacion = dedicacion # 
+                            cargo.modalidad = modalidad #
+                        # sino: deben quedar igual para poder mantener la restricción
                         cargo.categoria = categoria
                         cargo.fecha_alta = fecha_alta
                         cargo.fecha_baja = fecha_baja
@@ -152,77 +150,46 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
                     # print(cargo)
                     if('nodo' not in c['escalafon'].lower().replace(" ", "")): cargos_activos.append(cargo) # Los añadimos al diccionario que recibirá al template    
         except ConnectTimeout: pass # Lo trato a continuación:
-        
-        # Si se lograron almacenar cargos para el docente, los voy a almacenar los activos para poder mostrarlos por pantalla
-        if (Cargo.objects.filter(docente=docente, activo=1).exists()): # Caso en el que existe al menos un cargo en la BD, lo recupero
-            cargos = Cargo.objects.filter(docente=docente, activo=1)
-            cargas_cte_ch = []
-            cargos_horas = []
-
-            for c in cargos:
-                current_date = timezone.now().date()
-
-                cte_ch_aux = Cargo_CTE_CH.objects.filter(
-                    Q(cargo=c) &
-                    (Q(comision_ch__carga_horaria__fecha_hasta__gte=current_date) |
-                    Q(tipo_extra_ch__fecha_hasta__gte=current_date))
-                )
-                # print(cte_ch_aux)
-
-                total_horas = 0.00 # será un valor decimal
-            
-                for cte_ch in cte_ch_aux:
-                    # print(cte_ch.cargo)
-                    cargas_cte_ch.append(cte_ch)
-                    
-                    if (cte_ch.comision_ch is not None): 
-                        # print(cte_ch.comision_ch.carga_horaria.fecha_hasta)
-                        hora_inicio = cte_ch.comision_ch.carga_horaria.hora_inicio
-                        hora_fin = cte_ch.comision_ch.carga_horaria.hora_fin
-                        #
-                        # Calcular la diferencia de tiempo manualmente
-                        diferencia_horas = hora_fin.hour - hora_inicio.hour
-                        if (hora_fin.minute % 10 == 9): diferencia_minutos = (hora_fin.minute - hora_inicio.minute) + 1
-                        else: diferencia_minutos = hora_fin.minute - hora_inicio.minute
-                        #
-                        total_horas += diferencia_horas + (diferencia_minutos / 60)
-                    
-                    elif (cte_ch.tipo_extra_ch is not None):
-                        # print(cte_ch.tipo_extra_ch.fecha_hasta)
-                        cant_horas_tarea = cte_ch.tipo_extra_ch.cant_horas
-                        total_horas += cant_horas_tarea
-
-                    # print(total_horas)
-                #
-                cargos_horas.append({"cargo": c, "total_horas": total_horas})
-
+        #
         DocenteDetalleView.cargos_activos = cargos_activos
+        
+        ###################################
+        # RECUPERACIÓN DE CARGAS HORARIAS #
+        ###################################
+        if (Cargo.objects.filter(docente=docente, activo=1).exists()): DocenteDetalleView.cargas_cte_ch = calcular_horas(legajo)
 
-        return render(request, self.template_name, { 'alert':DocenteDetalleView.alert, 'docente': docente, 'cargos_activos': cargos_activos, 'cargas_cte_ch': cargas_cte_ch, 'cargos_horas': cargos_horas })
+        return render(request, self.template_name, { 'alert':DocenteDetalleView.alert, 'docente': docente, 'cargos_activos': DocenteDetalleView.cargos_activos, 'cargas_cte_ch': DocenteDetalleView.cargas_cte_ch })
 
 
     def post(self, request, legajo):
-        print(f'Qué valor tiene el alert? {DocenteDetalleView.alert}')
+        #
         DocenteDetalleView.alert = None
+
         # Carga archivos:
         # - Los archivos PDF quedan guardados en /media, en la BD queda almacenada la ruta que enlaza al archivo "/media/nombre_archivo.pdf" 
         # - Se admite la carga de multiples archivos
-        if DocenteDetalleView.cargos_activos is not None:
-            for ca in DocenteDetalleView.cargos_activos:
-                # print(f'Pero entra acá?')
-                # print(ca)
-                archivos = request.FILES.getlist('file-'+str(ca.nro_cargo))
-                # print(archivo)
-                if len(archivos) == 1:
-                    a = archivos[0]
-                    if a.content_type == 'application/pdf':
-                        ca.resolucion = a
-                        ca.save()
+
+        # Verificar si se envió el formulario de carga de archivos
+        if 'submit_archivos' in request.POST:
+            for c in DocenteDetalleView.cargos_activos:
+                campo_archivo = 'file-' + str(c.nro_cargo)
+                if campo_archivo in request.FILES:
+                    archivo = request.FILES[campo_archivo]
+                    if archivo.content_type == 'application/pdf':
+                        c.resolucion = archivo
+                        c.save()
                     else:
-                        # No es un archivo PDF
                         DocenteDetalleView.alert = "El archivo no es un PDF válido."
                         print(f'ERROR: {DocenteDetalleView.alert}')
-                        break # Debería salir del bucle y no procesar ningún archivo más
+                        break
+        
+        if 'submit_checkboxes' in request.POST:
+            for c_c in DocenteDetalleView.cargas_cte_ch:
+                checkbox = f'check-{c_c.pk}'
+                if checkbox in request.POST:
+                    try:
+                        obj = Cargo_CTE_CH.objects.get(pk=c_c.pk)
+                        obj.delete()
+                    except: pass
                 
-        print(f'Valor de salida del alert {DocenteDetalleView.alert}')
         return self.get(request, legajo)
