@@ -210,11 +210,13 @@
                             </td>
                             <td class="px-6 py-4">
                                 {{c.fecha_alta|date:"SHORT_DATE_FORMAT"}}
+                                <!-- {{c.fecha_alta}} -->
                             </td>
                             
                             {% if c.fecha_baja is not None %}
                             <td class="px-6 py-4">
                                 {{c.fecha_baja|date:"SHORT_DATE_FORMAT"}}
+                                <!-- {{c.fecha_baja}} -->
                             </td>
                             {% else %}
                             <td class="px-6 py-4">
