@@ -1,8 +1,48 @@
-
 <!DOCTYPE html>
 <html>
-    {% extends 'index.html' %}
+{% extends 'index.html' %}
 
+{% block title %} <title>Comision docente</title> {% endblock %}
+
+{% block light-style %}
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+
+{% endblock %}
+
+{% block sidebar %}
+<div class="p-10 pl-7 sm:ml-4">
+    <!-- Botón para desplegar cuando se achica el tamaño de la página -->
+    <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar"
+        type="button"
+        class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+        <span class="sr-only">Desplegar</span>
+        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg">
+            <path clip-rule="evenodd" fill-rule="evenodd"
+                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+            </path>
+        </svg>
+    </button>
+    <aside id="logo-sidebar"
+        class="fixed top-0 left-0 z-40 w-65 h-screen transition-transform -translate-x-full sm:translate-x-0"
+        aria-label="Sidebar">
+        <div class="h-full px-3 py-4 overflow-y-auto bg-red-800">
+            <a href="#" class="flex items-center pl-2.5 mb-4 pb-3 border-b-[1px] border-white">
+                <img src="https://untdf.edu.ar/img/isologotipo_chico.png" class="h-6 mr-3 sm:h-7" alt="UNTDF Logo" />
+                <span class="self-center text-xl font-semibold whitespace-nowrap text-gray-50">Mapa de carreras</span>
+            </a>
+            <ul id="content-side-bar" class="space-y-2 font-medium">
+                <!-- content con js -->
+            </ul>
+
+        </div>
+    </aside>
+
+<<<<<<< HEAD
     {% block title %} <title>Login</title> {% endblock %}
     
     {% block light-style %}
@@ -12,37 +52,11 @@
         }
     </style>
     
+=======
+>>>>>>> 11f0a6098f8308ee80ada2152d774efce70ae401
     {% endblock %}
-    
-    {% block sidebar %}
-    <div class="p-10 pl-7 sm:ml-4">
-                <!-- Botón para desplegar cuando se achica el tamaño de la página -->
-        <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar"
-            type="button"
-            class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-            <span class="sr-only">Desplegar</span>
-            <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg">
-                <path clip-rule="evenodd" fill-rule="evenodd"
-                    d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
-                </path>
-            </svg>
-        </button>
-        <aside id="logo-sidebar"
-            class="fixed top-0 left-0 z-40 w-65 h-screen transition-transform -translate-x-full sm:translate-x-0"
-            aria-label="Sidebar">
-            <div class="h-full px-3 py-4 overflow-y-auto bg-red-800">
-                <a href="#" class="flex items-center pl-2.5 mb-4 pb-3 border-b-[1px] border-white">
-                    <img src="https://untdf.edu.ar/img/isologotipo_chico.png" class="h-6 mr-3 sm:h-7" alt="UNTDF Logo" />
-                    <span class="self-center text-xl font-semibold whitespace-nowrap text-gray-50">Mapa de carreras</span>
-                </a>
-                <ul id="content-side-bar" class="space-y-2 font-medium">
-                    <!-- content con js -->
-                </ul>
-    
-            </div>
-        </aside>
 
+<<<<<<< HEAD
  {% endblock %}
  
  
@@ -71,3 +85,54 @@
  </div>
  {% endblock %}
  
+=======
+
+    {% block body-content %}
+    <div class="flex h-full sm:ml-64 items-center justify-center bg-green-100">
+        <div class="max-w-md mx-auto p-4">
+            <h2 class="text-2xl mb-4">Iniciar sesión</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="username" class="form-label">Usuario:</label>
+                    <input type="text" class="form-control" id="username" name="username">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña:</label>
+                    <input type="password" class="form-control" id="password" name="password">
+                </div>
+                <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+            </form>
+            <hr class="my-4">
+            <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-danger">
+                <i class="fab fa-google"></i> Iniciar sesión con Google
+            </a>
+        </div>
+
+        <div id="indicador-carga" style="display: none;">
+            Cargando...
+        </div>
+    </div>
+    {% endblock %}
+
+    <script>
+        // Obtén una referencia al elemento del indicador de carga
+        const indicadorCarga = document.getElementById("indicador-carga");
+
+        // Agrega un escuchador de eventos para mostrar el indicador de carga cuando la página comienza a cargar recursos
+        window.addEventListener("load", () => {
+            indicadorCarga.style.display = "none"; // Oculta el indicador de carga cuando la página se carga por completo
+        });
+
+        // Agrega un escuchador de eventos para mostrar el indicador de carga cuando se realiza una solicitud al servidor
+        // Por ejemplo, cuando se hace una solicitud AJAX
+        // Supongamos que estás utilizando jQuery para hacer solicitudes AJAX
+        $(document).ajaxStart(function () {
+            indicadorCarga.style.display = "block"; // Muestra el indicador de carga cuando comienza una solicitud AJAX
+        });
+
+        $(document).ajaxStop(function () {
+            indicadorCarga.style.display = "none"; // Oculta el indicador de carga cuando todas las solicitudes AJAX se completan
+        });
+    </script>
+>>>>>>> 11f0a6098f8308ee80ada2152d774efce70ae401

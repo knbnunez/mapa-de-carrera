@@ -41,22 +41,11 @@ class Docente(models.Model):
 
     def __str__(self):
         return self.nombre_apellido
-       
- 
-# class Resolucion(models.Model):
-#     nombre = models.CharField(max_length=255)
-#     # De las dudas: las fechas son las mismas que podemos obtener del endpoint de /agentes/{legajo}/cargos ???
-#     fecha_inicio = models.DateField()
-#     fecha_fin = models.DateField()
-#     documento = models.ImageField(upload_to='pdf')
-    
-#     def __str__(self):
-#         return self.nombre
     
 
 class Categoria(models.Model):
     codigo = models.CharField(primary_key=True, max_length=50) # categoria
-    desc_categ = models.CharField(max_length=255) # desc_dedic
+    desc_categ = models.CharField(max_length=255)
     
     def __str__(self):
         return self.desc_categ
@@ -124,6 +113,7 @@ class Cargo(models.Model):
     )
 
     resolucion = models.FileField(upload_to='media/', null=True, blank=True)
+    carga_actual = models.FloatField(default=0.0)
 
     #
     def __str__(self):
@@ -146,7 +136,7 @@ class Comision_CH(models.Model):
 
 class Tipo_Extra_CH(models.Model):
     tipo_extra = models.ForeignKey(Tipo_Extra, on_delete=models.CASCADE)
-    cant_horas = models.IntegerField()
+    cant_horas = models.FloatField()
     fecha_desde = models.DateField()
     fecha_hasta = models.DateField()
 

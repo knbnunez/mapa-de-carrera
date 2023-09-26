@@ -126,7 +126,7 @@ SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
     # aqui van otros backends
 
 )
-LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/docentes/'
+LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/cargar-base/'
 
 
 # Internationalization

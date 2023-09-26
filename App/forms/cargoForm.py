@@ -4,7 +4,7 @@ from App.models.mapa_de_carreras import Cargo, Tipo_Extra, Carga_Horaria, Tipo_E
 class AsignarTareasForm(forms.Form):
     cargo = forms.ModelChoiceField(queryset=None)  
     tipo_extra = forms.ModelChoiceField(queryset=None)
-    cant_horas = forms.IntegerField(
+    cant_horas = forms.FloatField(
         initial=0,
         widget=forms.TextInput(attrs={'class': 'rounded-lg h-[30.5px] sm:w-full w-12 text-sm font-semibold'})
     )

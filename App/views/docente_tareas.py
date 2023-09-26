@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render
 from App.models.mapa_de_carreras import *
 from App.models.guarani import *
 from App.forms.cargoForm import AsignarTareasForm
+from App.functions import calcular_horas
 
 class DocenteTareasView(TemplateView):
     template_name = 'docente_tareas.html'
@@ -33,6 +34,7 @@ class DocenteTareasView(TemplateView):
             cargos_activos=Cargo.objects.filter(docente=docente, activo=1)
         )
         
+        print(form.is_valid())
         if form.is_valid():
             # Verificar si todos los campos requeridos tienen datos
             if (
@@ -45,11 +47,13 @@ class DocenteTareasView(TemplateView):
                 # Una vez verificado que existen datos cargados, se procede a recuperarlos
                 tipo_extra = form.cleaned_data['tipo_extra']
                 cargo = form.cleaned_data['cargo'] 
-                cant_horas = form.cleaned_data['cant_horas']
+                cant_horas = float(form.cleaned_data['cant_horas'])
                 fecha_desde = form.cleaned_data['fecha_desde']
                 fecha_hasta = form.cleaned_data['fecha_hasta']
                 
-                if cant_horas > 0 and cant_horas <= 999:
+                print(f"value of cant_horas {cant_horas}")
+                if cant_horas > 0.0 and cant_horas <= 999.99:
+                    print("Inner IF")
                     # Guardar en Tipo_Extra_CH
                     tipo_extra_ch = Tipo_Extra_CH.objects.create(                
                         tipo_extra=tipo_extra,
@@ -58,10 +62,8 @@ class DocenteTareasView(TemplateView):
                         fecha_hasta=fecha_hasta,
                     )
                     # Guardar en Cargo_CTE_CH
-                    cargo_cte_ch = Cargo_CTE_CH.objects.create(
-                        cargo=cargo,
-                        tipo_extra_ch=tipo_extra_ch,
-                    )
+                    Cargo_CTE_CH.objects.create(cargo=cargo, tipo_extra_ch=tipo_extra_ch, comision_ch=None)
+                    calcular_horas(legajo)
            
         context = {
             'docente': docente,
