@@ -117,6 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+ALLOWED_EMAIL_DOMAINS = ['untdf.edu.ar']
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '93336371526-2s8mtia35k9kbtbrjkecpqdpov1pbg7q.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
