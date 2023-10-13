@@ -2,9 +2,6 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 
-<<<<<<< HEAD
-from django.conf import settings
-=======
 # Para consumo de la API
 from App.models.mapa_de_carreras import Docente
 from requests.exceptions import ConnectTimeout
@@ -53,7 +50,6 @@ def cargar_base(request):
     print("Finalización de carga de base...")
     return redirect('docente')
 
->>>>>>> 11f0a6098f8308ee80ada2152d774efce70ae401
 
 def login_view(request):
     
@@ -66,36 +62,24 @@ def login_view(request):
         if user is not None:
             print("Autenticación FROM exitosa")
             login(request, user)
-<<<<<<< HEAD
-            allowed_domains = settings.ALLOWED_EMAIL_DOMAINS
-            if not any(username.endswith(domain) for domain in allowed_domains):
-                messages.error(request, 'Dominio de correo no permitido')
-                return redirect('login')
-            return redirect('docente')
-           # login(request, user)
-         #   return redirect('docente')
-        
-=======
             cargar_base(request) # Además él mismo redirige a /docentes
             #return redirect('docente')
->>>>>>> 11f0a6098f8308ee80ada2152d774efce70ae401
         else:
             messages.error(request, 'Credenciales invalidas')
             # Manejar el caso de credenciales inválidas
-<<<<<<< HEAD
+
             # pass
     return render(request, 'login.html')
 
 #def logout_view(request):
  #   logout(request)
  #   return redirect('login')
-=======
-            print("Autenticación FORM incorrecta")
-            return redirect('login')
+
+ #            print("Autenticación FORM incorrecta")
+  #           return redirect('login')
     #
-    return render(request, 'login.html')
+ #    return render(request, 'login.html')
 
 def logout_view(request):
     logout(request)
     return redirect('login')
->>>>>>> 11f0a6098f8308ee80ada2152d774efce70ae401
