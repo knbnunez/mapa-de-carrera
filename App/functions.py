@@ -18,7 +18,7 @@ def calcular_horas(legajo):
             Q(cargo=c) &
             (Q(comision_ch__carga_horaria__fecha_hasta__gte=current_date) |
             Q(tipo_extra_ch__fecha_hasta__gte=current_date))
-        )
+        ).order_by('id')  # Orden ascendente
         #
         total_horas = 0.00 # valor decimal
         #

@@ -1,6 +1,7 @@
 from django.views.generic import TemplateView
 from django.shortcuts import get_object_or_404,render
 from django.utils import timezone
+from django.db.models import Case, When, Value, IntegerField
 
 from App.models.mapa_de_carreras import *
 from App.models.guarani import *
@@ -18,12 +19,25 @@ class DocenteComisionView(TemplateView): # Detalle para un único docente
         current_date = timezone.now().date()
 
         # Opción más eficiente según chatGpt (spoiler, funciona):
-        institutos = Instituto.objects.all()
-        carreras_institutos = Carrera_Instituto.objects.select_related('carrera', 'instituto').all()
-        materias_carreras = Materia_Carrera.objects.select_related('materia', 'carrera').filter(materia__comision__comision_ch__carga_horaria__fecha_hasta__gte=current_date).distinct()
+        institutos = Instituto.objects.all().order_by('nombre')
+        carreras_institutos = Carrera_Instituto.objects.select_related('carrera', 'instituto').all().order_by('carrera__nombre')
+        materias_carreras = Materia_Carrera.objects.select_related('materia', 'carrera').filter(materia__comision__comision_ch__carga_horaria__fecha_hasta__gte=current_date).distinct().order_by('materia__nombre')
 
         comisiones = Comision.objects.filter(comision_ch__carga_horaria__fecha_hasta__gte=current_date).select_related('materia', 'ubicacion').distinct()
-        comisiones_ch = Comision_CH.objects.select_related('comision', 'carga_horaria').filter(carga_horaria__fecha_hasta__gte=current_date)
+
+        comisiones_ch = Comision_CH.objects.select_related('comision', 'carga_horaria').filter(
+            carga_horaria__fecha_hasta__gte=current_date
+        ).annotate(
+            dia_semana_order=Case(
+                When(carga_horaria__dia_semana='Lunes', then=Value(1)),
+                When(carga_horaria__dia_semana='Martes', then=Value(2)),
+                When(carga_horaria__dia_semana='Miercoles', then=Value(3)),
+                When(carga_horaria__dia_semana='Jueves', then=Value(4)),
+                When(carga_horaria__dia_semana='Viernes', then=Value(5)),
+                default=Value(6), output_field=IntegerField()
+            )
+).order_by('dia_semana_order')
+
         tipos_dictados = Tipo_Dictado.objects.all()
 
         context['docente'] = docente

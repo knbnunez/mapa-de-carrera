@@ -75,11 +75,11 @@
                             <div class="">
                                 <a class="text-sm text-gray-700 truncate font-medium" href="{% url 'docente-detalle' legajo=d.docente.legajo %}">
                                     🔴 Estado:
-                                    <span class="text-sm text-red-500 truncate font-semibold">
-                                        Actual ({{ estado_cargo.horas }}hs)
+                                    <span class="text-sm text-black truncate font-semibold">
+                                        <span class="text-red-500">Actual ({{ estado_cargo.horas }}hs)</span>
                                          -  
                                         {% for e in estado_cargo.estado %}
-                                            {{ e }}
+                                            <span class="text-gray-600">{{ e }}</span>
                                         {% endfor %}    
                                     </span>
                                 </a>

@@ -45,46 +45,51 @@
         <ol class="w-full divide-y divide-gray-200 dark:divide-gray-700" id="lista-docentes" style="max-width: 85%">
 
             {% for c in comisiones %}
-            <li class="docente">
-                <div class="w-full flex items-center space-x-4">
-                    <div class="w-full flex-1 min-w-0 flex flex-row py-2">
-                        <!--  -->
-                        <div class="w-[35%] flex flex-col">
-                            <p class="text-sm text-gray-700 truncate flex justify-start">
-                                Materia:
-                                <span class="text-sm text-gray-800 truncate font-semibold ml-1">
-                                    {{ c.comision.materia.nombre }}
-                                </span>
-                            </p>
-                            <p class="text-sm font-medium text-gray-700 truncate flex justify-start">
-                                Comisión: 
-                                <span class="text-sm text-gray-800 truncate font-semibold ml-1">
-                                    {{ c.comision.nombre }}
-                                </span>
-                            </p>
-                        </div>
-                        <p class="w-[20%] text-sm text-gray-700 truncate flex justify-center">
-                            Ubicación: 
-                            <span class="text-sm text-gray-800 truncate font-semibold ml-1">
-                                {{ c.comision.ubicacion.nombre }}
-                            </span>
-                        </p>
-                        <div class="w-[20%] flex items-start justify-end">
-                            <p class="text-sm text-gray-700 ml-2">
-                                Carreras:
-                            </p>
-                        </div>
-                        <div class="w-[25%] flex flex-col justify-start">
-                            {% for car in c.carreras %}
-                                <span class="text-sm text-gray-800 font-semibold ml-[6px] mt-[1px]">
-                                    {{ car.nombre }}
-                                </span>    
-                            {% endfor %}
+                {% if c.nombres_carreras %}
+                <li class="docente">
+                    <div class="w-full flex items-center space-x-4 justify-between">
+                        <div class="w-full flex-1 min-w-0 flex flex-row py-2">
+                            <!--  -->
+                            <div class="w-1/3 flex flex-col">
+                                <p class="text-sm text-gray-700 truncate flex justify-start">
+                                    Materia:
+                                    <span class="text-sm truncate text-gray-800 font-semibold ml-1">
+                                        {{ c.nombre_materia }}
+                                    </span>
+                                </p>
+                                <p class="text-sm font-medium text-gray-700 truncate flex justify-start">
+                                    Comisión: 
+                                    <span class="text-sm text-gray-800 truncate font-semibold ml-1">
+                                        {{ c.nombre_comision }}
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="w-1/3 flex pl-12">
+                                <p class="text-sm text-gray-700 truncate flex justify-center">
+                                    Ubicación: 
+                                    <span class="text-sm text-gray-800 truncate font-semibold ml-1">
+                                        {{ c.nombre_ubicacion }}
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="w-1/3 flex truncate">
+                                <p class="text-sm text-gray-700 ml-2">
+                                    Carreras:
+                                </p>
+                                <ol class="truncate">
+                                    {% for ca in c.nombres_carreras %}
+                                    <li>
+                                        <p class="text-sm text-gray-800 truncate font-semibold ml-[6px] mt-[1px]">
+                                            {{ ca }}
+                                        </p>
+                                    </li>
+                                    {% endfor %}
+                                </ol>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </li>
-
+                </li>
+                {% endif %}
             {% endfor %}
         </ol>
 
