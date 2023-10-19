@@ -17,6 +17,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
     
     alert = None
     cargos_activos = []
+    info = []
     cargas_cte_ch = []
 
     def get(self, request, legajo): # Se puede recuperar el param de la url llamándolo como esta definido en urls.py en este caso: legajo
@@ -25,6 +26,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
         docente = None # Inicializo
         cargos = None 
         cargos_activos = None
+        info = None
 
         ########################
         # Info persona docente #
@@ -53,7 +55,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
             docente = Docente.objects.get(legajo=legajo) # Lo recupero
         elif (docente is None) and (not Docente.objects.filter(legajo=legajo).exists()): 
             DocenteDetalleView.cargos_activos = None
-            return render(request, self.template_name, { 'alert':DocenteDetalleView.alert, 'docente': docente, 'cargos_activos': DocenteDetalleView.cargos_activos, 'cargas_cte_ch': DocenteDetalleView.cargas_cte_ch }) 
+            return render(request, self.template_name, { 'alert':DocenteDetalleView.alert, 'docente': docente, 'cargos_activos': DocenteDetalleView.cargos_activos, 'info': DocenteDetalleView.info, 'cargas_cte_ch': DocenteDetalleView.cargas_cte_ch }) 
 
         # Correo docente --------------------------------------------------------
         if docente is not None:
@@ -73,6 +75,7 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
         # Info cargo docente #
         ######################
         cargos_activos = []
+        info = []
         url = self.url_mapuche+'agentes/'+legajo+'/cargos?activos=1' # /agentes/{legajo}/cargos
         try:
             response = requests.get(url, auth=(self.username, self.password), timeout=5)
@@ -148,17 +151,30 @@ class DocenteDetalleView(TemplateView): # Detalle para un único docente
                         )    
                          
                     # print(cargo)
-                    if('nodo' not in c['escalafon'].lower().replace(" ", "")): cargos_activos.append(cargo) # Los añadimos al diccionario que recibirá al template    
+                    if('nodo' not in c['escalafon'].lower().replace(" ", "")): 
+                        cargos_activos.append(cargo) # Los añadimos al diccionario que recibirá al template   
+                        if cargo.modalidad is not None:
+                            #
+                            if cargo.dedicacion.desc_dedic == 'Semided.' and cargo.modalidad.desc_modal == 'Docencia/Desarrollo profesional':
+                                info.append("Déficit: 6,0hs / Sobrecarga 10,0hs")
+                            #
+                            elif cargo.dedicacion.desc_dedic == 'Exclusiva' and cargo.modalidad.desc_modal == 'Docencia e Investigación':
+                                info.append("Déficit: 4,0hs / Sobrecarga 8,0hs")
+                            #
+                            else: 
+                                info.append("Déficit: 4,0hs / Sobrecarga 6,0hs")
         except ConnectTimeout: pass # Lo trato a continuación:
         #
         DocenteDetalleView.cargos_activos = cargos_activos
+        DocenteDetalleView.info = info
+        print(info)
         
         ###################################
         # RECUPERACIÓN DE CARGAS HORARIAS #
         ###################################
         if (Cargo.objects.filter(docente=docente, activo=1).exists()): DocenteDetalleView.cargas_cte_ch = calcular_horas(legajo)
 
-        return render(request, self.template_name, { 'alert':DocenteDetalleView.alert, 'docente': docente, 'cargos_activos': DocenteDetalleView.cargos_activos, 'cargas_cte_ch': DocenteDetalleView.cargas_cte_ch })
+        return render(request, self.template_name, { 'alert':DocenteDetalleView.alert, 'docente': docente, 'cargos_activos': DocenteDetalleView.cargos_activos, 'info': DocenteDetalleView.info, 'cargas_cte_ch': DocenteDetalleView.cargas_cte_ch })
 
 
     def post(self, request, legajo):

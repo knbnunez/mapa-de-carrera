@@ -1,6 +1,6 @@
 {% extends 'index.html' %}
 
-{% block title %} <title>Docentes con Sobrecarga o Déficit</title> {% endblock %}
+{% block title %} <title>Docentes con sobrecarga o déficit</title> {% endblock %}
 
 {% block light-style %}
 <style>
@@ -76,11 +76,11 @@
                                 <a class="text-sm text-gray-700 truncate font-medium" href="{% url 'docente-detalle' legajo=d.docente.legajo %}">
                                     🔴 Estado:
                                     <span class="text-sm text-black truncate font-semibold">
-                                        <span class="text-red-500">Actual ({{ estado_cargo.horas }}hs)</span>
-                                         -  
                                         {% for e in estado_cargo.estado %}
                                             <span class="text-gray-600">{{ e }}</span>
                                         {% endfor %}    
+                                        -  
+                                        <span class="text-red-500">Actual ({{ estado_cargo.horas }}hs)</span>
                                     </span>
                                 </a>
                             </div>

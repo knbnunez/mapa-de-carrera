@@ -1,6 +1,6 @@
 {% extends 'index.html' %}
 
-{% block title %} <title>Detalle docente</title> {% endblock %}
+{% block title %} <title>Perfil</title> {% endblock %}
 
 {% block light-style %}
 <style>
@@ -276,10 +276,20 @@
                 </form>
             
                 {% if cargas_cte_ch %}
-                <div class="flex flex-col mb-3">
-                    {% for c in cargos_activos %}
-                    <span class="text-lg font-semibold text-gray-500">Total de horas para ({{ c.nro_cargo }}): <span class="text-black">{{ c.carga_actual }}hs</span></span>
-                    {% endfor %}
+                <div class="w-full flex flex-row mb-3 mt-3">
+                    <div class="flex">
+                        {% for c in cargos_activos %}
+                        <span class="text-lg text-gray-400">
+                            Horas Cargo N°{{ c.nro_cargo }}: 
+                            <span class="text-black font-semibold">{{ c.carga_actual }}hs</span>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    <div class="flex items-end ml-2 pb-1">
+                        {% for i in info %}
+                        <span class="text-sm font-semibold text-gray-400"> ({{ i }}) </span>
+                        {% endfor %}   
+                    </div>
                 </div>
 
                 <form method="post">{% csrf_token %}

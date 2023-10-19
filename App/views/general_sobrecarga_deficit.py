@@ -24,8 +24,9 @@ class GeneralSobrecargaDeficitView(TemplateView):
                 docente=d, 
                 activo=1, 
                 modalidad__isnull=False, 
-                carga_actual__gt=0
-            )
+                carga_actual__gt=0,
+                cargo_cte_ch__isnull=False
+            ).distinct()
             #
             for c in cargos:
                 #
